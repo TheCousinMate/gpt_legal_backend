@@ -1,21 +1,18 @@
 from fastapi import APIRouter
-from pydantic import BaseModel, HttpUrl
-from typing import Dict
+from pydantic import BaseModel
+from fastapi.responses import JSONResponse
 
 router = APIRouter()
 
 class VisionInput(BaseModel):
-    image_url: HttpUrl
-    prompt: str
+    image_id: str
 
 class VisionOutput(BaseModel):
-    resultado: str
-    resumen: str
+    vision: str
 
-@router.post("/", response_model=VisionOutput)
-def analizar_imagen(data: VisionInput) -> Dict:
-    # Simulación de análisis
-    return {
-        "resultado": f"Imagen procesada correctamente desde URL: {data.image_url}",
-        "resumen": f"Análisis simbólico según prompt: {data.prompt}"
-    }
+@router.post("/vision/", response_model=VisionOutput)
+def analizar_imagen(data: VisionInput):
+    # TODO: Integrar procesamiento real de imágenes si se desea
+    return VisionOutput(
+        vision=f"Se recibió la imagen con identificador '{data.image_id}'. Análisis visual simulado."
+    )

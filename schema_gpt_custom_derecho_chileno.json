@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Derecho Chileno Temático",
+  "type": "object",
+  "patternProperties": {
+    "^[\\w\\sáéíóúÁÉÍÓÚñÑ]+$": {
+      "type": "object",
+      "properties": {
+        "temas": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "nombre": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string",
+                "format": "uri"
+              },
+              "leyes": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^Ley \\d+$|^Decreto.*|^Resolución.*|^Instrucción.*|^Decreto con Fuerza de Ley.*|^Ordenanza.*|^Reglamento.*|^Circular.*|^Norma.*|^Oficio.*|^Acuerdo.*|^Auto Acordado.*|^Código.*|^Orden.*"
+                }
+              },
+              "subtemas": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/tema"
+                }
+              }
+            },
+            "required": [
+              "nombre",
+              "url",
+              "leyes",
+              "subtemas"
+            ]
+          }
+        }
+      },
+      "required": [
+        "temas"
+      ]
+    }
+  },
+  "$defs": {
+    "tema": {
+      "type": "object",
+      "properties": {
+        "nombre": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "leyes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^Ley \\d+$|^Decreto.*|^Resolución.*|^Instrucción.*|^Decreto con Fuerza de Ley.*|^Ordenanza.*|^Reglamento.*|^Circular.*|^Norma.*|^Oficio.*|^Acuerdo.*|^Auto Acordado.*|^Código.*|^Orden.*"
+          }
+        },
+        "subtemas": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/tema"
+          }
+        }
+      },
+      "required": [
+        "nombre",
+        "url",
+        "leyes",
+        "subtemas"
+      ]
+    }
+  }
+}
