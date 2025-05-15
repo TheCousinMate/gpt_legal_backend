@@ -1,76 +1,105 @@
 openapi: 3.1.0
 info:
-  title: GPT Legal Backend
-  version: 1.0.0
-  description: API de backend legal para reflexiones jurídicas, visión forense, y consultas a legislación chilena.
+  title: GPT Legal Forensic API
+  description: API para análisis legal automatizado con múltiples módulos como reflexión jurídica, análisis visual, predicción bayesiana, y búsqueda de normas legales en BCN.
+  version: "1.0"
 
 servers:
   - url: http://localhost:8000
-    description: Servidor local de desarrollo
+    description: Local development server
 
 paths:
-  /reflexion/ejecutar:
-    post:
-      operationId: ejecutarReflexion
-      summary: Ejecutar reflexión jurídica
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                pregunta:
-                  type: string
+  /:
+    get:
+      operationId: readRoot
+      summary: Verificar estado del backend
       responses:
         '200':
-          description: Respuesta con reflexión
+          description: Respuesta básica de estado
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  respuesta:
+                  message:
                     type: string
 
-  /vision/procesar:
+  /reflexion/reflexion/:
     post:
-      operationId: procesarVisionForense
-      summary: Procesar visión forense
+      operationId: reflexionar
+      summary: Realizar reflexión jurídica
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
+              required: [documento_analizado, criterios]
               properties:
-                imagen:
+                documento_analizado:
                   type: string
-                  format: binary
+                criterios:
+                  type: array
+                  items:
+                    type: string
       responses:
         '200':
-          description: Resultado de visión forense
+          description: Resultado del análisis reflexivo
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  resultado:
+                  verificacion_integral:
                     type: string
+                  coherencia_estructural:
+                    type: string
+                  consistencia_semantica:
+                    type: string
+                  ajustes_realizados:
+                    type: array
+                    items:
+                      type: string
 
-  /prediccion/estimar:
+  /vision/vision/:
     post:
-      operationId: estimarPrediccion
-      summary: Realiza predicción bayesiana sobre datos legales
+      operationId: analizarImagen
+      summary: Análisis visual forense de una imagen
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
+              required: [image_id]
               properties:
-                datos:
-                  type: object
+                image_id:
+                  type: string
+      responses:
+        '200':
+          description: Análisis visual
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  vision:
+                    type: string
+
+  /prediccion/api/prediccion/:
+    post:
+      operationId: predecirRiesgo
+      summary: Predicción de riesgo utilizando análisis bayesiano
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [contexto]
+              properties:
+                contexto:
+                  type: string
       responses:
         '200':
           description: Resultado de la predicción
@@ -78,47 +107,37 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  resultado:
-                    type: string
+                additionalProperties: true
 
-  /bcn/extraer:
-    post:
-      operationId: extraerDesdeBcn
-      summary: Extrae texto legal desde una URL del BCN
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                url:
-                  type: string
+  /bcn/api/bcn/norma/{id_norma}:
+    get:
+      operationId: obtenerNormaBcn
+      summary: Obtener norma legal por ID desde BCN
+      parameters:
+        - name: id_norma
+          in: path
+          required: true
+          schema:
+            type: integer
       responses:
         '200':
-          description: Texto legal extraído
+          description: Norma legal obtenida
           content:
             application/json:
               schema:
                 type: object
-                properties:
-                  texto:
-                    type: string
+                additionalProperties: true
 
-  /bcn/buscar:
-    post:
-      operationId: buscarEnBcn
-      summary: Realiza búsqueda textual en legislación BCN
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                consulta:
-                  type: string
+  /legislacion/buscar:
+    get:
+      operationId: buscarNorma
+      summary: Buscar norma legal en BCN por palabra clave
+      parameters:
+        - name: palabra
+          in: query
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: Resultados de búsqueda
@@ -126,71 +145,74 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  resultados:
-                    type: array
-                    items:
-                      type: string
+                additionalProperties: true
 
-  /legislacion/buscar:
-    post:
-      operationId: buscarLegislacion
-      summary: Buscar legislación chilena por número o palabras clave
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                query:
-                  type: string
-      responses:
-        '200':
-          description: Detalles de la legislación encontrada
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  resultado:
-                    type: string
-
-  /forensics/gafi:
-    post:
-      operationId: obtenerInformeForense
-      summary: Obtiene resultados forenses según criterios GAFI
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                caso:
-                  type: string
-      responses:
-        '200':
-          description: Informe forense GAFI
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  informe:
-                    type: string
-
-  /status/ping:
+  /legislacion/norma/{id_norma}:
     get:
-      operationId: pingStatus
-      summary: Verificar estado del sistema
+      operationId: obtenerNormaLegislacion
+      summary: Obtener norma desde legislacion_bcn por ID
+      parameters:
+        - name: id_norma
+          in: path
+          required: true
+          schema:
+            type: integer
       responses:
         '200':
-          description: Estado OK
+          description: Norma encontrada
           content:
             application/json:
               schema:
                 type: object
-                properties:
-                  status:
-                    type: string
+                additionalProperties: true
+
+  /bcn/text-search:
+    get:
+      operationId: buscarTextoBcn
+      summary: Búsqueda textual en legislación BCN
+      parameters:
+        - name: palabra
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Resultados de la búsqueda textual
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+
+  /forensics/api/forensics/search:
+    get:
+      operationId: buscarForensics
+      summary: Realizar búsqueda de beneficiarios o GAFI en análisis forense
+      parameters:
+        - name: pregunta
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Resultados del análisis forense
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+
+  /status/status/json:
+    get:
+      operationId: obtenerStatus
+      summary: Obtener el estado actual del sistema
+      responses:
+        '200':
+          description: Estado general del backend
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
