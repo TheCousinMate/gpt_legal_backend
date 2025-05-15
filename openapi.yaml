@@ -1,8 +1,10 @@
 openapi: 3.1.0
 info:
   title: GPT Legal Forensic API
-  description: API para análisis legal automatizado con múltiples módulos...
+  description: API para análisis legal automatizado con múltiples módulos como reflexión jurídica, análisis visual, predicción bayesiana y búsqueda de normas legales en BCN.
   version: "1.0"
+  x-privacyPolicy: https://github.com/TheCousinMate/gpt_legal_backend#privacy-policy
+
 servers:
   - url: https://gpt-legal-backend.onrender.com
     description: Servidor público en Render
