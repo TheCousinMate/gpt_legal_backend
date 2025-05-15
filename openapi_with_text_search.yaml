@@ -1,27 +1,31 @@
 openapi: 3.1.0
 info:
-  title: Global AI Legal & Forensic Expert
-  version: 1.0.0
+  title: GPT Legal Forensic API
+  version: "1.0"
 servers:
   - url: https://gpt-legal-backend.onrender.com
-    description: Render Production Server
+    description: Render backend deployment
 
 paths:
   /:
     get:
-      summary: Root
-      operationId: root__get
+      operationId: getRoot
+      summary: Estado del sistema
       responses:
-        '200':
-          description: Successful Response
+        "200":
+          description: Respuesta básica
           content:
             application/json:
-              schema: {}
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
 
-  /reflexion/:
+  /reflexion/reflexion/:
     post:
-      summary: Ejecutar Reflexion
-      operationId: ejecutar_reflexion_reflexion__post
+      operationId: postReflexion
+      summary: Ejecutar reflexión
       requestBody:
         required: true
         content:
@@ -29,23 +33,19 @@ paths:
             schema:
               $ref: "#/components/schemas/ReflexionInput"
       responses:
-        '200':
-          description: Successful Response
+        "200":
+          description: Análisis exitoso
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ReflexionOutput"
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/HTTPValidationError"
+        "422":
+          description: Error de validación
 
-  /vision/:
+  /vision/vision/:
     post:
-      summary: Analizar Imagen
-      operationId: analizar_imagen_vision__post
+      operationId: postVision
+      summary: Analizar imagen
       requestBody:
         required: true
         content:
@@ -53,23 +53,19 @@ paths:
             schema:
               $ref: "#/components/schemas/VisionInput"
       responses:
-        '200':
-          description: Successful Response
+        "200":
+          description: Resultado del análisis
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/VisionOutput"
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/HTTPValidationError"
+        "422":
+          description: Error de validación
 
-  /prediccion/:
+  /prediccion/api/prediccion/:
     post:
-      summary: Predecir
-      operationId: predecir_prediccion__post
+      operationId: postPrediccion
+      summary: Ejecutar predicción bayesiana
       requestBody:
         required: true
         content:
@@ -77,80 +73,106 @@ paths:
             schema:
               $ref: "#/components/schemas/BayesInput"
       responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema: {}
-        '422':
-          description: Validation Error
+        "200":
+          description: Resultado de la predicción
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/HTTPValidationError"
+                type: object
+                properties:
+                  resultado:
+                    type: string
+        "422":
+          description: Error de validación
 
-  /bcn/buscar:
+  /bcn/api/bcn/norma/{id_norma}:
     get:
-      summary: Buscar Norma
-      operationId: buscar_norma_bcn_buscar_get
-      parameters:
-        - name: palabra
-          in: query
-          required: true
-          schema:
-            type: string
-            title: Palabra
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema: {}
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/HTTPValidationError"
-
-  /bcn/norma/{id_norma}:
-    get:
-      summary: Obtener Norma
-      operationId: obtener_norma_bcn_norma__id_norma__get
+      operationId: getNormaBcn
+      summary: Obtener norma BCN
       parameters:
         - name: id_norma
           in: path
           required: true
           schema:
             type: integer
-            title: Id Norma
       responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema: {}
-        '422':
-          description: Validation Error
+        "200":
+          description: Norma encontrada
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/HTTPValidationError"
+                type: object
+                properties:
+                  id_norma:
+                    type: integer
+                  contenido:
+                    type: string
+        "422":
+          description: Error de validación
 
-  /bcn/text-search:
+  /legislacion/buscar:
     get:
-      summary: Búsqueda textual en legislación chilena
-      operationId: buscarTextoLegal
+      operationId: buscarLegislacion
+      summary: Buscar norma por palabra clave
       parameters:
         - name: palabra
           in: query
           required: true
           schema:
             type: string
-            title: Palabra clave a buscar
       responses:
-        '200':
-          description: Resultados de búsqueda legal simulados
+        "200":
+          description: Resultados encontrados
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultados:
+                    type: array
+                    items:
+                      type: string
+        "422":
+          description: Error de validación
+
+  /legislacion/norma/{id_norma}:
+    get:
+      operationId: getLegislacionNorma
+      summary: Obtener detalle de norma legislativa
+      parameters:
+        - name: id_norma
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Detalle de la norma
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id_norma:
+                    type: integer
+                  texto:
+                    type: string
+        "422":
+          description: Error de validación
+
+  /bcn/text-search:
+    get:
+      operationId: buscarTextoLegal
+      summary: Búsqueda textual en legislación chilena
+      parameters:
+        - name: palabra
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Resultados de búsqueda
           content:
             application/json:
               schema:
@@ -167,116 +189,92 @@ paths:
                           type: integer
                         extracto:
                           type: string
+        "422":
+          description: Error de validación
+
+  /forensics/api/forensics/search:
+    get:
+      operationId: buscarForensics
+      summary: Buscar pregunta en proxy forense
+      parameters:
+        - name: pregunta
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Respuesta forense
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  respuesta:
+                    type: string
+        "422":
+          description: Error de validación
+
+  /status/status/json:
+    get:
+      operationId: getStatusJson
+      summary: Obtener estado del sistema
+      responses:
+        "200":
+          description: Estado actual
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
 
 components:
   schemas:
-    BayesInput:
-      type: object
-      title: BayesInput
-      required:
-        - contexto
-      properties:
-        contexto:
-          type: string
-          title: Contexto
-
-    HTTPValidationError:
-      type: object
-      title: HTTPValidationError
-      properties:
-        detail:
-          type: array
-          title: Detail
-          items:
-            $ref: "#/components/schemas/ValidationError"
-
     ReflexionInput:
       type: object
-      title: ReflexionInput
-      required:
-        - documento_analizado
-        - criterios
+      required: [documento_analizado, criterios]
       properties:
         documento_analizado:
           type: string
-          title: Documento Analizado
         criterios:
           type: array
-          title: Criterios
           items:
             type: string
 
     ReflexionOutput:
       type: object
-      title: ReflexionOutput
-      required:
-        - verificacion_integral
-        - coherencia_estructural
-        - consistencia_semantica
-        - ajustes_realizados
+      required: [verificacion_integral, coherencia_estructural, consistencia_semantica, ajustes_realizados]
       properties:
         verificacion_integral:
           type: string
-          title: Verificacion Integral
         coherencia_estructural:
           type: string
-          title: Coherencia Estructural
         consistencia_semantica:
           type: string
-          title: Consistencia Semantica
         ajustes_realizados:
           type: array
-          title: Ajustes Realizados
           items:
             type: string
 
-    ValidationError:
-      type: object
-      title: ValidationError
-      required:
-        - loc
-        - msg
-        - type
-      properties:
-        loc:
-          type: array
-          title: Location
-          items:
-            anyOf:
-              - type: string
-              - type: integer
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-
     VisionInput:
       type: object
-      title: VisionInput
-      required:
-        - image_url
-        - prompt
+      required: [image_id]
       properties:
-        image_url:
+        image_id:
           type: string
-          format: uri
-          title: Image Url
-        prompt:
-          type: string
-          title: Prompt
 
     VisionOutput:
       type: object
-      title: VisionOutput
-      required:
-        - resultado
-        - resumen
+      required: [vision]
       properties:
-        resultado:
+        vision:
           type: string
-          title: Resultado
-        resumen:
+
+    BayesInput:
+      type: object
+      required: [contexto]
+      properties:
+        contexto:
           type: string
-          title: Resumen
