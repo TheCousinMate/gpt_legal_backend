@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
+from utils_output import output_dual
 
 router = APIRouter()
 
@@ -30,11 +31,39 @@ def norma_bcn(id_norma: int):
         except Exception:
             resumen_text = "Error al extraer resumen"
 
-        return JSONResponse(content={
-            "id_norma": id_norma,
-            "titulo": titulo_text,
-            "resumen": resumen_text,
-            "url": url
-        })
+        resultado = {
+            "respuesta": f"Título: {titulo_text}",
+            "clasificacion": "Fuerte",
+            "justificacion": "Consulta directa a BCN.",
+            "base_legal": {},
+            "derecho_comparado": {},
+            "contradicciones": [],
+            "estandares_internacionales": [],
+            "esquema_visual": "",
+            "sintesis_audio": titulo_text,
+            "fuentes": [url],
+            "logs": {
+                "input": id_norma,
+                "output": {"titulo": titulo_text, "resumen": resumen_text}
+            }
+        }
+        dual = output_dual(resultado)
+        return JSONResponse(content={"json": dual["json"], "markdown": dual["markdown"]})
     except Exception as e:
-        return JSONResponse(content={"error": f"No se pudo obtener la norma BCN: {e}"})
+        dual = output_dual({
+            "respuesta": "No se pudo obtener la norma BCN.",
+            "clasificacion": "Errónea",
+            "justificacion": str(e),
+            "base_legal": {},
+            "derecho_comparado": {},
+            "contradicciones": [],
+            "estandares_internacionales": [],
+            "esquema_visual": "",
+            "sintesis_audio": "Error.",
+            "fuentes": [],
+            "logs": {
+                "input": id_norma,
+                "output": str(e)
+            }
+        })
+        return JSONResponse(content={"json": dual["json"], "markdown": dual["markdown"]})
