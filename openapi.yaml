@@ -1,181 +1,18 @@
 openapi: 3.1.0
 info:
-  title: Global AI Legal & Forensic Expert
-  version: 4.1.0
-  description: >
-    API oficial del modelo Forensic Legal Cognition 4.1, especializado en reflexión jurídica, análisis doctrinal,
-    predicción legal, evaluación visual forense y verificación normativa. Todas las funciones están optimizadas para uso con GPT personalizado.
+  title: GPT Legal Backend
+  version: 1.0.0
+  description: API de backend legal para reflexiones jurídicas, visión forense, y consultas a legislación chilena.
 
 servers:
-  - url: https://gpt-legal-backend.onrender.com
-    description: Render Production Server
+  - url: http://localhost:8000
+    description: Servidor local de desarrollo
 
 paths:
-  /:
-    get:
-      summary: Estado del sistema
-      operationId: rootStatus
-      responses:
-        '200':
-          description: Respuesta satisfactoria
-          content:
-            application/json:
-              schema: {}
-
-  /reflexion/:
+  /reflexion/ejecutar:
     post:
-      summary: Ejecutar reflexión jurídica estructural
       operationId: ejecutarReflexion
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ReflexionInput"
-      responses:
-        '200':
-          description: Reflexión completada
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ReflexionOutput"
-        '422':
-          description: Error de validación
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/HTTPValidationError"
-
-  /vision/:
-    post:
-      summary: Analizar evidencia visual (imagen forense)
-      operationId: analizarImagenForense
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/VisionInput"
-      responses:
-        '200':
-          description: Análisis forense completado
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/VisionOutput"
-        '422':
-          description: Error de validación
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/HTTPValidationError"
-
-  /prediccion/:
-    post:
-      summary: Predecir resultado jurídico basado en contexto
-      operationId: predecirResultadoLegal
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/BayesInput"
-      responses:
-        '200':
-          description: Predicción completada
-          content:
-            application/json:
-              schema: {}
-        '422':
-          description: Error de validación
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/HTTPValidationError"
-
-  /bcn/buscar:
-    get:
-      summary: Buscar norma en BCN por palabra clave
-      operationId: buscarNormaBCN
-      parameters:
-        - name: palabra
-          in: query
-          required: true
-          schema:
-            type: string
-            title: Palabra clave
-      responses:
-        '200':
-          description: Resultados encontrados
-          content:
-            application/json:
-              schema: {}
-        '422':
-          description: Error de validación
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/HTTPValidationError"
-
-  /bcn/norma/{id_norma}:
-    get:
-      summary: Obtener texto de norma por ID BCN
-      operationId: obtenerNormaBCN
-      parameters:
-        - name: id_norma
-          in: path
-          required: true
-          schema:
-            type: integer
-            title: ID de la norma
-      responses:
-        '200':
-          description: Texto legal recuperado
-          content:
-            application/json:
-              schema: {}
-        '422':
-          description: Error de validación
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/HTTPValidationError"
-
-  /bcn/text-search:
-    get:
-      summary: Búsqueda textual de legislación chilena
-      operationId: buscarTextoLegal
-      parameters:
-        - name: palabra
-          in: query
-          required: true
-          schema:
-            type: string
-            title: Palabra clave a buscar
-      responses:
-        '200':
-          description: Resultados simulados de búsqueda legal
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  palabra:
-                    type: string
-                  resultados:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        norma_id:
-                          type: integer
-                        extracto:
-                          type: string
-
-  /validacion/validar:
-    post:
-      summary: Validar estructura legal temática chilena
-      operationId: validarJsonLegal
+      summary: Ejecutar reflexión jurídica
       requestBody:
         required: true
         content:
@@ -183,123 +20,177 @@ paths:
             schema:
               type: object
               properties:
-                contenido:
-                  type: object
-              required:
-                - contenido
+                pregunta:
+                  type: string
       responses:
         '200':
-          description: Resultado de validación
+          description: Respuesta con reflexión
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  valido:
-                    type: boolean
-                  mensaje:
-                    type: string
-                  error:
+                  respuesta:
                     type: string
 
-components:
-  schemas:
-    BayesInput:
-      type: object
-      title: BayesInput
-      required:
-        - contexto
-      properties:
-        contexto:
-          type: string
-          title: Contexto del caso
+  /vision/procesar:
+    post:
+      operationId: procesarVisionForense
+      summary: Procesar visión forense
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                imagen:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Resultado de visión forense
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultado:
+                    type: string
 
-    HTTPValidationError:
-      type: object
-      title: HTTPValidationError
-      properties:
-        detail:
-          type: array
-          title: Detail
-          items:
-            $ref: "#/components/schemas/ValidationError"
+  /prediccion/estimar:
+    post:
+      operationId: estimarPrediccion
+      summary: Realiza predicción bayesiana sobre datos legales
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                datos:
+                  type: object
+      responses:
+        '200':
+          description: Resultado de la predicción
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultado:
+                    type: string
 
-    ReflexionInput:
-      type: object
-      title: ReflexionInput
-      required:
-        - documento_analizado
-        - criterios
-      properties:
-        documento_analizado:
-          type: string
-          title: Documento Analizado
-        criterios:
-          type: array
-          title: Criterios
-          items:
-            type: string
+  /bcn/extraer:
+    post:
+      operationId: extraerDesdeBcn
+      summary: Extrae texto legal desde una URL del BCN
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+      responses:
+        '200':
+          description: Texto legal extraído
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  texto:
+                    type: string
 
-    ReflexionOutput:
-      type: object
-      title: ReflexionOutput
-      required:
-        - verificacion_integral
-        - coherencia_estructural
-        - consistencia_semantica
-        - ajustes_realizados
-      properties:
-        verificacion_integral:
-          type: string
-        coherencia_estructural:
-          type: string
-        consistencia_semantica:
-          type: string
-        ajustes_realizados:
-          type: array
-          items:
-            type: string
+  /bcn/buscar:
+    post:
+      operationId: buscarEnBcn
+      summary: Realiza búsqueda textual en legislación BCN
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                consulta:
+                  type: string
+      responses:
+        '200':
+          description: Resultados de búsqueda
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultados:
+                    type: array
+                    items:
+                      type: string
 
-    ValidationError:
-      type: object
-      title: ValidationError
-      required:
-        - loc
-        - msg
-        - type
-      properties:
-        loc:
-          type: array
-          items:
-            anyOf:
-              - type: string
-              - type: integer
-        msg:
-          type: string
-        type:
-          type: string
+  /legislacion/buscar:
+    post:
+      operationId: buscarLegislacion
+      summary: Buscar legislación chilena por número o palabras clave
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+      responses:
+        '200':
+          description: Detalles de la legislación encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultado:
+                    type: string
 
-    VisionInput:
-      type: object
-      title: VisionInput
-      required:
-        - image_url
-        - prompt
-      properties:
-        image_url:
-          type: string
-          format: uri
-        prompt:
-          type: string
+  /forensics/gafi:
+    post:
+      operationId: obtenerInformeForense
+      summary: Obtiene resultados forenses según criterios GAFI
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                caso:
+                  type: string
+      responses:
+        '200':
+          description: Informe forense GAFI
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  informe:
+                    type: string
 
-    VisionOutput:
-      type: object
-      title: VisionOutput
-      required:
-        - resultado
-        - resumen
-      properties:
-        resultado:
-          type: string
-        resumen:
-          type: string
+  /status/ping:
+    get:
+      operationId: pingStatus
+      summary: Verificar estado del sistema
+      responses:
+        '200':
+          description: Estado OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string

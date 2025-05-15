@@ -8,7 +8,12 @@ from modules.bcn_text_search_parser import router as text_search_router
 from modules.forensics_proxy import router as forensics_router
 from modules.root import router as root_router
 
-app = FastAPI()
+app = FastAPI(title="GPT Legal Forensic API", version="1.0")
+
+# Ruta raíz para respuesta básica
+@app.get("/", tags=["Raíz"])
+async def read_root():
+    return {"message": "Backend GPT Legal Forensic funcionando correctamente"}
 
 # Inclusión de rutas organizadas
 app.include_router(reflexion_router, prefix="/reflexion", tags=["Reflexión"])
