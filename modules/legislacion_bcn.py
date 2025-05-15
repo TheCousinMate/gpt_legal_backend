@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Query, HTTPException
 import requests
 from bs4 import BeautifulSoup
+from fastapi.responses import JSONResponse
+from utils_output import output_dual
 
 router = APIRouter()
 
@@ -32,9 +34,42 @@ def buscar_norma(palabra: str = Query(..., description="Palabra clave legal a bu
         if response.status_code != 200:
             raise HTTPException(status_code=502, detail="Error de conexión con BCN.")
         contenido = parse_html_bcn(response.text)
-        return {"termino": palabra, "fuente": "BCN", "contenido": contenido}
+        resultado = {
+            "respuesta": f"Resultado de búsqueda para '{palabra}' en BCN.",
+            "clasificacion": "Fuerte" if contenido else "Débil",
+            "justificacion": "Resultado directo desde BCN.",
+            "base_legal": {},
+            "derecho_comparado": {},
+            "contradicciones": [],
+            "estandares_internacionales": [],
+            "esquema_visual": "",
+            "sintesis_audio": f"Resultado para {palabra}",
+            "fuentes": [url],
+            "logs": {
+                "input": palabra,
+                "output": contenido
+            }
+        }
+        dual = output_dual(resultado)
+        return JSONResponse(content={"json": dual["json"], "markdown": dual["markdown"]})
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        dual = output_dual({
+            "respuesta": "Error de conexión con BCN.",
+            "clasificacion": "Errónea",
+            "justificacion": str(e),
+            "base_legal": {},
+            "derecho_comparado": {},
+            "contradicciones": [],
+            "estandares_internacionales": [],
+            "esquema_visual": "",
+            "sintesis_audio": "Error de conexión",
+            "fuentes": [],
+            "logs": {
+                "input": palabra,
+                "output": str(e),
+            }
+        })
+        return JSONResponse(content={"json": dual["json"], "markdown": dual["markdown"]})
 
 @router.get("/norma/{id_norma}")
 def obtener_norma(id_norma: int):
@@ -44,6 +79,39 @@ def obtener_norma(id_norma: int):
         if response.status_code != 200:
             raise HTTPException(status_code=502, detail="Error de conexión con BCN.")
         contenido = parse_html_bcn(response.text)
-        return {"id_norma": id_norma, "fuente": "BCN", "contenido": contenido}
+        resultado = {
+            "respuesta": f"Detalle de la norma BCN ID {id_norma}.",
+            "clasificacion": "Fuerte" if contenido else "Débil",
+            "justificacion": "Norma consultada directamente en BCN.",
+            "base_legal": {},
+            "derecho_comparado": {},
+            "contradicciones": [],
+            "estandares_internacionales": [],
+            "esquema_visual": "",
+            "sintesis_audio": f"Norma {id_norma} consultada.",
+            "fuentes": [url],
+            "logs": {
+                "input": id_norma,
+                "output": contenido
+            }
+        }
+        dual = output_dual(resultado)
+        return JSONResponse(content={"json": dual["json"], "markdown": dual["markdown"]})
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        dual = output_dual({
+            "respuesta": "Error de conexión con BCN.",
+            "clasificacion": "Errónea",
+            "justificacion": str(e),
+            "base_legal": {},
+            "derecho_comparado": {},
+            "contradicciones": [],
+            "estandares_internacionales": [],
+            "esquema_visual": "",
+            "sintesis_audio": "Error de conexión",
+            "fuentes": [],
+            "logs": {
+                "input": id_norma,
+                "output": str(e),
+            }
+        })
+        return JSONResponse(content={"json": dual["json"], "markdown": dual["markdown"]})

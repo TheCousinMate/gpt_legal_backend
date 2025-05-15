@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
 from fastapi.responses import JSONResponse
+from utils_output import output_dual
 
 router = APIRouter()
 
@@ -8,18 +9,23 @@ class ReflexionInput(BaseModel):
     documento_analizado: str
     criterios: list[str]
 
-class ReflexionOutput(BaseModel):
-    verificacion_integral: str
-    coherencia_estructural: str
-    consistencia_semantica: str
-    ajustes_realizados: list[str]
-
-@router.post("/reflexion/", response_model=ReflexionOutput)
+@router.post("/reflexion/")
 def reflexionar(data: ReflexionInput):
-    # TODO: Integrar modelo NLP para análisis real
-    return ReflexionOutput(
-        verificacion_integral="Texto formalmente adecuado.",
-        coherencia_estructural="Buena construcción de párrafos argumentativos.",
-        consistencia_semantica="Consistencia temática y uso correcto de figuras legales.",
-        ajustes_realizados=["Corrección de conectores", "Mejoras en puntuación final"]
-    )
+    resultado = {
+        "respuesta": "Texto formalmente adecuado.",
+        "clasificacion": "Fuerte",
+        "justificacion": "Cumple criterios de coherencia y adecuación legal.",
+        "base_legal": {},
+        "derecho_comparado": {},
+        "contradicciones": [],
+        "estandares_internacionales": [],
+        "esquema_visual": "",
+        "sintesis_audio": "Resumen breve.",
+        "fuentes": [],
+        "logs": {
+            "input": data.dict(),
+            "output": "...",
+        }
+    }
+    dual = output_dual(resultado)
+    return JSONResponse(content={"json": dual["json"], "markdown": dual["markdown"]})

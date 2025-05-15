@@ -1,0 +1,1 @@
+https://raw.githubusercontent.com/TheCousinMate/gpt_legal_backend/main/openapi_with_text_search.yaml

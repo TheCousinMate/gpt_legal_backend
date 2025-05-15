@@ -1,12 +1,11 @@
 openapi: 3.1.0
 info:
   title: GPT Legal Forensic API
-  description: API para análisis legal automatizado con múltiples módulos como reflexión jurídica, análisis visual, predicción bayesiana, y búsqueda de normas legales en BCN.
+  description: API para análisis legal automatizado con múltiples módulos...
   version: "1.0"
-
 servers:
-  - url: http://localhost:8000
-    description: Local development server
+  - url: https://gpt-legal-backend.onrender.com
+    description: Servidor público en Render
 
 paths:
   /:
@@ -107,7 +106,9 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
+                properties:
+                  riesgo:
+                    type: string
 
   /bcn/api/bcn/norma/{id_norma}:
     get:
@@ -126,7 +127,10 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
+                properties:
+                  norma:
+                    type: object
+                    additionalProperties: true
 
   /legislacion/buscar:
     get:
@@ -145,7 +149,12 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
+                properties:
+                  resultados:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
 
   /legislacion/norma/{id_norma}:
     get:
@@ -164,7 +173,10 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
+                properties:
+                  norma:
+                    type: object
+                    additionalProperties: true
 
   /bcn/text-search:
     get:
@@ -183,7 +195,12 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
+                properties:
+                  resultados:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
 
   /forensics/api/forensics/search:
     get:
@@ -202,7 +219,12 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
+                properties:
+                  resultados:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
 
   /status/status/json:
     get:
@@ -215,4 +237,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
+                properties:
+                  status:
+                    type: string
