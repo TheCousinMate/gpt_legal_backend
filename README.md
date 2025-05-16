@@ -1,6 +1,3 @@
-Aquí tienes el archivo README.md “bonito” y con la URL correspondiente al repositorio:
-
----
 # 🧑‍⚖️ Forensic Legal Cognition 4.1 — Global AI Legal & Forensic Expert
 
 **Autor registrado:** Kabir K. Hazbún Crovetto  
@@ -76,6 +73,3 @@ Acredita que el modelo fue creado, entrenado y afinado conversacionalmente en su
 **Santiago, Chile — 2025**
 
 ---
-
-URL del archivo original:  
-https://github.com/TheCousinMate/gpt_legal_backend/blob/main/README.md
