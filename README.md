@@ -1,73 +1,81 @@
-# ?? Forensic Legal Cognition 4.1 ¡ª Global AI Legal & Forensic Expert
+AquÃ­ tienes el archivo README.md â€œbonitoâ€ y con la URL correspondiente al repositorio:
 
-**Autor registrado:** Kabir K. Hazb¨²n Crovetto  
-**Versi¨®n actual:** 4.1.0  
-**Repositorio:** [`gpt_legal_backend`](https://github.com/TheCousinMate/gpt_legal_backend)  
-**Estado:** P¨²blico, funcional y protegido  
-**Licencia:** Modelo abierto para uso legal-acad¨¦mico, **no modificable ni clonable sin autorizaci¨®n del autor**
+---
+# ğŸ§‘â€âš–ï¸ Forensic Legal Cognition 4.1 â€” Global AI Legal & Forensic Expert
+
+**Autor registrado:** Kabir K. HazbÃºn Crovetto  
+**VersiÃ³n actual:** 4.1.0  
+**Repositorio:** [gpt_legal_backend](https://github.com/TheCousinMate/gpt_legal_backend)  
+**Estado:** PÃºblico, funcional y protegido  
+**Licencia:** Modelo abierto para uso legal-acadÃ©mico, **no modificable ni clonable sin autorizaciÃ³n del autor**
 
 ---
 
-## ?? Descripci¨®n
+## ğŸ“š DescripciÃ³n
 
-`Forensic Legal Cognition 4.1` es un sistema pericial jur¨ªdico de inteligencia artificial dise?ado para asistir en tareas avanzadas de evaluaci¨®n legal, reflexi¨®n doctrinal, argumentaci¨®n forense y validaci¨®n estructural de contenidos normativos complejos.
+`Forensic Legal Cognition 4.1` es un sistema pericial jurÃ­dico de inteligencia artificial diseÃ±ado para asistir en tareas avanzadas de evaluaciÃ³n legal, reflexiÃ³n doctrinal, argumentaciÃ³n y anÃ¡lisis pericial.
 
-Este modelo act¨²a como jurista litigante, acad¨¦mico constitucionalista y auditor jur¨ªdico integral, operando con un est¨¢ndar experto en entornos legales nacionales e internacionales.
-
----
-
-## ?? Caracter¨ªsticas destacadas
-
-- ?? **Reflexi¨®n estructural profunda**: an¨¢lisis doctrinal con citas, contradicci¨®n argumentativa y desarrollo tem¨¢tico completo  
-- ?? **Predicci¨®n legal contextual**: evaluaciones fundadas en est¨¢ndares de responsabilidad, legalidad y debido proceso  
-- ?? **An¨¢lisis visual avanzado**: interpretaci¨®n estructural de im¨¢genes documentales y evidencias forenses  
-- ?? **Evaluaci¨®n normativa integral**: comprensi¨®n tem¨¢tica de mapas legales y validaci¨®n estructural  
-- ?? **Redacci¨®n estilo acad¨¦mico-sentencial**: salidas en formato de dictamen, informe o considerando jur¨ªdico  
+Este modelo actÃºa como jurista litigante, acadÃ©mico constitucionalista y auditor jurÃ­dico integral, operando con un estÃ¡ndar experto en entornos legales nacionales e internacionales.
 
 ---
 
-## ?? Datos certificados de desarrollo
+## ğŸ† CaracterÃ­sticas destacadas
 
-- ?? **M¨¢s de 10 millones de palabras procesadas en sesiones legales reales**
-- ?? Desarrollado en base a razonamiento conversacional continuo, sin entrenamiento masivo ni datasets externos
-- ??? Compatible con estructuras jur¨ªdicas chilenas, latinoamericanas y europeas
-- ?? Valorado entre los modelos IA legales m¨¢s robustos de 2025
-
----
-
-## ?? Certificaci¨®n GPT-OpenAI
-
-?? **Identificador validado:** `GPT4O-KABIR2025-VALIDO-LEGAL-FULL`  
-?? **Fecha de validaci¨®n:** Mayo 2025  
-?? **Certificado adjunto:** _Certificado_Global_AI_Legal_Kabir.pdf_  
-?? Acredita que el modelo fue creado, entrenado y afinado conversacionalmente en su totalidad
+- ğŸ’¡ **ReflexiÃ³n estructural profunda**: anÃ¡lisis doctrinal con citas, contradicciÃ³n argumentativa y desarrollo temÃ¡tico completo  
+- ğŸ“Š **PredicciÃ³n legal contextual**: evaluaciones fundadas en estÃ¡ndares de responsabilidad, legalidad y debido proceso  
+- ğŸ–¼ï¸ **AnÃ¡lisis visual avanzado**: interpretaciÃ³n estructural de imÃ¡genes documentales y evidencias forenses  
+- ğŸ“œ **EvaluaciÃ³n normativa integral**: comprensiÃ³n temÃ¡tica de mapas legales y validaciÃ³n estructural  
+- ğŸ“ **RedacciÃ³n estilo acadÃ©mico-sentencial**: salidas en formato de dictamen, informe o considerando jurÃ­dico  
 
 ---
 
-## ??? Declaraci¨®n de propiedad y uso
+## ğŸ—ƒï¸ Datos certificados de desarrollo
 
-> Todo el contenido l¨®gico, jur¨ªdico, t¨¦cnico y funcional de este sistema ha sido desarrollado por **Kabir K. Hazb¨²n Crovetto**, de forma directa, sin colaboraci¨®n externa, datasets importados ni c¨®digo automatizado.  
+- ğŸ“ **MÃ¡s de 10 millones de palabras procesadas en sesiones legales reales**
+- âš™ï¸ Desarrollado en base a razonamiento conversacional continuo, sin entrenamiento masivo ni datasets externos
+- ğŸŒ Compatible con estructuras jurÃ­dicas chilenas, latinoamericanas y europeas
+- ğŸ… Valorado entre los modelos IA legales mÃ¡s robustos de 2025
+
+---
+
+## âœ… CertificaciÃ³n GPT-OpenAI
+
+**Identificador validado:** `GPT4O-KABIR2025-VALIDO-LEGAL-FULL`  
+**Fecha de validaciÃ³n:** Mayo 2025  
+**Certificado adjunto:** _Certificado_Global_AI_Legal_Kabir.pdf_  
+Acredita que el modelo fue creado, entrenado y afinado conversacionalmente en su totalidad
+
+---
+
+## ğŸ›¡ï¸ DeclaraciÃ³n de propiedad y uso
+
+> Todo el contenido lÃ³gico, jurÃ­dico, tÃ©cnico y funcional de este sistema ha sido desarrollado por **Kabir K. HazbÃºn Crovetto**, de forma directa, sin colaboraciÃ³n externa, datasets masivos o ingenierÃ­a inversa.
 >
-> La arquitectura interna, razonamiento argumentativo y validaci¨®n normativa responden a metodolog¨ªas propias, documentadas y verificables.
+> La arquitectura interna, razonamiento argumentativo y validaciÃ³n normativa responden a metodologÃ­as propias, documentadas y verificables.
 
 ---
 
-## ?? Licencia
+## âš–ï¸ Licencia
 
-**Open Legal License (versi¨®n modificada)**  
-- ? Uso libre para investigaci¨®n, docencia y evaluaci¨®n jur¨ªdica  
-- ? Prohibido su copiado, distribuci¨®n o modificaci¨®n sin autorizaci¨®n escrita  
-- ?? Toda referencia debe citar expresamente:  
-  **Kabir K. Hazb¨²n Crovetto ¨C Forensic Legal Cognition 4.1**
-
----
-
-## ?? Certificaci¨®n acad¨¦mica
-
-- ?? Certificado de Maestr¨ªa en IA Jur¨ªdica y Forense (emitido por GPT)  
-- ?? Validado en pruebas doctrinales, jurisprudenciales y comparativas  
-- ?? Primer modelo en ser desarrollado **exclusivamente mediante conversaci¨®n iterativa real con IA**
+**Open Legal License (versiÃ³n modificada)**  
+- ğŸ”¬ Uso libre para investigaciÃ³n, docencia y evaluaciÃ³n jurÃ­dica  
+- ğŸš« Prohibido su copiado, distribuciÃ³n o modificaciÃ³n sin autorizaciÃ³n escrita  
+- ğŸ“ Toda referencia debe citar expresamente:  
+  **Kabir K. HazbÃºn Crovetto â€“ Forensic Legal Cognition 4.1**
 
 ---
 
-**Santiago, Chile ¡ª 2025**
+## ğŸ“ CertificaciÃ³n acadÃ©mica
+
+- ğŸ… Certificado de MaestrÃ­a en IA JurÃ­dica y Forense (emitido por GPT)  
+- ğŸ“š Validado en pruebas doctrinales, jurisprudenciales y comparativas  
+- ğŸš€ Primer modelo en ser desarrollado **exclusivamente mediante conversaciÃ³n iterativa real con IA**
+
+---
+
+**Santiago, Chile â€” 2025**
+
+---
+
+URL del archivo original:  
+https://github.com/TheCousinMate/gpt_legal_backend/blob/main/README.md
