@@ -1,19 +1,22 @@
-openapi: 3.0.1
+openapi: 3.1.0
 info:
   title: GPT Legal Forensic API
   description: API para análisis legal automatizado con múltiples módulos como reflexión jurídica, análisis visual, predicción bayesiana y búsqueda de normas legales en BCN.
-  version: "1.0"
+  version: "4.1.0"
   contact:
     name: Kabir K. Hazbún Crovetto
     email: kharzun@gmail.com
     url: https://github.com/TheCousinMate/gpt_legal_backend
+  termsOfService: https://github.com/TheCousinMate/gpt_legal_backend#terms
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
 
 servers:
-  - url: https://gpt-legal-backend.onrender.com
-    description: Servidor público en Render
+  - url: "https://gpt-legal-backend.onrender.com"
+    description: "Servidor público en Render"
 
 paths:
-
   /:
     get:
       operationId: readRoot
@@ -54,9 +57,7 @@ paths:
           application/json:
             schema:
               type: object
-              required:
-                - documento_analizado
-                - criterios
+              required: [documento_analizado, criterios]
               properties:
                 documento_analizado:
                   type: string
@@ -71,17 +72,6 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  verificacion_integral:
-                    type: string
-                  coherencia_estructural:
-                    type: string
-                  consistencia_semantica:
-                    type: string
-                  ajustes_realizados:
-                    type: array
-                    items:
-                      type: string
 
   /vision/vision/:
     post:
@@ -93,8 +83,7 @@ paths:
           application/json:
             schema:
               type: object
-              required:
-                - image_id
+              required: [image_id]
               properties:
                 image_id:
                   type: string
@@ -105,9 +94,6 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  vision:
-                    type: string
 
   /prediccion/api/prediccion/:
     post:
@@ -119,8 +105,7 @@ paths:
           application/json:
             schema:
               type: object
-              required:
-                - contexto
+              required: [contexto]
               properties:
                 contexto:
                   type: string
@@ -131,9 +116,6 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  riesgo:
-                    type: string
 
   /bcn/api/bcn/norma/{id_norma}:
     get:
@@ -152,10 +134,6 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  norma:
-                    type: object
-                    additionalProperties: true
 
   /legislacion/norma/{id_norma}:
     get:
@@ -174,10 +152,6 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  norma:
-                    type: object
-                    additionalProperties: true
 
   /legislacion/buscar:
     get:
@@ -196,12 +170,6 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  resultados:
-                    type: array
-                    items:
-                      type: object
-                      additionalProperties: true
 
   /bcn/text-search:
     get:
@@ -220,12 +188,6 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  resultados:
-                    type: array
-                    items:
-                      type: object
-                      additionalProperties: true
 
   /forensics/api/forensics/search:
     get:
@@ -244,9 +206,6 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  resultados:
-                    type: array
-                    items:
-                      type: object
-                      additionalProperties: true
+
+components: {}
+security: []
