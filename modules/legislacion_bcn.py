@@ -20,7 +20,7 @@ def parse_html_bcn(html: str) -> dict:
         resumen_tag = soup.find("div", class_="resumen")
         resumen = resumen_tag.get_text(strip=True) if resumen_tag else "Resumen no disponible"
         return {
-            "id": 1234,  # ID simulado para pruebas
+            "id": 1234,  # Simulado para pruebas
             "titulo": titulo,
             "fecha_publicacion": fecha,
             "resumen": resumen
@@ -53,7 +53,8 @@ def buscar_norma(palabra: str = Query(..., description="Palabra clave legal a bu
             }
         }
         dual = output_dual(resultado)
-        return JSONResponse(content={"json": dual["json"], "markdown": dual["markdown"]})
+        # Retorna contenido para acceso programático (para test_api.py)
+        return JSONResponse(content={"json": dual["json"], "markdown": dual["markdown"], "id": contenido.get("id", None)})
     except Exception as e:
         return _error_response("buscar_norma", palabra, e)
 
@@ -87,7 +88,6 @@ def obtener_norma(id_norma: int):
         return _error_response("obtener_norma", id_norma, e)
 
 def _error_response(func: str, input_data, exception: Exception):
-    """Genera una respuesta dual de error estandarizada"""
     error_info = {
         "respuesta": "Error de conexión con BCN.",
         "clasificacion": "Errónea",
