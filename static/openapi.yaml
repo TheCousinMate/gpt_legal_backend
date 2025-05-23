@@ -1,0 +1,167 @@
+openapi: 3.1.0
+info:
+  title: GPT Legal Backend - Resolver IA
+  description: API chilena de análisis jurídico automatizado y verificación forense con módulos de predicción, reflexión legal, análisis de imagen y consulta legislativa.
+  version: "4.1.0"
+  contact:
+    name: Kabir K. Hazbún Crovetto
+    email: kharzun@gmail.com
+    url: https://github.com/TheCousinMate/gpt_legal_backend
+
+servers:
+  - url: https://gpt-legal-backend.onrender.com
+    description: Servidor desplegado en Render
+  - url: http://127.0.0.1:8000
+    description: Servidor local de desarrollo
+
+paths:
+
+  /:
+    get:
+      summary: Verificar estado general del backend
+      operationId: readRoot
+      responses:
+        "200":
+          description: El backend está activo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  version:
+                    type: string
+
+  /status/json:
+    get:
+      summary: Estado completo del backend con estructura dual
+      operationId: obtenerEstado
+      responses:
+        "200":
+          description: Estado JSON y markdown
+          content:
+            application/json:
+              schema:
+                type: object
+
+  /predict:
+    post:
+      summary: Predicción legal basada en análisis de texto
+      operationId: predecirRiesgoLegal
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [input]
+              properties:
+                input:
+                  type: string
+      responses:
+        "200":
+          description: Respuesta estructurada en JSON + Markdown
+          content:
+            application/json:
+              schema:
+                type: object
+
+  /reflexion/reflexion/:
+    post:
+      summary: Reflexión jurídica sobre texto según criterios
+      operationId: reflexionarTextoLegal
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - documento_analizado
+                - criterios
+              properties:
+                documento_analizado:
+                  type: string
+                criterios:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        "200":
+          description: Análisis reflexivo estructurado
+          content:
+            application/json:
+              schema:
+                type: object
+
+  /vision/vision/:
+    post:
+      summary: Análisis visual forense de imágenes
+      operationId: analizarImagen
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - image_id
+              properties:
+                image_id:
+                  type: string
+      responses:
+        "200":
+          description: Resultado del análisis visual
+          content:
+            application/json:
+              schema:
+                type: object
+
+  /bcn/api/bcn/norma/{id_norma}:
+    get:
+      summary: Obtener norma legal desde BCN por ID
+      operationId: obtenerNormaDesdeBcn
+      parameters:
+        - name: id_norma
+          in: path
+          required: true
+          description: ID numérico de la norma legal
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Norma legal extraída exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  norma:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      titulo:
+                        type: string
+                      contenido:
+                        type: string
+
+  /legislacion/buscar:
+    get:
+      summary: Buscar norma legal en BCN por palabra clave
+      operationId: buscarNormaLegislativa
+      parameters:
+        - name: palabra
+          in: query
+          required: true
+          description: Palabra clave para búsqueda legislativa
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Resultados de la búsqueda
+          content:
+            application/json:
+              schema:
+                type: object
