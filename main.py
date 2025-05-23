@@ -26,18 +26,19 @@ app = FastAPI(
         "name": "MIT",
         "url": "https://opensource.org/licenses/MIT"
     },
-    openapi_url="/static/openapi.yaml"  # Reemplaza la auto-generación por el archivo externo
+    # ✅ OJO: Solo si estás usando YAML real. Si usas JSON, cambia a openapi.json
+    openapi_url="/static/openapi.json"
 )
 
-# 📁 Servir carpeta estática
+# ✅ Montar carpeta estática correctamente
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# ✅ Endpoint básico
+# ✅ Endpoint de salud
 @app.get("/")
 def health_check():
-    return {"status": "alive", "version": "4.1.0"}
+    return {"status": "alive", "version": app.version}
 
-# 🔗 Routers del sistema
+# ✅ Carga de routers
 app.include_router(root.router)
 app.include_router(reflexion.router, prefix="/reflexion")
 app.include_router(vision_forense.router, prefix="/vision")
@@ -45,10 +46,10 @@ app.include_router(prediccion_bayesiana.router, prefix="/prediccion")
 app.include_router(legislacion_bcn.router, prefix="/legislacion")
 app.include_router(bcn_parser.router, prefix="/bcn")
 
-# 🔍 Endpoint para acceder al OpenAPI
-@app.get("/static/openapi.yaml", include_in_schema=False)
+# ✅ Endpoint explícito para obtener el OpenAPI manual (opcional pero útil para debug)
+@app.get("/static/openapi.json", include_in_schema=False)
 def get_openapi_file():
-    filepath = os.path.join("static", "openapi.yaml")
+    filepath = os.path.join("static", "openapi.json")
     if os.path.exists(filepath):
-        return FileResponse(filepath, media_type="text/yaml")
-    return {"detail": "File not found"}
+        return FileResponse(filepath, media_type="application/json")
+    return {"detail": "openapi.json not found"}
