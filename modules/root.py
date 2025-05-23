@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse
 from utils_output import output_dual
+from modules.motor_predictivo import analizar_input_legal
 
 router = APIRouter()
 
@@ -27,10 +28,16 @@ def status_json():
 
 @router.post("/predict")
 async def predict(request: Request):
-    payload = await request.json()
-    user_input = payload.get("input", "")
+    try:
+        payload = await request.json()
+        user_input = payload.get("input", "")
+    except Exception as e:
+        return JSONResponse(status_code=400, content={"error": f"Error al procesar JSON: {str(e)}"})
+
+    respuesta_generada = analizar_input_legal(user_input)
+
     resultado = {
-        "respuesta": f"Entrada procesada: {user_input}",
+        "respuesta": respuesta_generada,
         "clasificacion": "Fuerte",
         "justificacion": "El endpoint predict fue alcanzado exitosamente.",
         "base_legal": {},
@@ -38,7 +45,7 @@ async def predict(request: Request):
         "contradicciones": [],
         "estandares_internacionales": [],
         "esquema_visual": "",
-        "sintesis_audio": user_input,
+        "sintesis_audio": respuesta_generada,
         "fuentes": [],
         "logs": {
             "input": user_input,

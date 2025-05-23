@@ -1,3 +1,5 @@
+# ✅ BCN Parser actualizado: extracción más robusta desde leychile
+
 import requests
 from bs4 import BeautifulSoup
 from fastapi import APIRouter
@@ -6,64 +8,52 @@ from utils_output import output_dual
 
 router = APIRouter()
 
-@router.get("/api/bcn/norma/{id_norma}")
-def norma_bcn(id_norma: int):
+@router.get("/bcn/api/bcn/norma/{id_norma}")
+def obtener_norma_bcn(id_norma: int):
     try:
         url = f"https://www.bcn.cl/leychile/Navegar?idNorma={id_norma}"
-        headers = {"User-Agent": "ForensicLegalBot/1.0"}
+        headers = {"User-Agent": "ResolverIA/1.0"}
         response = requests.get(url, headers=headers, timeout=10)
         response.raise_for_status()
+
         soup = BeautifulSoup(response.text, "html.parser")
 
-        try:
-            titulo = soup.find("h1") or soup.find("title")
-            titulo_text = titulo.get_text(strip=True) if titulo else "Sin título"
-        except Exception:
-            titulo_text = "Error al extraer título"
+        # Intentar obtener el titulo desde <h1> o <title>
+        titulo_tag = soup.find("h1") or soup.find("title")
+        titulo = titulo_tag.get_text(strip=True) if titulo_tag else "Título no disponible"
 
-        try:
-            resumen = soup.find("div", class_="resumen")
-            if resumen:
-                resumen_text = resumen.get_text(strip=True)
-            else:
-                parrafos = soup.find_all("p")
-                resumen_text = parrafos[0].get_text(strip=True) if parrafos else "Sin resumen"
-        except Exception:
-            resumen_text = "Error al extraer resumen"
+        # Buscar contenido relevante en resumen o párrafos
+        resumen_tag = soup.find("div", class_="resumen")
+        if resumen_tag:
+            contenido = resumen_tag.get_text(strip=True)
+        else:
+            parrafos = soup.find_all("p")
+            contenido = parrafos[0].get_text(strip=True) if parrafos else "Resumen no disponible"
+
+        # Si todo está vacío, fallback: intentar desde iframe export
+        if titulo == "Título no disponible" and contenido == "Resumen no disponible":
+            export_url = f"https://www.bcn.cl/leychile/export?idNorma={id_norma}"
+            export_resp = requests.get(export_url, headers=headers, timeout=10)
+            export_resp.raise_for_status()
+            export_soup = BeautifulSoup(export_resp.text, "html.parser")
+            texto_completo = export_soup.get_text(" ", strip=True)
+            contenido = texto_completo[:500] + "..." if texto_completo else contenido
 
         resultado = {
-            "respuesta": f"Título: {titulo_text}",
-            "clasificacion": "Fuerte",
-            "justificacion": "Consulta directa a BCN.",
-            "base_legal": {},
-            "derecho_comparado": {},
-            "contradicciones": [],
-            "estandares_internacionales": [],
-            "esquema_visual": "",
-            "sintesis_audio": titulo_text,
-            "fuentes": [url],
-            "logs": {
-                "input": id_norma,
-                "output": {"titulo": titulo_text, "resumen": resumen_text}
+            "norma": {
+                "id": id_norma,
+                "titulo": titulo,
+                "contenido": contenido
             }
         }
-        dual = output_dual(resultado)
-        return JSONResponse(content={"json": dual["json"], "markdown": dual["markdown"]})
+        return JSONResponse(content=resultado)
+
     except Exception as e:
-        dual = output_dual({
-            "respuesta": "No se pudo obtener la norma BCN.",
-            "clasificacion": "Errónea",
-            "justificacion": str(e),
-            "base_legal": {},
-            "derecho_comparado": {},
-            "contradicciones": [],
-            "estandares_internacionales": [],
-            "esquema_visual": "",
-            "sintesis_audio": "Error.",
-            "fuentes": [],
-            "logs": {
-                "input": id_norma,
-                "output": str(e)
+        return JSONResponse(
+            status_code=500,
+            content={
+                "error": "Fallo al obtener norma BCN",
+                "id": id_norma,
+                "detalle": str(e)
             }
-        })
-        return JSONResponse(content={"json": dual["json"], "markdown": dual["markdown"]})
+        )
