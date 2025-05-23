@@ -1,6 +1,7 @@
 # Entornos virtuales
 env/
 venv/
+.venv/
 
 # Cache y archivos temporales
 __pycache__/
@@ -25,4 +26,4 @@ Thumbs.db
 .vscode/
 .idea/
 
-contenido_completo_backend.txt
+
