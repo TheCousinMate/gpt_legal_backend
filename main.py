@@ -1,5 +1,8 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+import os
+
 from modules import (
     root,
     reflexion,
@@ -23,18 +26,18 @@ app = FastAPI(
         "name": "MIT",
         "url": "https://opensource.org/licenses/MIT"
     },
-    openapi_url="/static/openapi.yaml"  # Correcta ruta al OpenAPI definitivo
+    openapi_url="/static/openapi.yaml"  # Reemplaza la auto-generación por el archivo externo
 )
 
-# 📁 Montar carpeta estática
+# 📁 Servir carpeta estática
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# ✅ Endpoint de salud
+# ✅ Endpoint básico
 @app.get("/")
 def health_check():
     return {"status": "alive", "version": "4.1.0"}
 
-# ✅ Routers correctos
+# 🔗 Routers del sistema
 app.include_router(root.router)
 app.include_router(reflexion.router, prefix="/reflexion")
 app.include_router(vision_forense.router, prefix="/vision")
@@ -42,13 +45,10 @@ app.include_router(prediccion_bayesiana.router, prefix="/prediccion")
 app.include_router(legislacion_bcn.router, prefix="/legislacion")
 app.include_router(bcn_parser.router, prefix="/bcn")
 
-import os
-from fastapi.responses import FileResponse
-
+# 🔍 Endpoint para acceder al OpenAPI
 @app.get("/static/openapi.yaml", include_in_schema=False)
 def get_openapi_file():
     filepath = os.path.join("static", "openapi.yaml")
     if os.path.exists(filepath):
         return FileResponse(filepath, media_type="text/yaml")
     return {"detail": "File not found"}
-

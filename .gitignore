@@ -1,24 +1,26 @@
-# Ignorar entornos virtuales
+# Entornos virtuales
 env/
 venv/
 
-# Ignorar archivos temporales y caché
+# Cache y archivos temporales
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 *.log
 
-# Archivos de configuración y entorno
+# Configs de entorno y producción
 .env
 *.env
 
-# Archivos comprimidos y de despliegue
+# Archivos comprimidos
 *.tar
 *.zip
 *.gz
 *.egg-info/
 
-# Archivos del sistema
+# Archivos del sistema y editores
 .DS_Store
 Thumbs.db
+.vscode/
+.idea/
