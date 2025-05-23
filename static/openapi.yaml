@@ -13,8 +13,8 @@ info:
     url: https://opensource.org/licenses/MIT
 
 servers:
-  - url: "https://gpt-legal-backend.onrender.com"
-    description: "Servidor público en Render"
+  - url: https://gpt-legal-backend.onrender.com/static
+    description: Servidor público en Render (directorio /static)
 
 paths:
   /:
