@@ -1,5 +1,4 @@
 ﻿import requests
-
 BASE = "http://127.0.0.1:8000"
 
 def check(endpoint, method='get', data=None, params=None):
