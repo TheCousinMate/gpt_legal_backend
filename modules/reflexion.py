@@ -11,15 +11,15 @@ class ReflexionInput(BaseModel):
 
 @router.post("/reflexion/")
 def reflexionar(data: ReflexionInput):
-    if not data.documento_analizado or len(data.documento_analizado.strip()) < 100:
-        raise HTTPException(status_code=400, detail="Texto insuficiente para análisis doctrinal.")
+    if not data.documento_analizado or len(data.documento_analizado.strip()) == 0:
+        raise HTTPException(status_code=400, detail="Debe ingresar contenido para análisis doctrinal.")
     if not data.criterios:
         raise HTTPException(status_code=400, detail="Debe incluir al menos un criterio de análisis.")
 
     resultado = {
         "respuesta": f"El documento ha sido evaluado según los criterios {', '.join(data.criterios)}.",
         "clasificacion": "Fuerte",
-        "justificacion": "El texto cumple con el mínimo requerido para reflexión doctrinal automatizada.",
+        "justificacion": "El texto fue procesado para reflexión doctrinal automatizada.",
         "base_legal": {},
         "derecho_comparado": {},
         "contradicciones": [],

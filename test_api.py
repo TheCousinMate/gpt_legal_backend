@@ -47,7 +47,7 @@ def test_obtener_norma(id_norma):
 
 def test_obtener_norma_bcn(id_norma):
     print("5️⃣ Obtener Norma BCN")
-    r = safe_request("GET", f"{BASE_URL}/bcn/bcn/api/bcn/norma/{id_norma}")
+    r = safe_request("GET", f"{BASE_URL}/api/bcn/norma/{id_norma}")
     if r: print(r.status_code, r.json())
 
 def test_reflexion():
@@ -56,19 +56,19 @@ def test_reflexion():
         "documento_analizado": "Este documento trata sobre la responsabilidad penal en el derecho chileno.",
         "criterios": ["culpabilidad", "dolo", "negligencia"]
     }
-    r = safe_request("POST", f"{BASE_URL}/reflexion/reflexion/", json=payload)
+    r = safe_request("POST", f"{BASE_URL}/reflexion/", json=payload)
     if r: print(r.status_code, r.json())
 
 def test_vision():
     print("7️⃣ Análisis de Imagen Legal")
     payload = {"image_id": "evidencia_2025_caso001.jpg"}
-    r = safe_request("POST", f"{BASE_URL}/vision/vision/", json=payload)
+    r = safe_request("POST", f"{BASE_URL}/vision/", json=payload)
     if r: print(r.status_code, r.json())
 
 def test_prediccion():
     print("8️⃣ Predicción Bayesiana")
     payload = {"contexto": "Una persona actúa con imprudencia al conducir, provocando daño a un peatón."}
-    r = safe_request("POST", f"{BASE_URL}/prediccion/api/prediccion/", json=payload)
+    r = safe_request("POST", f"{BASE_URL}/api/prediccion/", json=payload)
     if r: print(r.status_code, r.json())
 
 def test_predict():
