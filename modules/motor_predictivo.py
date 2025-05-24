@@ -1,5 +1,15 @@
 # motor_predictivo.py
 
+from fastapi import APIRouter, HTTPException
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel
+from utils_output import output_dual
+
+router = APIRouter()
+
+class PredictInput(BaseModel):
+    texto: str
+
 def analizar_input_legal(texto: str) -> str:
     texto = texto.lower()
 
@@ -29,3 +39,25 @@ def analizar_input_legal(texto: str) -> str:
         )
     else:
         return "No se detectó riesgo legal específico, pero se recomienda revisión con asesoría jurídica especializada."
+
+@router.post("/predict")
+def predict_riesgo(input_data: PredictInput):
+    resultado_texto = analizar_input_legal(input_data.texto)
+    resultado = {
+        "respuesta": resultado_texto,
+        "clasificacion": "Fuerte",
+        "justificacion": "El endpoint predict fue alcanzado exitosamente.",
+        "base_legal": {},
+        "derecho_comparado": {},
+        "contradicciones": [],
+        "estandares_internacionales": [],
+        "esquema_visual": "",
+        "sintesis_audio": resultado_texto,
+        "fuentes": [],
+        "logs": {
+            "input": input_data.texto,
+            "output": "Respuesta generada correctamente"
+        }
+    }
+    dual = output_dual(resultado)
+    return JSONResponse(content={"json": dual["json"], "markdown": dual["markdown"]})
