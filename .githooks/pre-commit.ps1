@@ -1,0 +1,28 @@
+#!/usr/bin/env pwsh
+
+# ✅ Pre-commit hook para proteger secretos y validar backend (versión PowerShell)
+
+# 1. Bloqueo de archivos .txt sensibles en /static/
+$archivos = git diff --cached --name-only
+foreach ($archivo in $archivos) {
+    if ($archivo -match '^static/.*\.txt$') {
+        Write-Host "❌ ERROR: No se permite hacer commit de archivos .txt en /static/"
+        exit 1
+    }
+}
+
+# 2. Verifica existencia de .env
+if (-not (Test-Path ".env")) {
+    Write-Host "⚠️  Advertencia: No se encontró .env en el proyecto."
+}
+
+# 3. Validación de sintaxis Python
+Write-Host "🔍 Validando sintaxis..."
+$valid = python -m compileall .
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "❌ ERROR: Hay errores de sintaxis Python. Corrige antes de hacer commit."
+    exit 1
+}
+
+Write-Host "✅ Pre-commit validado. Todo OK."
+exit 0
