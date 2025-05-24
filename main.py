@@ -1,55 +1,37 @@
-﻿from fastapi import FastAPI
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
-
-from modules import (
-    root,
-    reflexion,
-    vision_forense,
-    prediccion_bayesiana,
-    legislacion_bcn,
-    bcn_parser,
-    forensics_proxy
-)
+﻿from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+from modules.reflexion import router as reflexion_router
+from modules.prediccion_bayesiana import router as prediccion_router
+from modules.motor_predictivo import router as motor_router
+from modules.vision_forense import router as vision_router
+from modules.legislacion_bcn import router as legislacion_router
+from modules.root import router as root_router
 
 app = FastAPI(
     title="Forensic Legal Cognition 4.1",
     description="API chilena de análisis jurídico automatizado, evaluación doctrinal y verificación forense de alta precisión.",
-    version="4.1.0",
-    contact={
-        "name": "Kabir K. Hazbún Crovetto",
-        "email": "kharzun@gmail.com",
-        "url": "https://github.com/TheCousinMate/gpt_legal_backend"
-    },
-    terms_of_service="https://github.com/TheCousinMate/gpt_legal_backend#terms",
-    license_info={
-        "name": "MIT",
-        "url": "https://opensource.org/licenses/MIT"
-    },
-    openapi_url="/static/openapi.json"
+    version="4.1.0"
 )
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
+# Middleware CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
+# Inclusión de routers
+app.include_router(reflexion_router)
+app.include_router(prediccion_router)
+app.include_router(motor_router)
+app.include_router(vision_router)
+app.include_router(legislacion_router)
+app.include_router(root_router)
+
+# Health Check para GET y HEAD
 @app.get("/")
-def health_check():
+@app.head("/")
+def health_check(request: Request):
     return {"status": "alive", "version": app.version}
-
-app.include_router(root.router)
-app.include_router(reflexion.router)
-app.include_router(vision_forense.router)
-app.include_router(prediccion_bayesiana.router)
-app.include_router(legislacion_bcn.router)
-app.include_router(bcn_parser.router)
-app.include_router(forensics_proxy.router)
-
-@app.get("/static/openapi.json", include_in_schema=False)
-def get_openapi_file():
-    filepath = os.path.join("static", "openapi.json")
-    if os.path.exists(filepath):
-        return FileResponse(filepath, media_type="application/json")
-    return {"detail": "openapi.json not found"}
