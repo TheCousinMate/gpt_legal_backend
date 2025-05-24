@@ -26,4 +26,5 @@ Thumbs.db
 .vscode/
 .idea/
 
-
+# Bloqueo de archivos con posibles secretos
+static/*.txt
