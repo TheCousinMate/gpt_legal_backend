@@ -1,6 +1,6 @@
 import httpx
 
-BASE_URL = "http://127.0.0.1:8000"
+BASE_URL = "https://gpt-legal-backend.onrender.com"
 
 def safe_request(method, url, **kwargs):
     try:
@@ -73,7 +73,7 @@ def test_prediccion():
 
 def test_predict():
     print("9️⃣ Experimento Predictivo General")
-    payload = {"test": True}  # para evitar 400 vacío
+    payload = {"texto": "Una empresa despide sin causa a un trabajador formalizado."}
     r = safe_request("POST", f"{BASE_URL}/predict", json=payload)
     if r: print(r.status_code, r.text)
 

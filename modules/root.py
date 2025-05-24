@@ -30,11 +30,13 @@ def status_json():
 async def predict(request: Request):
     try:
         payload = await request.json()
-        user_input = payload.get("input", "")
+        texto = payload.get("texto") or payload.get("input")
+        if not texto:
+            raise ValueError("Falta el campo obligatorio 'texto' o 'input'.")
     except Exception as e:
         return JSONResponse(status_code=400, content={"error": f"Error al procesar JSON: {str(e)}"})
 
-    respuesta_generada = analizar_input_legal(user_input)
+    respuesta_generada = analizar_input_legal(texto)
 
     resultado = {
         "respuesta": respuesta_generada,
@@ -48,7 +50,7 @@ async def predict(request: Request):
         "sintesis_audio": respuesta_generada,
         "fuentes": [],
         "logs": {
-            "input": user_input,
+            "input": texto,
             "output": "Respuesta generada correctamente"
         }
     }
