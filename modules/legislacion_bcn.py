@@ -1,10 +1,10 @@
-from fastapi import APIRouter, Query, HTTPException
+﻿from fastapi import APIRouter, Query, HTTPException
 import requests
 from bs4 import BeautifulSoup
 from fastapi.responses import JSONResponse
 from utils_output import output_dual
 
-router = APIRouter()
+router = APIRouter(prefix="/legislacion")
 
 DEFAULT_HEADERS = {"User-Agent": "ForensicLegalBot/1.0"}
 DEFAULT_TIMEOUT = 12

@@ -1,7 +1,10 @@
-from fastapi import FastAPI
+﻿from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 from modules import (
     root,
@@ -9,7 +12,8 @@ from modules import (
     vision_forense,
     prediccion_bayesiana,
     legislacion_bcn,
-    bcn_parser
+    bcn_parser,
+    forensics_proxy
 )
 
 app = FastAPI(
@@ -26,27 +30,23 @@ app = FastAPI(
         "name": "MIT",
         "url": "https://opensource.org/licenses/MIT"
     },
-    # ✅ OJO: Solo si estás usando YAML real. Si usas JSON, cambia a openapi.json
     openapi_url="/static/openapi.json"
 )
 
-# ✅ Montar carpeta estática correctamente
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# ✅ Endpoint de salud
 @app.get("/")
 def health_check():
     return {"status": "alive", "version": app.version}
 
-# ✅ Carga de routers
 app.include_router(root.router)
-app.include_router(reflexion.router, prefix="/reflexion")
-app.include_router(vision_forense.router, prefix="/vision")
-app.include_router(prediccion_bayesiana.router, prefix="/prediccion")
-app.include_router(legislacion_bcn.router, prefix="/legislacion")
-app.include_router(bcn_parser.router, prefix="/bcn")
+app.include_router(reflexion.router)
+app.include_router(vision_forense.router)
+app.include_router(prediccion_bayesiana.router)
+app.include_router(legislacion_bcn.router)
+app.include_router(bcn_parser.router)
+app.include_router(forensics_proxy.router)
 
-# ✅ Endpoint explícito para obtener el OpenAPI manual (opcional pero útil para debug)
 @app.get("/static/openapi.json", include_in_schema=False)
 def get_openapi_file():
     filepath = os.path.join("static", "openapi.json")

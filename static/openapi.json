@@ -1,261 +1,423 @@
-openapi: 3.1.0
-info:
-  title: Forensic Legal Cognition 4.1
-  description: API chilena de análisis jurídico automatizado, evaluación doctrinal y verificación forense de alta precisión.
-  contact:
-    name: Kabir K. Hazbún Crovetto
-    url: https://github.com/TheCousinMate/gpt_legal_backend.git
-    email: khazbun@gmail.com
-  version: 4.1.0
-
-servers:
-  - url: https://gpt-legal-backend.onrender.com
-    description: Servidor público en Render
-
-paths:
-  /:
-    get:
-      summary: Health Check
-      operationId: healthCheck
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: alive
-                  version:
-                    type: string
-                    example: 4.1.0
-
-  /status/json:
-    get:
-      summary: Status Json
-      operationId: statusJson
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema: {}
-
-  /predict:
-    post:
-      summary: Predict
-      operationId: predict
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema: {}
-
-  /reflexion/reflexion/:
-    post:
-      summary: Reflexionar
-      operationId: reflexionar
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ReflexionInput'
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema: {}
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-
-  /vision/vision/:
-    post:
-      summary: Analizar Imagen
-      operationId: analizarImagen
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/VisionInput'
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema: {}
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-
-  /prediccion/api/prediccion/:
-    post:
-      summary: Predecir Riesgo
-      operationId: predecirRiesgo
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PrediccionInput'
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema: {}
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-
-  /legislacion/buscar:
-    get:
-      summary: Buscar Norma
-      operationId: buscarNorma
-      parameters:
-        - name: palabra
-          in: query
-          required: true
-          schema:
-            type: string
-            title: Palabra
-            description: Palabra clave legal a buscar en Ley Chile
-          description: Palabra clave legal a buscar en Ley Chile
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema: {}
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-
-  /legislacion/norma/{id_norma}:
-    get:
-      summary: Obtener Norma
-      operationId: obtenerNorma
-      parameters:
-        - name: id_norma
-          in: path
-          required: true
-          schema:
-            type: integer
-            title: Id Norma
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema: {}
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-
-  /bcn/bcn/api/bcn/norma/{id_norma}:
-    get:
-      summary: Obtener Norma BCN
-      operationId: obtenerNormaBcn
-      parameters:
-        - name: id_norma
-          in: path
-          required: true
-          schema:
-            type: integer
-            title: Id Norma
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema: {}
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-
-components:
-  schemas:
-    ValidationError:
-      title: ValidationError
-      type: object
-      required: [loc, msg, type]
-      properties:
-        loc:
-          title: Location
-          type: array
-          items:
-            anyOf:
-              - type: string
-              - type: integer
-        msg:
-          title: Message
-          type: string
-        type:
-          title: Error Type
-          type: string
-
-    HTTPValidationError:
-      title: HTTPValidationError
-      type: object
-      properties:
-        detail:
-          title: Detail
-          type: array
-          items:
-            $ref: '#/components/schemas/ValidationError'
-
-    ReflexionInput:
-      title: ReflexionInput
-      type: object
-      required: [documento_analizado, criterios]
-      properties:
-        documento_analizado:
-          type: string
-          title: Documento Analizado
-        criterios:
-          type: array
-          title: Criterios
-          items:
-            type: string
-
-    VisionInput:
-      title: VisionInput
-      type: object
-      required: [image_id]
-      properties:
-        image_id:
-          type: string
-          title: Image Id
-
-    PrediccionInput:
-      title: PrediccionInput
-      type: object
-      required: [contexto]
-      properties:
-        contexto:
-          type: string
-          title: Contexto
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Forensic Legal Cognition 4.1",
+    "description": "API chilena de análisis jurídico automatizado, evaluación doctrinal y verificación forense de alta precisión.",
+    "termsOfService": "https://github.com/TheCousinMate/gpt_legal_backend#terms",
+    "contact": {
+      "name": "Kabir K. Hazbún Crovetto",
+      "url": "https://github.com/TheCousinMate/gpt_legal_backend",
+      "email": "kharzun@gmail.com"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    },
+    "version": "4.1.0"
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "Health Check",
+        "operationId": "health_check__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/status/json": {
+      "get": {
+        "summary": "Status Json",
+        "operationId": "status_json_status_json_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/predict": {
+      "post": {
+        "summary": "Predict",
+        "operationId": "predict_predict_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reflexion/": {
+      "post": {
+        "summary": "Reflexionar",
+        "operationId": "reflexionar_reflexion__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReflexionInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/vision/": {
+      "post": {
+        "summary": "Analizar Imagen",
+        "operationId": "analizar_imagen_vision__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VisionInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/prediccion/": {
+      "post": {
+        "summary": "Predecir Riesgo",
+        "operationId": "predecir_riesgo_api_prediccion__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PrediccionInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/legislacion/buscar": {
+      "get": {
+        "summary": "Buscar Norma",
+        "operationId": "buscar_norma_legislacion_buscar_get",
+        "parameters": [
+          {
+            "name": "palabra",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Palabra clave legal a buscar en Ley Chile",
+              "title": "Palabra"
+            },
+            "description": "Palabra clave legal a buscar en Ley Chile"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/legislacion/norma/{id_norma}": {
+      "get": {
+        "summary": "Obtener Norma",
+        "operationId": "obtener_norma_legislacion_norma__id_norma__get",
+        "parameters": [
+          {
+            "name": "id_norma",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Id Norma"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/bcn/norma/{id_norma}": {
+      "get": {
+        "summary": "Norma Bcn",
+        "operationId": "norma_bcn_api_bcn_norma__id_norma__get",
+        "parameters": [
+          {
+            "name": "id_norma",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Id Norma"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/forensics/search": {
+      "get": {
+        "summary": "Buscar Forensics",
+        "operationId": "buscar_forensics_forensics_search_get",
+        "parameters": [
+          {
+            "name": "pregunta",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Pregunta"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "PrediccionInput": {
+        "properties": {
+          "contexto": {
+            "type": "string",
+            "title": "Contexto"
+          }
+        },
+        "type": "object",
+        "required": [
+          "contexto"
+        ],
+        "title": "PrediccionInput"
+      },
+      "ReflexionInput": {
+        "properties": {
+          "documento_analizado": {
+            "type": "string",
+            "title": "Documento Analizado"
+          },
+          "criterios": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Criterios"
+          }
+        },
+        "type": "object",
+        "required": [
+          "documento_analizado",
+          "criterios"
+        ],
+        "title": "ReflexionInput"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "VisionInput": {
+        "properties": {
+          "image_id": {
+            "type": "string",
+            "title": "Image Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image_id"
+        ],
+        "title": "VisionInput"
+      }
+    }
+  }
+}

@@ -1,17 +1,18 @@
 ﻿{
   "schema_version": "v1",
   "name_for_human": "Forensic Legal Cognition",
-  "name_for_model": "forensicLegalCognition",
-  "description_for_human": "Consulta y análisis jurídico automatizado del derecho chileno.",
-  "description_for_model": "Utiliza esta API para hacer análisis legales, predictivos y forenses de documentos jurídicos chilenos.",
+  "name_for_model": "forensic_legal_gpt",
+  "description_for_human": "Diagnóstico jurídico, análisis doctrinal y evaluación forense automatizada.",
+  "description_for_model": "Ayuda a interpretar documentos legales chilenos, evaluar riesgos jurídicos y emitir análisis doctrinal estructurado. También puede simular evaluaciones forenses de textos o imágenes por ID.",
   "auth": {
     "type": "none"
   },
   "api": {
     "type": "openapi",
-    "url": "https://gpt-legal-backend.onrender.com/static/openapi.json"
+    "url": "https://gpt-legal-backend.onrender.com/static/openapi.json",
+    "is_user_authenticated": false
   },
-  "logo_url": "https://raw.githubusercontent.com/TheCousinMate/gpt_legal_backend/main/static/logo.png",
+  "logo_url": "https://gpt-legal-backend.onrender.com/static/logo.png",
   "contact_email": "kharzun@gmail.com",
   "legal_info_url": "https://github.com/TheCousinMate/gpt_legal_backend#terms"
 }
