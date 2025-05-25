@@ -3,7 +3,6 @@
   "info": {
     "title": "Forensic Legal Cognition 4.1",
     "description": "API chilena de análisis jurídico automatizado, evaluación doctrinal y verificación forense de alta precisión.",
-    "termsOfService": "https://github.com/TheCousinMate/gpt_legal_backend#terms",
     "contact": {
       "name": "Kabir K. Hazbún Crovetto",
       "url": "https://github.com/TheCousinMate/gpt_legal_backend",
@@ -16,54 +15,6 @@
     "version": "4.1.0"
   },
   "paths": {
-    "/": {
-      "get": {
-        "summary": "Health Check",
-        "operationId": "health_check__get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      }
-    },
-    "/status/json": {
-      "get": {
-        "summary": "Status Json",
-        "operationId": "status_json_status_json_get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      }
-    },
-    "/predict": {
-      "post": {
-        "summary": "Predict",
-        "operationId": "predict_predict_post",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      }
-    },
     "/reflexion/": {
       "post": {
         "summary": "Reflexionar",
@@ -73,42 +24,6 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/ReflexionInput"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/vision/": {
-      "post": {
-        "summary": "Analizar Imagen",
-        "operationId": "analizar_imagen_vision__post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/VisionInput"
               }
             }
           },
@@ -172,9 +87,46 @@
         }
       }
     },
+    "/vision/": {
+      "post": {
+        "summary": "Analizar Imagen",
+        "operationId": "analizar_imagen_vision__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VisionInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/legislacion/buscar": {
       "get": {
         "summary": "Buscar Norma",
+        "description": "Busca normas legales en BCN con análisis mejorado",
         "operationId": "buscar_norma_legislacion_buscar_get",
         "parameters": [
           {
@@ -183,6 +135,7 @@
             "required": true,
             "schema": {
               "type": "string",
+              "minLength": 3,
               "description": "Palabra clave legal a buscar en Ley Chile",
               "title": "Palabra"
             },
@@ -214,44 +167,8 @@
     "/legislacion/norma/{id_norma}": {
       "get": {
         "summary": "Obtener Norma",
+        "description": "Obtiene norma específica por ID con análisis detallado",
         "operationId": "obtener_norma_legislacion_norma__id_norma__get",
-        "parameters": [
-          {
-            "name": "id_norma",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "title": "Id Norma"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/bcn/norma/{id_norma}": {
-      "get": {
-        "summary": "Norma Bcn",
-        "operationId": "norma_bcn_api_bcn_norma__id_norma__get",
         "parameters": [
           {
             "name": "id_norma",
@@ -316,6 +233,144 @@
                 "schema": {
                   "$ref": "#/components/schemas/HTTPValidationError"
                 }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/bcn/norma/{id_norma}": {
+      "get": {
+        "summary": "Norma Bcn",
+        "operationId": "norma_bcn_api_bcn_norma__id_norma__get",
+        "parameters": [
+          {
+            "name": "id_norma",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Id Norma"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/text-search": {
+      "get": {
+        "summary": "Buscar Texto Bcn",
+        "operationId": "buscar_texto_bcn_text_search_get",
+        "parameters": [
+          {
+            "name": "palabra",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Término a buscar en el texto legal",
+              "title": "Palabra"
+            },
+            "description": "Término a buscar en el texto legal"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "summary": "Health Check",
+        "operationId": "health_check__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
+      "head": {
+        "summary": "Health Check",
+        "operationId": "health_check__head",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/status/json": {
+      "get": {
+        "summary": "Status Json",
+        "operationId": "status_json_status_json_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/predict": {
+      "post": {
+        "summary": "Predict Unified",
+        "operationId": "predict_unified_predict_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
               }
             }
           }

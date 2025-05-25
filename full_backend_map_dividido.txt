@@ -1,0 +1,2456 @@
+﻿--- Archivo: properties - Parte 1 ---
+properties
+
+--- Archivo: : alertas,
+         - Parte 1 ---
+Riesgo: {riesgo}
+
+--- Archivo: ]})
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\root.py =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\vision_forense.py =====
+
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+from fastapi.responses import JSONResponse
+from utils_output import output_dual
+
+router = APIRouter()
+
+class VisionInput(BaseModel):
+    image_id: str
+
+@router.post( - Parte 1 ---
+justificacion
+
+--- Archivo: ) {
+    Add-Content -Encoding UTF8 -Path  - Parte 1 ---
+$modules\forensics_proxy.py
+
+--- Archivo: )
+def buscar_forensics(pregunta: str):
+    return { - Parte 1 ---
+respuesta
+
+--- Archivo: logs - Parte 1 ---
+logs
+
+--- Archivo: Test Predict - Parte 1 ---
+Test Predict
+
+--- Archivo: 4.1.0 - Parte 1 ---
+4.1.0
+
+--- Archivo:  in doc.lower() and  - Parte 1 ---
+sintesis_audio
+
+--- Archivo: alive - Parte 1 ---
+alive
+
+--- Archivo: 
+    },
+     - Parte 1 ---
+,
+
+--- Archivo: }
+DEFAULT_TIMEOUT = 12
+
+def parse_html_bcn(html: str) -> dict:
+     - Parte 1 ---
+Extrae título, fecha y resumen desde HTML de BCN
+
+--- Archivo: 
+
+        fecha_tag = soup.find(class_= - Parte 1 ---
+fecha-publicacion
+
+--- Archivo: 
+        return {
+             - Parte 1 ---
+: 1234,  # Simulado para pruebas
+
+--- Archivo: : [url],
+             - Parte 1 ---
+: id_norma,
+
+--- Archivo: main:app - Parte 1 ---
+main:app
+
+--- Archivo: 
+$extensions = @( - Parte 1 ---
+$extensions = @(
+
+--- Archivo: , id_norma, e)
+
+def _error_response(func: str, input_data, exception: Exception):
+    error_info = {
+         - Parte 1 ---
+,
+
+--- Archivo: predecir - Parte 1 ---
+predecir
+
+--- Archivo: modules/bcn_text_search_parser.py - Parte 1 ---
+modules/bcn_text_search_parser.py
+
+--- Archivo: `n📎 Enlace OpenAPI que se usará en producción: - Parte 1 ---
+`n📎 Enlace OpenAPI que se usará en producción:
+
+--- Archivo: : f - Parte 1 ---
+derecho_comparado
+
+--- Archivo: 
+        ],
+         - Parte 1 ---
+,
+
+--- Archivo: validacion_schema.py - Parte 1 ---
+validacion_schema.py
+
+--- Archivo: {BASE_URL}/reflexion/ - Parte 1 ---
+{BASE_URL}/reflexion/
+
+--- Archivo: texto - Parte 1 ---
+texto
+
+--- Archivo: uri - Parte 1 ---
+uri
+
+--- Archivo: valido - Parte 1 ---
+valido
+
+--- Archivo: )
+        contenido = parse_html_bcn(response.text)
+        resultado = {
+             - Parte 1 ---
+Detalle de la norma BCN ID {id_norma}.
+
+--- Archivo: )
+        if resumen_tag:
+            resumen = resumen_tag.get_text(strip=True)
+        else:
+            primer_p = soup.find( - Parte 1 ---
+p
+
+--- Archivo: url - Parte 1 ---
+:
+
+--- Archivo: 
+    } else {
+        Write-Host  - Parte 1 ---
+`n⚠️ Código HTTP $($resp.StatusCode). Verifica que Render esté online.
+
+--- Archivo: : input_data.texto,
+             - Parte 1 ---
+: dual[
+
+--- Archivo: Predict - Parte 1 ---
+Predict
+
+--- Archivo: Texto normativo o doctrinal: - Parte 1 ---
+Texto normativo o doctrinal:
+
+--- Archivo: ,
+   - Parte 1 ---
+,
+
+--- Archivo: Error en parseo JSON: - Parte 1 ---
+Error en parseo JSON:
+
+--- Archivo: )
+        fecha = fecha_tag.get_text(strip=True) if fecha_tag else  - Parte 1 ---
+resumen_tag = soup.find(
+
+--- Archivo: Predicción - Parte 1 ---
+Predicción
+
+--- Archivo:  | Out-File $outputFile -Append
+     - Parte 1 ---
+| Out-File $outputFile -Append
+
+--- Archivo: 
+}
+
+# 3. Regenerar archivo de test
+$test_script = @ - Parte 1 ---
+import requests
+
+BASE =
+
+--- Archivo: 🧹 Eliminando carpeta {cache} - Parte 1 ---
+🧹 Eliminando carpeta {cache}
+
+--- Archivo: , class_= - Parte 1 ---
+)
+        resumen = resumen_tag.get_text(strip=True) if resumen_tag else
+
+--- Archivo: : [ - Parte 1 ---
+sintesis_audio
+
+--- Archivo: 2️⃣ Status JSON - Parte 1 ---
+2️⃣ Status JSON
+
+--- Archivo: 
+        }
+        resultado[ - Parte 1 ---
+json
+
+--- Archivo: /reflexion/ - Parte 1 ---
+, 'post', {
+
+--- Archivo: 
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\full_backend_finalizer.ps1 =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\full_backend_validator.ps1 =====
+
+# ✅ SCRIPT POWERSHELL AUTOMATIZADO: VALIDACIÓN COMPLETA BACKEND GPT LEGAL
+# Ejecuta todo el proceso en un solo comando
+
+$base =  - Parte 1 ---
+C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend
+
+--- Archivo: 
+
+# 2. Verificar e insertar endpoint /search si no existe
+$content = Get-Content  - Parte 1 ---
+$modules\forensics_proxy.py
+
+--- Archivo: : fecha,
+             - Parte 1 ---
+: resumen
+        }
+    except Exception as e:
+        return {
+
+--- Archivo: )
+def buscar_forensics(pregunta: str = Query(...)):
+    try:
+        # Simulación de lógica (puede integrarse llamada real aquí si se desea)
+        resultado = {
+             - Parte 1 ---
+: f
+
+--- Archivo: : {
+               - Parte 1 ---
+,
+
+--- Archivo: __main__ - Parte 1 ---
+__main__
+
+--- Archivo: 
+
+Write-Host  - Parte 1 ---
+🎯 Hook pre-commit listo y funcional. Testéalo haciendo un commit.
+
+--- Archivo: max_tokens - Parte 1 ---
+max_tokens
+
+--- Archivo: none - Parte 1 ---
+},
+
+--- Archivo: forensic_legal_gpt - Parte 1 ---
+forensic_legal_gpt
+
+--- Archivo: )) {
+    Write-Host  - Parte 1 ---
+⚠️  Advertencia: No se encontró .env en el proyecto.
+
+--- Archivo: 
+        resultado[ - Parte 1 ---
+El principio de jerarquía normativa impide que un reglamento contradiga a la ley.
+
+--- Archivo: : output_json,  - Parte 1 ---
+: output_json,
+
+--- Archivo: palabra - Parte 1 ---
+:
+
+--- Archivo: : None,
+             - Parte 1 ---
+]})
+
+@router.post(
+
+--- Archivo: 4️⃣ Obtener Norma - Parte 1 ---
+4️⃣ Obtener Norma
+
+--- Archivo: auth - Parte 1 ---
+: {
+
+--- Archivo: : texto,
+             - Parte 1 ---
+/vision/
+
+--- Archivo: legislación - Parte 1 ---
+legislación
+
+--- Archivo: : resumen
+            }
+        }
+        return JSONResponse(content=resultado)
+    except Exception as e:
+        return JSONResponse(status_code=500, content={
+             - Parte 1 ---
+error
+
+--- Archivo: )
+    if not criterios:
+        raise HTTPException(status_code=400, detail= - Parte 1 ---
+clasificacion
+
+--- Archivo: 
+        }
+    }
+    dual = output_dual(resultado)
+    return JSONResponse(content={ - Parte 1 ---
+: {
+
+--- Archivo: 
+$psHookContent = @'
+#!/usr/bin/env pwsh
+
+# ✅ Pre-commit hook para proteger secretos y validar backend (versión PowerShell)
+
+# 1. Bloqueo de archivos .txt sensibles en /static/
+$archivos = git diff --cached --name-only
+foreach ($archivo in $archivos) {
+    if ($archivo -match '^static/.*\.txt$') {
+        Write-Host  - Parte 1 ---
+❌ ERROR: No se permite hacer commit de archivos .txt en /static/
+
+--- Archivo:  in criterios:
+        resultado[ - Parte 1 ---
+sintesis_audio
+
+--- Archivo: 
+$actionPath = Join-Path $backendPath  - Parte 1 ---
+action.json
+
+--- Archivo: model - Parte 1 ---
+model
+
+--- Archivo: 
+}
+
+# 2. Escribir contenido del hook PowerShell
+$psHookPath =  - Parte 1 ---
+$hookDir/pre-commit.ps1
+
+--- Archivo: )
+        titulo = soup.find( - Parte 1 ---
+)
+        titulo = titulo.get_text(strip=True) if titulo else
+
+--- Archivo: Status Code: - Parte 1 ---
+Status Code:
+
+--- Archivo: static/openapi.json - Parte 1 ---
+static/openapi.json
+
+--- Archivo: : str(exception),
+        }
+    }
+    dual = output_dual(error_info)
+    return JSONResponse(content={ - Parte 1 ---
+markdown
+
+--- Archivo: )
+            resumen = primer_p.get_text(strip=True) if primer_p else  - Parte 1 ---
+Resumen no disponible
+
+--- Archivo: : palabra,
+             - Parte 1 ---
+: resultados
+        }
+    }
+    dual = output_dual(resultado)
+    return JSONResponse(content={
+
+--- Archivo: ^[\\w\\sáéíóúÁÉÍÓÚñÑ]+$ - Parte 1 ---
+^[\\w\\sáéíóúÁÉÍÓÚñÑ]+$
+
+--- Archivo: 📦 Moviendo schema al módulo... - Parte 1 ---
+📦 Moviendo schema al módulo...
+
+--- Archivo: {BASE_URL}/api/bcn/norma/{id_norma} - Parte 1 ---
+{BASE_URL}/api/bcn/norma/{id_norma}
+
+--- Archivo: palabra clave - Parte 1 ---
+palabra clave
+
+--- Archivo: 
+
+# 4. Ejecutar generación de OpenAPI
+python  - Parte 1 ---
+$base\update_openapi.py
+
+--- Archivo: documento - Parte 1 ---
+documento
+
+--- Archivo: Derechos del consumidor - Parte 1 ---
+})
+check(
+
+--- Archivo: documento_analizado - Parte 1 ---
+:
+
+--- Archivo:  in criterios:
+        if  - Parte 1 ---
+Conflicto detectado entre niveles normativos.
+
+--- Archivo: 
+        }
+    }
+
+    # Evaluación por criterio
+    if  - Parte 1 ---
+Se verificó compatibilidad con principios constitucionales.
+
+--- Archivo: 
+
+# 1. Activar entorno virtual o crearlo
+if (!(Test-Path  - Parte 1 ---
+$venv\Scripts\activate.ps1
+
+--- Archivo: criterios - Parte 1 ---
+: [
+
+--- Archivo: )
+        titulo = titulo_tag.get_text(strip=True) if titulo_tag else  - Parte 1 ---
+Título no disponible
+
+--- Archivo: 🚀 Streamlit lanzado - Parte 1 ---
+🚀 Streamlit lanzado
+
+--- Archivo: }
+        response = requests.get(url, headers=headers, timeout=10)
+        response.raise_for_status()
+        soup = BeautifulSoup(response.text,  - Parte 1 ---
+html.parser
+
+--- Archivo: Extrae título, fecha y resumen desde HTML de BCN - Parte 1 ---
+try:
+        soup = BeautifulSoup(html,
+
+--- Archivo: * - Parte 1 ---
+*
+
+--- Archivo: )
+    except Exception as e:
+        return JSONResponse(status_code=400, content={ - Parte 1 ---
+:
+
+--- Archivo: name_for_human - Parte 1 ---
+:
+
+--- Archivo: 
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\fix_pre_commit.ps1 =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\full_backend_finalizer.ps1 =====
+
+# full_backend_finalizer.ps1
+
+# 🚀 Activación de entorno y validación total del backend GPT Legal
+Write-Host  - Parte 1 ---
+🔧 Iniciando validación final del backend...
+
+--- Archivo: object - Parte 1 ---
+object
+
+--- Archivo: ) -replace 'APIRouter\(\)', 'APIRouter(prefix= - Parte 1 ---
+/legislacion
+
+--- Archivo: , None)})
+    except Exception as e:
+        return _error_response( - Parte 1 ---
+/norma/{id_norma}
+
+--- Archivo: nombre - Parte 1 ---
+nombre
+
+--- Archivo: búsqueda textual - Parte 1 ---
+búsqueda textual
+
+--- Archivo: )
+        resultado[ - Parte 1 ---
+derecho_comparado
+
+--- Archivo: items - Parte 1 ---
+items
+
+--- Archivo: : 67890,  - Parte 1 ---
+extracto
+
+--- Archivo: beneficiario - Parte 1 ---
+beneficiario
+
+--- Archivo: forensics - Parte 1 ---
+forensics
+
+--- Archivo: logo_url - Parte 1 ---
+:
+
+--- Archivo: ✅ Archivo renombrado a 'openapi.yaml' - Parte 1 ---
+✅ Archivo renombrado a 'openapi.yaml'
+
+--- Archivo: : titulo,
+             - Parte 1 ---
+: fecha,
+
+--- Archivo: )) {
+  python -m venv $venv
+  Write-Host  - Parte 1 ---
+✅ Entorno virtual creado
+
+--- Archivo: boletín - Parte 1 ---
+boletín
+
+--- Archivo: contenido - Parte 1 ---
+contenido
+
+--- Archivo: API chilena de análisis jurídico automatizado, evaluación doctrinal y verificación forense de alta precisión. - Parte 1 ---
+API chilena de análisis jurídico automatizado, evaluación doctrinal y verificación forense de alta precisión.
+
+--- Archivo: },
+        { - Parte 1 ---
+norma_id
+
+--- Archivo: ❌ Error: 'openapi.yaml' no se encontró - Parte 1 ---
+❌ Error: 'openapi.yaml' no se encontró
+
+--- Archivo: evidencia_2025_caso001.jpg - Parte 1 ---
+evidencia_2025_caso001.jpg
+
+--- Archivo: 
+    }
+} catch {
+    Write-Host  - Parte 1 ---
+`n❌ ERROR: No se pudo acceder a $onlineUrl. ¿Está el backend corriendo en Render?
+
+--- Archivo: test - Parte 1 ---
+test
+
+--- Archivo: format - Parte 1 ---
+format
+
+--- Archivo: ,
+     - Parte 1 ---
+},
+
+--- Archivo: cd /d C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend && uvicorn main:app --reload - Parte 1 ---
+cd /d C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend && uvicorn main:app --reload
+
+--- Archivo: 
+        alertas.append( - Parte 1 ---
+clasificacion
+
+--- Archivo: 
+    try:
+        soup = BeautifulSoup(html,  - Parte 1 ---
+)
+        titulo = soup.find(
+
+--- Archivo: 3️⃣ Buscar Norma (dolo) - Parte 1 ---
+3️⃣ Buscar Norma (dolo)
+
+--- Archivo: : titulo,
+                 - Parte 1 ---
+fecha_publicacion
+
+--- Archivo: modules/legislacion_bcn.py - Parte 1 ---
+modules/legislacion_bcn.py
+
+--- Archivo: derecho_chileno_schema.json - Parte 1 ---
+derecho_chileno_schema.json
+
+--- Archivo: @
+$testPath =  - Parte 1 ---
+$tests\__test_all_endpoints.py
+
+--- Archivo: bcn - Parte 1 ---
+bcn
+
+--- Archivo: 
+Write-Host  - Parte 1 ---
+`n🌐 Verificando acceso público a $onlineUrl ...
+
+--- Archivo:  else {},
+         - Parte 1 ---
+esquema_visual
+
+--- Archivo: python - Parte 1 ---
+python
+
+--- Archivo: 5️⃣ Obtener Norma BCN - Parte 1 ---
+5️⃣ Obtener Norma BCN
+
+--- Archivo: ✅ Confirmado: 'openapi.yaml' listo en la raíz del proyecto - Parte 1 ---
+✅ Confirmado: 'openapi.yaml' listo en la raíz del proyecto
+
+--- Archivo: schema_gpt_custom_derecho_chileno.json - Parte 1 ---
+schema_gpt_custom_derecho_chileno.json
+
+--- Archivo: 
+  }
+}
+
+Write-Host  - Parte 1 ---
+🎯 Backend final validado y funcional. Puedes hacer push y desplegar.
+
+--- Archivo: JSON válido según el esquema oficial. - Parte 1 ---
+JSON válido según el esquema oficial.
+
+--- Archivo: http://127.0.0.1:10000/vision/ - Parte 1 ---
+http://127.0.0.1:10000/vision/
+
+--- Archivo: 
+    dual = output_dual(resultado)
+    return JSONResponse(content={ - Parte 1 ---
+respuesta
+
+--- Archivo: 
+$venv =  - Parte 1 ---
+$base\.venv
+
+--- Archivo: 
+$yamlPath = Join-Path $staticPath  - Parte 1 ---
+openapi.yaml
+
+--- Archivo: 🚀 Iniciando servidor en el puerto {port}... - Parte 1 ---
+🚀 Iniciando servidor en el puerto {port}...
+
+--- Archivo: streamlit run app_streamlit_tabs.py - Parte 1 ---
+streamlit run app_streamlit_tabs.py
+
+--- Archivo: ].append( - Parte 1 ---
+comparado
+
+--- Archivo: Predecir riesgo - Parte 1 ---
+Predecir riesgo
+
+--- Archivo: : analisis
+        }
+    }
+    dual = output_dual(resultado)
+    return JSONResponse(content={ - Parte 1 ---
+markdown
+
+--- Archivo: 
+
+    if  - Parte 1 ---
+Bloque de constitucionalidad obliga a armonizar normas internas con tratados.
+
+--- Archivo: 
+  } catch {
+    Write-Host  - Parte 1 ---
+⚠️ No se pudo activar hook con chmod (WSL no disponible o ruta incorrecta)
+
+--- Archivo: ✅ Limpieza y corrección completa. - Parte 1 ---
+✅ Limpieza y corrección completa.
+
+--- Archivo: ],  - Parte 1 ---
+,
+
+--- Archivo: http://127.0.0.1:8000 - Parte 1 ---
+def check(endpoint, method='get', data=None, params=None):
+    try:
+        if method == 'get':
+            r = requests.get(BASE + endpoint, params=params)
+        else:
+            r = requests.post(BASE + endpoint, json=data)
+        r.raise_for_status()
+        print(f
+
+--- Archivo: ) or soup.find( - Parte 1 ---
+title
+
+--- Archivo: 
+      },
+       - Parte 1 ---
+}
+        },
+
+--- Archivo: : palabra,
+                 - Parte 1 ---
+json
+
+--- Archivo: Ayuda a interpretar documentos legales chilenos, evaluar riesgos jurídicos y emitir análisis doctrinal estructurado. También puede simular evaluaciones forenses de textos o imágenes por ID. - Parte 1 ---
+Ayuda a interpretar documentos legales chilenos, evaluar riesgos jurídicos y emitir análisis doctrinal estructurado. También puede simular evaluaciones forenses de textos o imágenes por ID.
+
+--- Archivo: subtemas - Parte 1 ---
+subtemas
+
+--- Archivo: 
+        resumen_tag = soup.find( - Parte 1 ---
+, class_=
+
+--- Archivo: {BASE_URL}/status/json - Parte 1 ---
+{BASE_URL}/status/json
+
+--- Archivo: #/$defs/tema - Parte 1 ---
+#/$defs/tema
+
+--- Archivo: 8️⃣ Predicción Bayesiana - Parte 1 ---
+8️⃣ Predicción Bayesiana
+
+--- Archivo: 
+
+# 6️⃣ Verificación online
+$onlineUrl =  - Parte 1 ---
+https://gpt-legal-backend.onrender.com/static/openapi.yaml
+
+--- Archivo: : []
+        }
+        dual = output_dual(resultado)
+        return JSONResponse(content={ - Parte 1 ---
+: dual[
+
+--- Archivo: nombre_de_ejemplo.png - Parte 1 ---
+nombre_de_ejemplo.png
+
+--- Archivo: modules/forensics_proxy.py - Parte 1 ---
+modules/forensics_proxy.py
+
+--- Archivo: https://gpt-legal-backend.onrender.com/static/openapi.yaml - Parte 1 ---
+},
+
+--- Archivo: 
+
+# 4. Asignar permisos ejecutables (si WSL está disponible)
+try {
+    wsl chmod +x .git/hooks/pre-commit
+    Write-Host  - Parte 1 ---
+🔒 Permisos ejecutables asignados vía WSL.
+
+--- Archivo: )
+
+@router.get( - Parte 1 ---
+)
+def buscar_forensics(pregunta: str = Query(...)):
+    try:
+        # Simulación de lógica (puede integrarse llamada real aquí si se desea)
+        resultado = {
+
+--- Archivo: : [
+          {
+             - Parte 1 ---
+:
+
+--- Archivo: : {
+           - Parte 1 ---
+,
+
+--- Archivo: : {},
+             - Parte 1 ---
+estandares_internacionales
+
+--- Archivo: image_id - Parte 1 ---
+:
+
+--- Archivo: {BASE_URL}/predict - Parte 1 ---
+{BASE_URL}/predict
+
+--- Archivo: name_for_model - Parte 1 ---
+:
+
+--- Archivo: Response JSON: - Parte 1 ---
+Response JSON:
+
+--- Archivo: ❌ {endpoint} FALLÓ: {e} - Parte 1 ---
+)
+
+check(
+
+--- Archivo: 
+        )
+    else:
+        return  - Parte 1 ---
+respuesta
+
+--- Archivo: contexto - Parte 1 ---
+contexto
+
+--- Archivo: ]})
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\vision_forense.py =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\static\openapi.json =====
+
+{
+   - Parte 1 ---
+,
+
+--- Archivo: 
+$modules =  - Parte 1 ---
+$base\modules
+
+--- Archivo: Criterios separados por coma: - Parte 1 ---
+Criterios separados por coma:
+
+--- Archivo:  | Out-File $outputFile -Encoding UTF8
+ - Parte 1 ---
+| Out-File $outputFile -Encoding UTF8
+
+--- Archivo: )
+        if not texto:
+            raise ValueError( - Parte 1 ---
+,
+
+--- Archivo: https://gpt-legal-backend.onrender.com/static/logo.png - Parte 1 ---
+https://gpt-legal-backend.onrender.com/static/logo.png
+
+--- Archivo: 
+        fecha_tag = soup.find(class_= - Parte 1 ---
+)
+        fecha = fecha_tag.get_text(strip=True) if fecha_tag else
+
+--- Archivo: estructura - Parte 1 ---
+estructura
+
+--- Archivo: leyes - Parte 1 ---
+leyes
+
+--- Archivo: 
+}
+ - Parte 1 ---
+}
+
+--- Archivo: : str(exception),
+         - Parte 1 ---
+: {},
+
+--- Archivo: Forensic Legal Cognition - Parte 1 ---
+,
+
+--- Archivo: utf-8 - Parte 1 ---
+utf-8
+
+--- Archivo: 
+} catch {
+    Write-Host  - Parte 1 ---
+⚠️  No se pudo aplicar chmod. Verifica manualmente si es necesario.
+
+--- Archivo: ley - Parte 1 ---
+ley
+
+--- Archivo: Ley chilena... - Parte 1 ---
+,
+
+--- Archivo:  | Out-File $outputFile -Append
+    } else {
+        $content | Out-File $outputFile -Append
+    }
+
+     - Parte 1 ---
+`n`n
+
+--- Archivo: 
+    return { - Parte 1 ---
+return {
+
+--- Archivo: )
+def reflexionar(data: ReflexionInput):
+    doc = data.documento_analizado.strip()
+    criterios = [c.lower() for c in data.criterios]
+
+    if not doc:
+        raise HTTPException(status_code=400, detail= - Parte 1 ---
+Documento evaluado doctrinalmente según: {', '.join(criterios)}.
+
+--- Archivo: : contenido
+            }
+        }
+        dual = output_dual(resultado)
+        # Retorna contenido para acceso programático (para test_api.py)
+        return JSONResponse(content={ - Parte 1 ---
+json
+
+--- Archivo:  in texto and  - Parte 1 ---
+impide acreditar condiciones pactadas, y expone a la empresa a sanciones por evasión previsional o tributaria.
+
+--- Archivo: ]})
+    except Exception as e:
+        return _error_response( - Parte 1 ---
+:
+
+--- Archivo: ,  - Parte 1 ---
+Necesidad de revisión doctrinal y jurisprudencial.
+
+--- Archivo: openapi_with_text_search.yaml - Parte 1 ---
+openapi_with_text_search.yaml
+
+--- Archivo: 
+}
+
+Read-Host  - Parte 1 ---
+`nPresiona Enter para cerrar
+
+--- Archivo: argumento - Parte 1 ---
+argumento
+
+--- Archivo: imagen - Parte 1 ---
+imagen
+
+--- Archivo: Una empresa despide sin causa a un trabajador formalizado. - Parte 1 ---
+Una empresa despide sin causa a un trabajador formalizado.
+
+--- Archivo: , palabra, e)
+
+@router.get( - Parte 1 ---
+https://www.bcn.cl/leychile/consulta/legislacion_abierta_web_service?norma={id_norma}
+
+--- Archivo: 🚀 Uvicorn relanzado con --reload (si usas backend local) - Parte 1 ---
+🚀 Uvicorn relanzado con --reload (si usas backend local)
+
+--- Archivo: Describe el contexto legal a evaluar: - Parte 1 ---
+Describe el contexto legal a evaluar:
+
+--- Archivo: 
+        justificacion =  - Parte 1 ---
+Nivel de riesgo normativo: {riesgo}
+
+--- Archivo: Derecho Chileno Temático - Parte 1 ---
+Derecho Chileno Temático
+
+--- Archivo: POST - Parte 1 ---
+POST
+
+--- Archivo: 
+$wrapperContent | Set-Content -Encoding UTF8 -Path $wrapperPath
+Write-Host  - Parte 1 ---
+✅ Wrapper bash en .git/hooks/pre-commit creado.
+
+--- Archivo: chore: renombrado y agregado openapi.yaml con definición actualizada - Parte 1 ---
+chore: renombrado y agregado openapi.yaml con definición actualizada
+
+--- Archivo: ,
+         - Parte 1 ---
+: {
+
+--- Archivo: /static - Parte 1 ---
+/static
+
+--- Archivo: openapi - Parte 1 ---
+,
+
+--- Archivo: : true
+        },
+         - Parte 1 ---
+: {}
+              }
+            }
+          },
+
+--- Archivo: 
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\generar_openapi_y_action.ps1 =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\__init__.py =====
+
+# Paquete inicializado
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\__init__.py =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\bcn_parser.py =====
+
+import requests
+from bs4 import BeautifulSoup
+from fastapi import APIRouter
+from fastapi.responses import JSONResponse
+from utils_output import output_dual
+
+router = APIRouter()
+
+@router.get( - Parte 1 ---
+/api/bcn/norma/{id_norma}
+
+--- Archivo: probabilidad - Parte 1 ---
+probabilidad
+
+--- Archivo: }
+    ]
+    resultado = {
+         - Parte 1 ---
+respuesta
+
+--- Archivo: / - Parte 1 ---
+)
+check(
+
+--- Archivo: 
+### Respuesta directa
+{data.get('respuesta', '')}
+
+**Clasificación:** {data.get('clasificacion', '')}  
+**Justificación:** {data.get('justificacion', '')}  
+
+**Base legal:**  
+{data.get('base_legal', '')}  
+
+**Derecho comparado:**  
+{data.get('derecho_comparado', '')}  
+
+**Contradicciones:**  
+{data.get('contradicciones', '')}  
+
+**Estándares internacionales:**  
+{data.get('estandares_internacionales', '')}  
+
+**Esquema visual:**  
+{data.get('esquema_visual', '')}  
+
+**Síntesis para audio:**  
+{data.get('sintesis_audio', '')}  
+
+**Fuentes:**  
+{data.get('fuentes', '')}  
+
+---
+**Logs internos:**  
+{data.get('logs', '')}
+ - Parte 1 ---
+### Respuesta directa
+{data.get('respuesta', '')}
+
+**Clasificación:** {data.get('clasificacion', '')}  
+**Justificación:** {data.get('justificacion', '')}  
+
+**Base legal:**  
+{data.get('base_legal', '')}  
+
+**Derecho comparado:**  
+{data.get('derecho_comparado', '')}  
+
+**Contradicciones:**  
+{data.get('contradicciones', '')}  
+
+**Estándares internacionales:**  
+{data.get('estandares_internacionales', '')}  
+
+**Esquema visual:**  
+{data.get('esquema_visual', '')}  
+
+**Síntesis para audio:**  
+{data.get('sintesis_audio', '')}  
+
+**Fuentes:**  
+{data.get('fuentes', '')}  
+
+---
+**Logs internos:**  
+{data.get('logs', '')}
+
+--- Archivo: Este documento trata sobre la responsabilidad penal en el derecho chileno. - Parte 1 ---
+Este documento trata sobre la responsabilidad penal en el derecho chileno.
+
+--- Archivo: html - Parte 1 ---
+html
+
+--- Archivo: legal_info_url - Parte 1 ---
+:
+
+--- Archivo: v1 - Parte 1 ---
+,
+
+--- Archivo: 
+
+# 2. Instalar dependencias
+pip install -r  - Parte 1 ---
+$base\requirements.txt
+
+--- Archivo: })
+
+    respuesta_generada = analizar_input_legal(texto)
+
+    resultado = {
+         - Parte 1 ---
+: {},
+
+--- Archivo: : pregunta,  - Parte 1 ---
+:
+
+--- Archivo: El campo 'contenido' es obligatorio. - Parte 1 ---
+El campo 'contenido' es obligatorio.
+
+--- Archivo: coherencia - Parte 1 ---
+coherencia
+
+--- Archivo: ]})
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\motor_predictivo.py =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\prediccion_bayesiana.py =====
+
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+from fastapi.responses import JSONResponse
+from utils_output import output_dual
+from modules.motor_predictivo import analizar_input_legal
+
+router = APIRouter()
+
+class PrediccionInput(BaseModel):
+    contexto: str
+
+@router.post( - Parte 1 ---
+: analisis,
+
+--- Archivo: r - Parte 1 ---
+r
+
+--- Archivo: , - Parte 1 ---
+,
+
+--- Archivo: ❌ Error HTTP {exc.response.status_code}: {exc.response.text} - Parte 1 ---
+❌ Error HTTP {exc.response.status_code}: {exc.response.text}
+
+--- Archivo: Utiliza esta API para hacer análisis legales, predictivos y forenses de documentos jurídicos chilenos. - Parte 1 ---
+,
+
+--- Archivo: )
+        resumen = resumen_tag.get_text(strip=True) if resumen_tag else  - Parte 1 ---
+return {
+
+--- Archivo: }
+'@
+    Write-Host  - Parte 1 ---
+✅ Endpoint /search añadido a forensics_proxy.py
+
+--- Archivo: 
+}
+
+# 5. Configurar Git para usar .githooks como ruta oficial
+git config core.hooksPath .githooks
+Write-Host  - Parte 1 ---
+🛠️ Git configurado para usar .githooks
+
+--- Archivo: contrato - Parte 1 ---
+})
+
+--- Archivo: ] +=  - Parte 1 ---
+json
+
+--- Archivo: {BASE_URL}/vision/ - Parte 1 ---
+{BASE_URL}/vision/
+
+--- Archivo: 
+}
+
+# 3. Validación de sintaxis Python
+Write-Host  - Parte 1 ---
+🔍 Validando sintaxis...
+
+--- Archivo: 
+          },
+           - Parte 1 ---
+,
+
+--- Archivo: )):
+    try:
+        url = f - Parte 1 ---
+response = requests.get(url, headers=DEFAULT_HEADERS, timeout=DEFAULT_TIMEOUT)
+        if response.status_code != 200:
+            raise HTTPException(status_code=502, detail=
+
+--- Archivo: Elige módulo: - Parte 1 ---
+Elige módulo:
+
+--- Archivo: )
+def obtener_norma(id_norma: int):
+    try:
+        url = f - Parte 1 ---
+Error de conexión con BCN.
+
+--- Archivo: Analizar - Parte 1 ---
+Analizar
+
+--- Archivo: ]})
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\bcn_text_search_parser.py =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\forensics_proxy.py =====
+
+# ✅ PARCHE DIRECTO PARA forensics_proxy.py SI /search NO FUNCIONA
+
+from fastapi import APIRouter, Query
+from fastapi.responses import JSONResponse
+from utils_output import output_dual
+
+router = APIRouter(prefix= - Parte 1 ---
+)
+
+@router.get(
+
+--- Archivo:  -Raw
+if ($content -notmatch  - Parte 1 ---
+/search
+
+--- Archivo: )
+
+    riesgo =  - Parte 1 ---
+inconstitucional
+
+--- Archivo: $ref - Parte 1 ---
+$ref
+
+--- Archivo: 
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\exportar_contenido_backend.ps1 =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\fix_pre_commit.ps1 =====
+
+# fix_pre_commit.ps1
+
+# 1. Crear directorio .githooks si no existe
+$hookDir =  - Parte 1 ---
+.githooks
+
+--- Archivo: )
+def analizar_imagen(data: VisionInput):
+    if not data.image_id or len(data.image_id.strip()) == 0:
+        raise HTTPException(status_code=400, detail= - Parte 1 ---
+Identificador procesado. Procesamiento visual profundo aún en expansión.
+
+--- Archivo: 
+$hookPath =  - Parte 1 ---
+$base\.git\hooks\pre-commit
+
+--- Archivo:  | Out-File $outputFile -Append
+
+# 🔁 Recorre todos los archivos con extensiones reconocidas
+Get-ChildItem -Path $rootPath -Recurse -File | Where-Object { $extensions -contains $_.Extension.ToLower() } | ForEach-Object {
+    $file = $_
+    $fullPath = $file.FullName
+    $relPath = $fullPath.Substring($rootPath.Length).TrimStart('\')
+    $content = Get-Content -Path $fullPath -Raw -ErrorAction SilentlyContinue
+
+    # 📄 Encabezado por archivo
+     - Parte 1 ---
+| Out-File $outputFile -Append
+
+# 🔁 Recorre todos los archivos con extensiones reconocidas
+Get-ChildItem -Path $rootPath -Recurse -File | Where-Object { $extensions -contains $_.Extension.ToLower() } | ForEach-Object {
+    $file = $_
+    $fullPath = $file.FullName
+    $relPath = $fullPath.Substring($rootPath.Length).TrimStart('\')
+    $content = Get-Content -Path $fullPath -Raw -ErrorAction SilentlyContinue
+
+    # 📄 Encabezado por archivo
+
+--- Archivo: Diagnóstico jurídico, análisis doctrinal y evaluación forense automatizada. - Parte 1 ---
+Diagnóstico jurídico, análisis doctrinal y evaluación forense automatizada.
+
+--- Archivo: `n🎉 Archivo 'action.json' creado exitosamente en:`n$ActionFile - Parte 1 ---
+`n🎉 Archivo 'action.json' creado exitosamente en:`n$ActionFile
+
+--- Archivo: : {
+                 - Parte 1 ---
+: {
+
+--- Archivo: : resultado_texto,
+         - Parte 1 ---
+: input_data.texto,
+
+--- Archivo: 
+
+@router.post( - Parte 1 ---
+clasificacion
+
+--- Archivo: : justificacion,
+         - Parte 1 ---
+Corte Suprema Rol 8632-2021
+
+--- Archivo: 
+    justificacion =  - Parte 1 ---
+incumplimiento
+
+--- Archivo: )
+def norma_bcn(id_norma: int):
+    try:
+        url = f - Parte 1 ---
+https://www.bcn.cl/leychile/Navegar?idNorma={id_norma}
+
+--- Archivo: ]})
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\reflexion.py =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\root.py =====
+
+from fastapi import APIRouter, Request
+from fastapi.responses import JSONResponse
+from utils_output import output_dual
+from modules.motor_predictivo import analizar_input_legal
+
+router = APIRouter()
+
+@router.get( - Parte 1 ---
+justificacion
+
+--- Archivo: https://json-schema.org/draft/2020-12/schema - Parte 1 ---
+https://json-schema.org/draft/2020-12/schema
+
+--- Archivo: : datos.dict(),
+             - Parte 1 ---
+markdown
+
+--- Archivo: ] =  - Parte 1 ---
+/status/json
+
+--- Archivo: ⚠️ No se encontró una norma válida. - Parte 1 ---
+⚠️ No se encontró una norma válida.
+
+--- Archivo: 
+} else {
+    Write-Host  - Parte 1 ---
+🔁 Endpoint /search ya presente en forensics_proxy.py
+
+--- Archivo: pattern - Parte 1 ---
+pattern
+
+--- Archivo: claridad - Parte 1 ---
+]})
+check(
+
+--- Archivo: 
+
+# 3. Crear wrapper Bash en .git/hooks que llama al script de PowerShell
+$wrapperPath =  - Parte 1 ---
+.git/hooks/pre-commit
+
+--- Archivo: 🚀 Iniciando backend en puerto {port}... - Parte 1 ---
+🚀 Iniciando backend en puerto {port}...
+
+--- Archivo: {BASE_URL}/legislacion/norma/{id_norma} - Parte 1 ---
+{BASE_URL}/legislacion/norma/{id_norma}
+
+--- Archivo: ⚖️ Legal Cognition Interface - Parte 1 ---
+⚖️ Legal Cognition Interface
+
+--- Archivo: 6️⃣ Reflexión Jurídica - Parte 1 ---
+6️⃣ Reflexión Jurídica
+
+--- Archivo: : str(e)})
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\forensics_proxy.py =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\legislacion_bcn.py =====
+
+from fastapi import APIRouter, Query, HTTPException
+import requests
+from bs4 import BeautifulSoup
+from fastapi.responses import JSONResponse
+from utils_output import output_dual
+
+router = APIRouter(prefix= - Parte 1 ---
+)
+
+DEFAULT_HEADERS = {
+
+--- Archivo: 
+    exit 1
+}
+
+Write-Host  - Parte 1 ---
+✅ Pre-commit validado. Todo OK.
+
+--- Archivo: ]})
+    except Exception as e:
+        return JSONResponse(status_code=500, content={ - Parte 1 ---
+: str(e)})
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\forensics_proxy.py =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\legislacion_bcn.py =====
+
+from fastapi import APIRouter, Query, HTTPException
+import requests
+from bs4 import BeautifulSoup
+from fastapi.responses import JSONResponse
+from utils_output import output_dual
+
+router = APIRouter(prefix=
+
+--- Archivo: 
+             - Parte 1 ---
+/predict
+
+--- Archivo: 
+$testScript | Set-Content -Encoding UTF8 -Path $testPath
+Write-Host  - Parte 1 ---
+✅ Script de test regenerado
+
+--- Archivo: api - Parte 1 ---
+: {
+
+--- Archivo: : str(e)
+        })
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\bcn_parser.py =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\bcn_text_search_parser.py =====
+
+from fastapi import APIRouter, Query
+from fastapi.responses import JSONResponse
+from utils_output import output_dual
+
+router = APIRouter()
+
+@router.get( - Parte 1 ---
+/text-search
+
+--- Archivo: consulta - Parte 1 ---
+consulta
+
+--- Archivo: 
+    alertas = []
+
+    if any(palabra in texto for palabra in [ - Parte 1 ---
+nulidad
+
+--- Archivo: gafi - Parte 1 ---
+gafi
+
+--- Archivo: : fecha,
+                 - Parte 1 ---
+contenido
+
+--- Archivo: GET - Parte 1 ---
+GET
+
+--- Archivo: : {
+         - Parte 1 ---
+:
+
+--- Archivo: )
+def status_json():
+    resultado = {
+         - Parte 1 ---
+Sistema activo.
+
+--- Archivo: )
+            resultado[ - Parte 1 ---
+estandares_internacionales
+
+--- Archivo: : {
+                   - Parte 1 ---
+: {
+
+--- Archivo: 
+$staticPath = Join-Path $backendPath  - Parte 1 ---
+static
+
+--- Archivo: 
+        )
+    elif  - Parte 1 ---
+Es fundamental contar con respaldo documental válido para evitar conflictos o sanciones.
+
+--- Archivo: /legislacion/buscar - Parte 1 ---
+, 'get', None, {
+
+--- Archivo: ],
+         - Parte 1 ---
+Evaluación de riesgo legal resultó en nivel {riesgo}.
+
+--- Archivo: 
+            }
+          }
+        ],
+         - Parte 1 ---
+: {}
+              }
+            }
+          },
+
+--- Archivo: : contenido.get( - Parte 1 ---
+buscar_norma
+
+--- Archivo: 
+$valid = python -m compileall .
+if ($LASTEXITCODE -ne 0) {
+    Write-Host  - Parte 1 ---
+❌ ERROR: Hay errores de sintaxis Python. Corrige antes de hacer commit.
+
+--- Archivo: : output_md}
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\utils_output.py =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\exportar_contenido_backend.ps1 =====
+
+# ===============================================
+# 📦 Exportador completo de contenido del backend
+# ===============================================
+
+$rootPath =  - Parte 1 ---
+: output_md}
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\utils_output.py =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\exportar_contenido_backend.ps1 =====
+
+# ===============================================
+# 📦 Exportador completo de contenido del backend
+# ===============================================
+
+$rootPath =
+
+--- Archivo: ,
+       - Parte 1 ---
+: {
+
+--- Archivo: 
+$outputFile = Join-Path $rootPath  - Parte 1 ---
+$outputFile = Join-Path $rootPath
+
+--- Archivo: )
+
+    analisis = analizar_input_legal(datos.contexto)
+
+    resultado = {
+         - Parte 1 ---
+,
+
+--- Archivo: riesgo - Parte 1 ---
+riesgo
+
+--- Archivo: Forensic Legal Cognition 4.1 - Parte 1 ---
+Forensic Legal Cognition 4.1
+
+--- Archivo: 
+                }
+              ]
+            },
+             - Parte 1 ---
+,
+
+--- Archivo: 🗑️ Eliminando config_map.py duplicado del raíz - Parte 1 ---
+🗑️ Eliminando config_map.py duplicado del raíz
+
+--- Archivo: ]})
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\predict.py =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\reflexion.py =====
+
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+from fastapi.responses import JSONResponse
+from utils_output import output_dual
+
+router = APIRouter()
+
+class ReflexionInput(BaseModel):
+    documento_analizado: str
+    criterios: list[str]
+
+@router.post( - Parte 1 ---
+respuesta
+
+--- Archivo: : resultados
+        }
+    }
+    dual = output_dual(resultado)
+    return JSONResponse(content={ - Parte 1 ---
+: dual[
+
+--- Archivo: ]})
+
+@router.post( - Parte 1 ---
+})
+
+    respuesta_generada = analizar_input_legal(texto)
+
+    resultado = {
+
+--- Archivo: 
+if (Test-Path $openapiUpdater) {
+  python $openapiUpdater
+}
+
+# 5. Ejecutar los tests
+python $testPath
+
+# 6. Activar pre-commit hook si existe
+if (Test-Path  - Parte 1 ---
+$hookPath
+
+--- Archivo: .\openapi.yaml - Parte 1 ---
+.\openapi.yaml
+
+--- Archivo: )
+def predecir_riesgo(data: PrediccionInput):
+    texto = data.contexto.strip().lower()
+    if not texto:
+        raise HTTPException(status_code=400, detail= - Parte 1 ---
+fraude
+
+--- Archivo: )
+
+        titulo_tag = soup.find( - Parte 1 ---
+h1
+
+--- Archivo:  if contenido else  - Parte 1 ---
+justificacion
+
+--- Archivo: 
+exit 0
+'@
+
+$psHookContent | Set-Content -Encoding UTF8 -Path $psHookPath
+Write-Host  - Parte 1 ---
+✅ Hook PowerShell generado: $psHookPath
+
+--- Archivo: mensaje - Parte 1 ---
+mensaje
+
+--- Archivo: {BASE_URL}/api/prediccion/ - Parte 1 ---
+{BASE_URL}/api/prediccion/
+
+--- Archivo: wide - Parte 1 ---
+wide
+
+--- Archivo: ❌ Error general: {e} - Parte 1 ---
+❌ Error general: {e}
+
+--- Archivo: 
+}
+&  - Parte 1 ---
+$venv\Scripts\activate.ps1
+
+--- Archivo: )' | Set-Content -Encoding UTF8 -Path  - Parte 1 ---
+$modules\legislacion_bcn.py
+
+--- Archivo: JSON inválido. - Parte 1 ---
+JSON inválido.
+
+--- Archivo: : {
+       - Parte 1 ---
+:
+
+--- Archivo: 
+$wrapperContent =  - Parte 1 ---
+#!/bin/sh\npwsh .githooks/pre-commit.ps1
+
+--- Archivo: error - Parte 1 ---
+error
+
+--- Archivo: :  - Parte 1 ---
+}
+    }
+  }
+}
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\static\openapi.json =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\.github\workflows\docker-image.yml =====
+
+name: Docker Image CI
+
+on:
+  push:
+    branches: [
+
+--- Archivo: )):
+    resultados = [
+        { - Parte 1 ---
+norma_id
+
+--- Archivo: description_for_model - Parte 1 ---
+:
+
+--- Archivo: type - Parte 1 ---
+:
+
+--- Archivo: : {
+             - Parte 1 ---
+: [
+
+--- Archivo: {API_BASE}/reflexion/ - Parte 1 ---
+{API_BASE}/reflexion/
+
+--- Archivo: tema - Parte 1 ---
+tema
+
+--- Archivo: contact_email - Parte 1 ---
+:
+
+--- Archivo: )
+def predecir_riesgo(datos: PrediccionInput):
+    if not datos.contexto or len(datos.contexto.strip()) < 50:
+        raise HTTPException(status_code=422, detail= - Parte 1 ---
+:
+
+--- Archivo: kharzun@gmail.com - Parte 1 ---
+,
+
+--- Archivo: : dual[ - Parte 1 ---
+:
+
+--- Archivo: }
+
+@router.get( - Parte 1 ---
+)
+def buscar_norma(palabra: str = Query(..., description=
+
+--- Archivo: : {
+     - Parte 1 ---
+},
+
+--- Archivo: is_user_authenticated - Parte 1 ---
+is_user_authenticated
+
+--- Archivo: config_map.py - Parte 1 ---
+config_map.py
+
+--- Archivo: temas - Parte 1 ---
+temas
+
+--- Archivo: temperature - Parte 1 ---
+temperature
+
+--- Archivo: dolo - Parte 1 ---
+dolo
+
+--- Archivo: ✅ Archivo antiguo 'openapi.yaml' eliminado - Parte 1 ---
+✅ Archivo antiguo 'openapi.yaml' eliminado
+
+--- Archivo: uvicorn main:app --reload - Parte 1 ---
+uvicorn main:app --reload
+
+--- Archivo: /forensics/search - Parte 1 ---
+, 'get', None, {
+
+--- Archivo: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend - Parte 1 ---
+C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend
+
+--- Archivo: Consulta y análisis jurídico automatizado del derecho chileno. - Parte 1 ---
+,
+
+--- Archivo: : {},
+         - Parte 1 ---
+: [],
+
+--- Archivo: : id_norma,
+                 - Parte 1 ---
+: dual[
+
+--- Archivo: : [
+           - Parte 1 ---
+: {
+
+--- Archivo: 
+{
+   - Parte 1 ---
+{
+
+--- Archivo: 
+$test_script | Set-Content -Encoding UTF8 -Path $test_path
+Write-Host  - Parte 1 ---
+✅ Script de test regenerado
+
+--- Archivo: https://gpt-legal-backend.onrender.com/static/openapi.json - Parte 1 ---
+https://gpt-legal-backend.onrender.com/static/openapi.json
+
+--- Archivo: gpt-4o - Parte 1 ---
+gpt-4o
+
+--- Archivo:    https://gpt-legal-backend.onrender.com/static/openapi.yaml - Parte 1 ---
+https://gpt-legal-backend.onrender.com/static/openapi.yaml
+
+--- Archivo: 
+        response = requests.get(url, headers=DEFAULT_HEADERS, timeout=DEFAULT_TIMEOUT)
+        if response.status_code != 200:
+            raise HTTPException(status_code=502, detail= - Parte 1 ---
+respuesta
+
+--- Archivo: pregunta - Parte 1 ---
+:
+
+--- Archivo: modules/prediccion_bayesiana.py - Parte 1 ---
+modules/prediccion_bayesiana.py
+
+--- Archivo: )
+
+    resultado = {
+         - Parte 1 ---
+base_legal
+
+--- Archivo: ❌ ERROR: No se encontró el archivo 'openapi.yaml' en $StaticPath - Parte 1 ---
+❌ ERROR: No se encontró el archivo 'openapi.yaml' en $StaticPath
+
+--- Archivo: 📘 Reflexión Jurídica Automatizada - Parte 1 ---
+📘 Reflexión Jurídica Automatizada
+
+--- Archivo: buscador - Parte 1 ---
+buscador
+
+--- Archivo: 
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+   - Parte 1 ---
+:
+
+--- Archivo: ]})
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\legislacion_bcn.py =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\motor_predictivo.py =====
+
+# motor_predictivo.py
+
+from fastapi import APIRouter, HTTPException
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel
+from utils_output import output_dual
+
+router = APIRouter()
+
+class PredictInput(BaseModel):
+    texto: str
+
+def analizar_input_legal(texto: str) -> str:
+    texto = texto.lower()
+
+    if not texto or len(texto.strip()) == 0:
+        return  - Parte 1 ---
+contrato
+
+--- Archivo: ,
+             - Parte 1 ---
+:
+
+--- Archivo: 
+
+# 1. Corregir prefix en routers
+(Get-Content  - Parte 1 ---
+$modules\forensics_proxy.py
+
+--- Archivo: : input_data,
+             - Parte 1 ---
+json
+
+--- Archivo: ) or payload.get( - Parte 1 ---
+:
+
+--- Archivo: https://raw.githubusercontent.com/TheCousinMate/gpt_legal_backend/main/static/logo.png - Parte 1 ---
+,
+
+--- Archivo: 
+            },
+             - Parte 1 ---
+: [
+
+--- Archivo: : respuesta_generada,
+         - Parte 1 ---
+json
+
+--- Archivo: 
+
+$base =  - Parte 1 ---
+C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend
+
+--- Archivo: 
+if (-not (Test-Path $hookDir)) {
+    New-Item -ItemType Directory -Path $hookDir | Out-Null
+    Write-Host  - Parte 1 ---
+✅ Carpeta .githooks creada.
+
+--- Archivo: openapi.yaml - Parte 1 ---
+openapi.yaml
+
+--- Archivo: : true,
+             - Parte 1 ---
+: {
+
+--- Archivo:  -Value @'
+@router.get( - Parte 1 ---
+/search
+
+--- Archivo: simbología - Parte 1 ---
+simbología
+
+--- Archivo: required - Parte 1 ---
+required
+
+--- Archivo: /validar - Parte 1 ---
+/validar
+
+--- Archivo: 
+              }
+            }
+          },
+           - Parte 1 ---
+: {
+
+--- Archivo: action.json - Parte 1 ---
+action.json
+
+--- Archivo: 9️⃣ Experimento Predictivo General - Parte 1 ---
+9️⃣ Experimento Predictivo General
+
+--- Archivo: visual - Parte 1 ---
+visual
+
+--- Archivo: 🧪 Predict API (Experimental) - Parte 1 ---
+🧪 Predict API (Experimental)
+
+--- Archivo: ^Ley \\d+$|^Decreto.*|^Resolución.*|^Instrucción.*|^Decreto con Fuerza de Ley.*|^Ordenanza.*|^Reglamento.*|^Circular.*|^Norma.*|^Oficio.*|^Acuerdo.*|^Auto Acordado.*|^Código.*|^Orden.* - Parte 1 ---
+^Ley \\d+$|^Decreto.*|^Resolución.*|^Instrucción.*|^Decreto con Fuerza de Ley.*|^Ordenanza.*|^Reglamento.*|^Circular.*|^Norma.*|^Oficio.*|^Acuerdo.*|^Auto Acordado.*|^Código.*|^Orden.*
+
+--- Archivo: Texto crudo: - Parte 1 ---
+Texto crudo:
+
+--- Archivo:  in texto:
+        return (
+             - Parte 1 ---
+No se detectó riesgo legal específico, pero se recomienda revisión con asesoría jurídica especializada.
+
+--- Archivo: 
+
+        resumen_tag = soup.find( - Parte 1 ---
+div
+
+--- Archivo: resultados - Parte 1 ---
+resultados
+
+--- Archivo:  in texto or  - Parte 1 ---
+Los actos emitidos sin competencia o delegación formal son jurídicamente inexistentes y pueden ser objeto de control de legalidad.
+
+--- Archivo: culpabilidad - Parte 1 ---
+culpabilidad
+
+--- Archivo: @
+$test_path =  - Parte 1 ---
+$tests\__test_all_endpoints.py
+
+--- Archivo: 
+
+# 1️⃣ Contenido mínimo y válido del openapi.yaml
+$yaml = @ - Parte 1 ---
+openapi: 3.1.0
+info:
+  title: Forensic Legal Cognition 4.1
+  description: API chilena de análisis jurídico automatizado.
+  version:
+
+--- Archivo: Una persona actúa con imprudencia al conducir, provocando daño a un peatón. - Parte 1 ---
+Una persona actúa con imprudencia al conducir, provocando daño a un peatón.
+
+--- Archivo: : 1234,  # Simulado para pruebas
+             - Parte 1 ---
+: titulo,
+
+--- Archivo: modules - Parte 1 ---
+modules
+
+--- Archivo: : [
+                {
+                   - Parte 1 ---
+:
+
+--- Archivo:  in doc.lower():
+            resultado[ - Parte 1 ---
+Se identificaron contradicciones.
+
+--- Archivo: 
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\full_backend_validator.ps1 =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\generar_openapi_y_action.ps1 =====
+
+# ===============================================
+# 🔄 Script: Generar openapi.yaml + action.json
+# ===============================================
+
+# ⚙️ Variables base
+$backendPath =  - Parte 1 ---
+C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend
+
+--- Archivo: : [],
+         - Parte 1 ---
+: dual[
+
+--- Archivo: {BASE_URL}/ - Parte 1 ---
+{BASE_URL}/
+
+--- Archivo: title - Parte 1 ---
+title
+
+--- Archivo: top_p - Parte 1 ---
+top_p
+
+--- Archivo: 
+
+# 3. Regenerar archivo de test
+$testScript = @ - Parte 1 ---
+import requests
+BASE =
+
+--- Archivo: )
+
+# 🧹 Borra archivo anterior si existe
+if (Test-Path $outputFile) {
+    Remove-Item $outputFile
+}
+
+ - Parte 1 ---
+)
+
+# 🧹 Borra archivo anterior si existe
+if (Test-Path $outputFile) {
+    Remove-Item $outputFile
+}
+
+--- Archivo: modelo bayesiano - Parte 1 ---
+modelo bayesiano
+
+--- Archivo: )
+        titulo = titulo.get_text(strip=True) if titulo else  - Parte 1 ---
+fecha_tag = soup.find(class_=
+
+--- Archivo:  | Out-File $outputFile -Append
+
+    if (-not $content) {
+         - Parte 1 ---
+⚠️ Archivo vacío o no legible.
+
+--- Archivo: status - Parte 1 ---
+status
+
+--- Archivo: @
+
+# 5️⃣ Guardar el archivo action.json
+$action | Out-File $actionPath -Encoding utf8
+Write-Host  - Parte 1 ---
+`n✅ action.json creado correctamente en:
+
+--- Archivo: $schema - Parte 1 ---
+$schema
+
+--- Archivo: 
+  },
+   - Parte 1 ---
+,
+
+--- Archivo: 
+        }
+    }
+
+    dual = output_dual(resultado)
+    return JSONResponse(content={ - Parte 1 ---
+markdown
+
+--- Archivo: https://github.com/TheCousinMate/gpt_legal_backend#terms - Parte 1 ---
+}
+
+--- Archivo: keywords - Parte 1 ---
+keywords
+
+--- Archivo: $defs - Parte 1 ---
+$defs
+
+--- Archivo: modules/bcn_parser.py - Parte 1 ---
+modules/bcn_parser.py
+
+--- Archivo: )
+
+    elif any(palabra in texto for palabra in [ - Parte 1 ---
+Moderado
+
+--- Archivo: 
+
+# 4️⃣ Contenido completo de action.json
+$action = @ - Parte 1 ---
+{
+
+--- Archivo: 🔮 Riesgo Legal Predictivo - Parte 1 ---
+🔮 Riesgo Legal Predictivo
+
+--- Archivo: patternProperties - Parte 1 ---
+patternProperties
+
+--- Archivo: 
+(Get-Content  - Parte 1 ---
+$modules\legislacion_bcn.py
+
+--- Archivo: },
+             - Parte 1 ---
+: []
+        }
+        dual = output_dual(resultado)
+        return JSONResponse(content={
+
+--- Archivo: 0.0.0.0 - Parte 1 ---
+0.0.0.0
+
+--- Archivo: 
+$tests =  - Parte 1 ---
+$base\tests
+
+--- Archivo: 
+                },
+                {
+                   - Parte 1 ---
+: {
+
+--- Archivo: ✅ {endpoint} OK - Parte 1 ---
+)
+    except Exception as e:
+        print(f
+
+--- Archivo: ) {
+  try {
+    wsl chmod +x $hookPath
+    Write-Host  - Parte 1 ---
+✅ Pre-commit hook activado
+
+--- Archivo: : riesgo,
+         - Parte 1 ---
+Sobre procedimientos administrativos. Principios de juridicidad y motivación.
+
+--- Archivo: 
+
+# 5. Ejecutar test
+python $test_path
+
+Write-Host  - Parte 1 ---
+`n🎯 Validación automatizada completada. Revisa arriba los estados de cada endpoint.
+
+--- Archivo: )
+def buscar_texto_bcn(palabra: str = Query(..., description= - Parte 1 ---
+Término a buscar en el texto legal
+
+--- Archivo: 
+        headers = { - Parte 1 ---
+User-Agent
+
+--- Archivo:  | Out-File $outputFile -Append
+}
+
+Write-Host  - Parte 1 ---
+`n✅ Reporte generado:
+
+--- Archivo: búsqueda - Parte 1 ---
+búsqueda
+
+--- Archivo: w - Parte 1 ---
+w
+
+--- Archivo: description_for_human - Parte 1 ---
+:
+
+--- Archivo: array - Parte 1 ---
+array
+
+--- Archivo: schema_version - Parte 1 ---
+:
+
+--- Archivo: 
+
+# 4. Ejecutar update_openapi.py si existe
+$openapiUpdater =  - Parte 1 ---
+$base\update_openapi.py
+
+--- Archivo: 
+
+Read-Host  - Parte 1 ---
+`nPresiona Enter para cerrar
+
+--- Archivo: version - Parte 1 ---
+version
+
+--- Archivo: __pycache__ - Parte 1 ---
+__pycache__
+
+--- Archivo: : {}
+              }
+            }
+          },
+           - Parte 1 ---
+:
+
+--- Archivo: Reflexión - Parte 1 ---
+Reflexión
+
+--- Archivo: )
+def buscar_norma(palabra: str = Query(..., description= - Parte 1 ---
+)):
+    try:
+        url = f
+
+--- Archivo: {API_BASE}/predict - Parte 1 ---
+{API_BASE}/predict
+
+--- Archivo: static - Parte 1 ---
+static
+
+--- Archivo: 1.0 - Parte 1 ---
+servers:
+  - url: https://gpt-legal-backend.onrender.com
+    description: Render
+
+paths:
+  /:
+    get:
+      operationId: healthCheck
+      summary: Check de salud
+      responses:
+        '200':
+          description: OK
+components:
+  schemas: {}
+
+--- Archivo: ,
+           - Parte 1 ---
+:
+
+--- Archivo: forensicLegalCognition - Parte 1 ---
+,
+
+--- Archivo: 1️⃣ Health Check - Parte 1 ---
+1️⃣ Health Check
+
+--- Archivo: ]):
+        riesgo =  - Parte 1 ---
+respuesta
+
+--- Archivo: : analisis,
+         - Parte 1 ---
+:
+
+--- Archivo: transparencia - Parte 1 ---
+transparencia
+
+--- Archivo: ] = {
+             - Parte 1 ---
+Se incluyó contraste con derecho comparado.
+
+--- Archivo: {BASE_URL}/legislacion/buscar - Parte 1 ---
+{BASE_URL}/legislacion/buscar
+
+--- Archivo: ]})
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\prediccion_bayesiana.py =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\predict.py =====
+
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+from fastapi.responses import JSONResponse
+from utils_output import output_dual
+
+router = APIRouter()
+
+class PrediccionInput(BaseModel):
+    contexto: str
+
+@router.post( - Parte 1 ---
+No se detectaron patrones críticos en el texto proporcionado.
+
+--- Archivo: ⚠️ Parsing error: - Parte 1 ---
+⚠️ Parsing error:
+
+--- Archivo: @
+
+# 2️⃣ Crear carpeta static si no existe
+if (-Not (Test-Path $staticPath)) {
+    New-Item -ItemType Directory -Path $staticPath | Out-Null
+}
+
+# 3️⃣ Guardar el archivo openapi.yaml
+$yaml | Out-File $yamlPath -Encoding utf8
+Write-Host  - Parte 1 ---
+`n✅ openapi.yaml creado correctamente en:
+
+--- Archivo: PORT - Parte 1 ---
+PORT
+
+--- Archivo: {API_BASE}/api/prediccion/ - Parte 1 ---
+{API_BASE}/api/prediccion/
+
+--- Archivo: ✏️ Reescribiendo validacion_schema.py sin código de activación... - Parte 1 ---
+✏️ Reescribiendo validacion_schema.py sin código de activación...
+
+--- Archivo: : data.dict(),
+             - Parte 1 ---
+:
+
+--- Archivo: : resumen
+        }
+    except Exception as e:
+        return { - Parte 1 ---
+: f
+
+--- Archivo: 
+try {
+    $resp = Invoke-WebRequest -Uri $onlineUrl -UseBasicParsing -TimeoutSec 10
+    if ($resp.StatusCode -eq 200) {
+        Write-Host  - Parte 1 ---
+`n🟢 openapi.yaml está accesible en línea y listo para importar en ChatGPT.
+
+--- Archivo: : 12345,  - Parte 1 ---
+extracto
+
+--- Archivo: /vision/ - Parte 1 ---
+, 'post', {
+
+--- Archivo: 
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+     - Parte 1 ---
+: [
+          {
+
+--- Archivo: output - Parte 1 ---
+output
+
+--- Archivo: modules/vision_forense.py - Parte 1 ---
+modules/vision_forense.py
+
+--- Archivo: https://gpt-legal-backend.onrender.com - Parte 1 ---
+https://gpt-legal-backend.onrender.com
+
+--- Archivo: )
+
+DEFAULT_HEADERS = { - Parte 1 ---
+:
+
+--- Archivo: : {}
+              }
+            }
+          }
+        }
+      }
+    },
+     - Parte 1 ---
+: {
+
+--- Archivo: negligencia - Parte 1 ---
+negligencia
+
+--- Archivo: 
+        } if riesgo !=  - Parte 1 ---
+Convención Americana art. 8 y 25
+
+--- Archivo: 
+
+        resultado = {
+             - Parte 1 ---
+norma
+
+--- Archivo: AutoPush 2025-05-14_16-33 - Parte 1 ---
+AutoPush 2025-05-14_16-33
+
+--- Archivo: : { - Parte 1 ---
+: pregunta,
+
+--- Archivo: 
+          }
+        },
+         - Parte 1 ---
+]
+  pull_request:
+    branches: [
+
+--- Archivo: : contenido
+            }
+        }
+        dual = output_dual(resultado)
+        return JSONResponse(content={ - Parte 1 ---
+],
+
+--- Archivo: ][ - Parte 1 ---
+markdown
+
+--- Archivo: reflexiona - Parte 1 ---
+reflexiona
+
+--- Archivo: 
+
+    resultado[ - Parte 1 ---
+markdown
+
+--- Archivo: )
+async def predict(request: Request):
+    try:
+        payload = await request.json()
+        texto = payload.get( - Parte 1 ---
+: respuesta_generada,
+
+--- Archivo: . - Parte 1 ---
+.
+
+--- Archivo: )
+def predict_riesgo(input_data: PredictInput):
+    resultado_texto = analizar_input_legal(input_data.texto)
+    resultado = {
+         - Parte 1 ---
+Fuerte
+
+--- Archivo: 7️⃣ Análisis de Imagen Legal - Parte 1 ---
+7️⃣ Análisis de Imagen Legal
+
+--- Archivo: norma - Parte 1 ---
+norma
+
+--- Archivo: Legal Cognition 4.1 - Parte 1 ---
+Legal Cognition 4.1
+
+--- Archivo: id - Parte 1 ---
+id
+
+--- Archivo: ,
+               - Parte 1 ---
+: {
+
+--- Archivo: 
+        exit 1
+    }
+}
+
+# 2. Verifica existencia de .env
+if (-not (Test-Path  - Parte 1 ---
+.env
+
+--- Archivo: launch_backend_render.py - Parte 1 ---
+launch_backend_render.py
+
+--- Archivo: 
+          }
+        ],
+         - Parte 1 ---
+: {}
+              }
+            }
+          },
+
+--- Archivo: : [],
+             - Parte 1 ---
+,
+
+--- Archivo: imagen123 - Parte 1 ---
+})
+check(
+
+--- Archivo: modules/reflexion.py - Parte 1 ---
+modules/reflexion.py
+
+--- Archivo: ✅ Git actualizado y sincronizado con openapi.yaml - Parte 1 ---
+✅ Git actualizado y sincronizado con openapi.yaml
+
+--- Archivo: string - Parte 1 ---
+string
+
