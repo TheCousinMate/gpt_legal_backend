@@ -1,29 +1,32 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
+from typing import Optional
 from fastapi.responses import JSONResponse
 from utils_output import output_dual
 
 router = APIRouter()
 
 class PrediccionInput(BaseModel):
-    contexto: str
+    contexto: Optional[str] = None
+    input: Optional[str] = None
+    texto: Optional[str] = None
 
 @router.post("/predict")
 def predecir_riesgo(data: PrediccionInput):
-    texto = data.contexto.strip().lower()
-    if not texto:
-        raise HTTPException(status_code=400, detail="Debe ingresar un contexto jurídico para evaluación.")
+    contenido = (data.contexto or data.input or data.texto or "").strip().lower()
+    if not contenido:
+        raise HTTPException(status_code=400, detail="Debe ingresar al menos un campo: contexto, input o texto.")
 
     riesgo = "Bajo"
     justificacion = "No se detectaron patrones críticos en el texto proporcionado."
     alertas = []
 
-    if any(palabra in texto for palabra in ["fraude", "inconstitucional", "incumplimiento", "nulidad", "arbitrariedad"]):
+    if any(palabra in contenido for palabra in ["fraude", "inconstitucional", "incumplimiento", "nulidad", "arbitrariedad"]):
         riesgo = "Alto"
         justificacion = "Se detectaron términos indicativos de riesgo legal significativo."
         alertas.append("Conflicto potencial con principios fundamentales.")
 
-    elif any(palabra in texto for palabra in ["ambigüedad", "falta de competencia", "vacío legal"]):
+    elif any(palabra in contenido for palabra in ["ambigüedad", "falta de competencia", "vacío legal"]):
         riesgo = "Moderado"
         justificacion = "Se identifican riesgos interpretativos o de competencia normativa."
         alertas.append("Necesidad de revisión doctrinal y jurisprudencial.")
