@@ -13,6 +13,7 @@ from modules.legislacion_bcn import router as legislacion_router
 from modules.forensics_proxy import router as forensics_router
 from modules.bcn_parser import router as bcn_router
 from modules.bcn_text_search_parser import router as text_search_router
+from modules.predict import router as predict_router  # NUEVO
 
 app = FastAPI(
     title="Forensic Legal Cognition 4.1",
@@ -20,12 +21,12 @@ app = FastAPI(
     version="4.1.0",
     contact={
         "name": "Kabir K. Hazbún Crovetto",
-        "email": "kharzun@gmail.com",
+        "email": "khazbun@gmail.com",
         "url": "https://github.com/TheCousinMate/gpt_legal_backend"
     },
     license_info={
         "name": "MIT",
-        "url": "https://opensource.org/licenses/MIT"
+        "url": "https://www.safecreative.org/es"
     }
 )
 
@@ -46,31 +47,21 @@ app.include_router(legislacion_router)
 app.include_router(forensics_router)
 app.include_router(bcn_router)
 app.include_router(text_search_router)
+app.include_router(predict_router)  # NUEVO
 
-# Montar archivos estáticos
+# Archivos estáticos
 if os.path.exists("static"):
     app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# Health Check endpoints
+# Health check
 @app.get("/")
 @app.head("/")
 def health_check():
     return {
-        "status": "alive", 
+        "status": "alive",
         "version": app.version,
         "title": app.title,
-        "endpoints": [
-            "/reflexion/",
-            "/api/prediccion/",
-            "/vision/",
-            "/legislacion/buscar",
-            "/legislacion/norma/{id}",
-            "/forensics/search",
-            "/api/bcn/norma/{id}",
-            "/text-search",
-            "/predict",
-            "/status/json"
-        ]
+        "endpoints": [route.path for route in app.routes if route.path != "/openapi.json"]
     }
 
 @app.get("/status/json")
@@ -83,31 +74,7 @@ def status_json():
         "total_endpoints": len(app.routes)
     }
 
-# Endpoint unificado /predict
-@app.post("/predict")
-async def predict_unified(request: Request):
-    try:
-        payload = await request.json()
-        texto = payload.get("texto") or payload.get("input") or payload.get("contexto")
-        if not texto:
-            raise HTTPException(status_code=400, detail="Falta el campo obligatorio 'texto', 'input' o 'contexto'.")
-        
-        from modules.motor_predictivo import analizar_input_legal
-        respuesta = analizar_input_legal(texto)
-        
-        return JSONResponse(content={
-            "prediction": respuesta,
-            "confidence": "high",
-            "source": "forensic_legal_cognition",
-            "input_processed": texto[:100] + "..." if len(texto) > 100 else texto
-        })
-    except Exception as e:
-        return JSONResponse(
-            status_code=500, 
-            content={"error": f"Error en predicción: {str(e)}"}
-        )
-
-# Manejador global de errores
+# Global error handler
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
     return JSONResponse(

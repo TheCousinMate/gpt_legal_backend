@@ -1,42 +1,25 @@
 openapi: 3.1.0
 info:
-  title: Forensic Legal Cognition API
-  version: 4.1.0
-  description: |
-    API chilena de análisis jurídico automatizado con evaluación doctrinal 
-    y verificación forense de alta precisión.
-    
-    Funcionalidades principales:
-    - Análisis predictivo de riesgo legal
-    - Evaluación doctrinal automatizada
-    - Consulta a legislación chilena (BCN)
-    - Análisis forense digital
-    - Búsqueda textual en normativa
+  title: Forensic Legal Cognition 4.1
+  description: API chilena de análisis jurídico automatizado, evaluación doctrinal y verificación forense de alta precisión.
   contact:
     name: Kabir K. Hazbún Crovetto
-    email: kharzun@gmail.com
-    url: https://github.com/TheCousinMate/gpt_legal_backend
-  license:
-    name: MIT
-    url: https://opensource.org/licenses/MIT
+    url: https://github.com/TheCousinMate/gpt_legal_backend.git
+    email: khazbun@gmail.com
+  version: 4.1.0
 
 servers:
   - url: https://gpt-legal-backend.onrender.com
-    description: Servidor de producción en Render
-  - url: http://localhost:8000
-    description: Servidor de desarrollo local
+    description: Servidor público en Render
 
 paths:
   /:
     get:
       summary: Health Check
-      description: Verifica el estado del API y retorna información básica
-      operationId: health_check
-      tags:
-        - Sistema
+      operationId: healthCheck
       responses:
         '200':
-          description: API funcionando correctamente
+          description: Successful Response
           content:
             application/json:
               schema:
@@ -44,41 +27,26 @@ paths:
                 properties:
                   status:
                     type: string
-                    example: "alive"
+                    example: alive
                   version:
                     type: string
-                    example: "4.1.0"
-                  title:
-                    type: string
-                  endpoints:
-                    type: array
-                    items:
-                      type: string
+                    example: 4.1.0
 
   /status/json:
     get:
-      summary: Estado detallado del sistema
-      description: Información completa del estado operacional
-      operationId: status_json
-      tags:
-        - Sistema
+      summary: Status Json
+      operationId: statusJson
       responses:
         '200':
-          description: Estado del sistema
+          description: Successful Response
           content:
             application/json:
-              schema:
-                $ref: '#/components/schemas/SystemStatus'
+              schema: {}
 
   /predict:
     post:
-      summary: Predicción de Riesgo Legal
-      description: |
-        Analiza texto jurídico y predice niveles de riesgo legal usando
-        patrones específicos del derecho chileno
-      operationId: predict_risk
-      tags:
-        - Predicción Legal
+      summary: Analizar texto legal con modelo forense GPT
+      operationId: consultar_backend_predict
       requestBody:
         required: true
         content:
@@ -88,41 +56,21 @@ paths:
               properties:
                 texto:
                   type: string
-                  description: Texto legal a analizar
-                  example: "Trabajador sin contrato formal recibe pagos irregulares"
-                input:
-                  type: string
-                  description: Alias para texto
-                contexto:
-                  type: string
-                  description: Contexto legal extenso
-              oneOf:
-                - required: [texto]
-                - required: [input] 
-                - required: [contexto]
+                  description: Texto legal o pregunta jurídica a analizar
+              required:
+                - texto
       responses:
         '200':
-          description: Análisis de riesgo completado
+          description: Respuesta legal generada por el backend
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PredictionResponse'
-        '400':
-          description: Datos de entrada inválidos
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                type: object
 
-  /reflexion/:
+  /reflexion/reflexion/:
     post:
-      summary: Reflexión Jurídica Automatizada
-      description: |
-        Evaluación doctrinal profunda usando criterios jurídicos específicos
-        como constitucionalidad, convencionalidad, etc.
-      operationId: legal_reflection
-      tags:
-        - Análisis Doctrinal
+      summary: Reflexionar
+      operationId: reflexionar
       requestBody:
         required: true
         content:
@@ -131,42 +79,21 @@ paths:
               $ref: '#/components/schemas/ReflexionInput'
       responses:
         '200':
-          description: Análisis doctrinal completado
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DualResponse'
-        '400':
-          description: Criterios o documento inválidos
+                $ref: '#/components/schemas/HTTPValidationError'
 
-  /api/prediccion/:
+  /vision/vision/:
     post:
-      summary: Predicción Bayesiana de Riesgo
-      description: Análisis avanzado usando modelos probabilísticos
-      operationId: bayesian_prediction
-      tags:
-        - Predicción Legal
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PrediccionInput'
-      responses:
-        '200':
-          description: Predicción bayesiana completada
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DualResponse'
-
-  /vision/:
-    post:
-      summary: Análisis Forense de Imágenes
-      description: Análisis visual forense de documentos e imágenes legales
-      operationId: forensic_vision
-      tags:
-        - Análisis Forense
+      summary: Analizar Imagen
+      operationId: analizarImagen
       requestBody:
         required: true
         content:
@@ -175,271 +102,172 @@ paths:
               $ref: '#/components/schemas/VisionInput'
       responses:
         '200':
-          description: Análisis visual completado
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DualResponse'
+                $ref: '#/components/schemas/HTTPValidationError'
+
+  /prediccion/api/prediccion/:
+    post:
+      summary: Predecir Riesgo
+      operationId: predecirRiesgo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PrediccionInput'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
 
   /legislacion/buscar:
     get:
-      summary: Buscar normas legales
-      description: Búsqueda de normas en la base de datos de la BCN
-      operationId: search_legislation
-      tags:
-        - Legislación BCN
+      summary: Buscar Norma
+      operationId: buscarNorma
       parameters:
         - name: palabra
           in: query
           required: true
           schema:
             type: string
-            minLength: 3
-          description: Palabra clave para buscar en la legislación
-          example: "contrato"
+            title: Palabra
+            description: Palabra clave legal a buscar en Ley Chile
       responses:
         '200':
-          description: Resultados de búsqueda
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SearchResponse'
+                $ref: '#/components/schemas/HTTPValidationError'
 
   /legislacion/norma/{id_norma}:
     get:
-      summary: Obtener norma por ID
-      description: Recupera el detalle completo de una norma específica
-      operationId: get_legislation_by_id
-      tags:
-        - Legislación BCN
+      summary: Obtener Norma
+      operationId: obtenerNorma
       parameters:
         - name: id_norma
           in: path
           required: true
           schema:
             type: integer
-            minimum: 1
-          description: ID único de la norma en BCN
-          example: 1234
+            title: Id Norma
       responses:
         '200':
-          description: Detalle de la norma
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DualResponse'
+                $ref: '#/components/schemas/HTTPValidationError'
 
-  /api/bcn/norma/{id_norma}:
+  /bcn/bcn/api/bcn/norma/{id_norma}:
     get:
-      summary: Parser directo de norma BCN
-      description: Extracción directa desde el sitio web de BCN
-      operationId: parse_bcn_norm
-      tags:
-        - Legislación BCN
+      summary: Obtener Norma BCN
+      operationId: obtenerNormaBcn
       parameters:
         - name: id_norma
           in: path
           required: true
           schema:
             type: integer
-            minimum: 1
-          example: 5678
+            title: Id Norma
       responses:
         '200':
-          description: Norma extraída desde BCN
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BCNNormResponse'
-
-  /forensics/search:
-    get:
-      summary: Búsqueda forense especializada
-      description: Motor de búsqueda para análisis forense y transparencia
-      operationId: forensic_search
-      tags:
-        - Análisis Forense
-      parameters:
-        - name: pregunta
-          in: query
-          required: true
-          schema:
-            type: string
-            minLength: 5
-          description: Consulta para análisis forense
-          example: "beneficiario final empresa offshore"
-      responses:
-        '200':
-          description: Resultados de análisis forense
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DualResponse'
-
-  /text-search:
-    get:
-      summary: Búsqueda textual en normativa
-      description: Búsqueda de términos específicos en textos legales
-      operationId: text_search
-      tags:
-        - Búsqueda Textual
-      parameters:
-        - name: palabra
-          in: query
-          required: true
-          schema:
-            type: string
-            minLength: 3
-          description: Término a buscar en textos legales
-          example: "responsabilidad civil"
-      responses:
-        '200':
-          description: Resultados de búsqueda textual
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DualResponse'
+                $ref: '#/components/schemas/HTTPValidationError'
 
 components:
   schemas:
-    SystemStatus:
+    ValidationError:
+      title: ValidationError
+      type: object
+      required: [loc, msg, type]
+      properties:
+        loc:
+          title: Location
+          type: array
+          items:
+            anyOf:
+              - type: string
+              - type: integer
+        msg:
+          title: Message
+          type: string
+        type:
+          title: Error Type
+          type: string
+
+    HTTPValidationError:
+      title: HTTPValidationError
       type: object
       properties:
-        status:
-          type: string
-          example: "operational"
-        version:
-          type: string
-          example: "4.1.0"
-        title:
-          type: string
-          example: "Forensic Legal Cognition 4.1"
-        description:
-          type: string
-        total_endpoints:
-          type: integer
-
-    PredictionResponse:
-      type: object
-      properties:
-        prediction:
-          type: string
-          description: Resultado del análisis predictivo
-        confidence:
-          type: string
-          enum: [low, medium, high]
-        source:
-          type: string
-          example: "forensic_legal_cognition"
-        input_processed:
-          type: string
-          description: Preview del texto procesado
-
-    DualResponse:
-      type: object
-      properties:
-        json:
-          type: string
-          description: Respuesta en formato JSON estructurado
-        markdown:
-          type: string
-          description: Respuesta en formato Markdown legible
-
-    SearchResponse:
-      allOf:
-        - $ref: '#/components/schemas/DualResponse'
-        - type: object
-          properties:
-            id:
-              type: integer
-              description: ID de la norma encontrada (si aplica)
-
-    BCNNormResponse:
-      type: object
-      properties:
-        norma:
-          type: object
-          properties:
-            id:
-              type: integer
-            titulo:
-              type: string
-            fecha_publicacion:
-              type: string
-            contenido:
-              type: string
+        detail:
+          title: Detail
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
 
     ReflexionInput:
+      title: ReflexionInput
       type: object
-      required:
-        - documento_analizado
-        - criterios
+      required: [documento_analizado, criterios]
       properties:
         documento_analizado:
           type: string
-          description: Texto legal para análisis doctrinal
-          minLength: 10
-          example: "Artículo que establece procedimiento administrativo sin garantías del debido proceso"
+          title: Documento Analizado
         criterios:
           type: array
+          title: Criterios
           items:
             type: string
-          minItems: 1
-          description: Criterios de evaluación jurídica
-          example: ["constitucionalidad", "convencionalidad", "contradicción normativa"]
-
-    PrediccionInput:
-      type: object
-      required:
-        - contexto
-      properties:
-        contexto:
-          type: string
-          description: Contexto legal extenso para análisis bayesiano
-          minLength: 50
-          example: "Empresa realiza despidos masivos sin seguir protocolo legal establecido, afectando derechos fundamentales de trabajadores sindicalizados"
 
     VisionInput:
+      title: VisionInput
       type: object
-      required:
-        - image_id
+      required: [image_id]
       properties:
         image_id:
           type: string
-          description: Identificador único de imagen para análisis forense
-          minLength: 1
-          example: "evidencia_fiscal_2025_001.jpg"
+          title: Image Id
 
-    ErrorResponse:
+    PrediccionInput:
+      title: PrediccionInput
       type: object
+      required: [contexto]
       properties:
-        error:
+        contexto:
           type: string
-          description: Mensaje de error
-        detail:
-          type: string
-          description: Detalle específico del error
-        path:
-          type: string
-          description: Endpoint que generó el error
-
-  securitySchemes:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: X-API-Key
-      description: API Key para autenticación (actualmente no requerida)
-
-tags:
-  - name: Sistema
-    description: Endpoints de estado y salud del sistema
-  - name: Predicción Legal
-    description: Análisis predictivo y evaluación de riesgo legal
-  - name: Análisis Doctrinal
-    description: Evaluación jurídica profunda y reflexión doctrinal
-  - name: Análisis Forense
-    description: Herramientas de análisis forense digital
-  - name: Legislación BCN
-    description: Integración con Biblioteca del Congreso Nacional
-  - name: Búsqueda Textual
-    description: Motores de búsqueda especializados en textos legales
+          title: Contexto

@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from typing import Optional
 from fastapi.responses import JSONResponse
 from utils_output import output_dual
+from modules.motor_predictivo import analizar_input_legal
 
 router = APIRouter()
 
@@ -13,44 +14,26 @@ class PrediccionInput(BaseModel):
 
 @router.post("/predict")
 def predecir_riesgo(data: PrediccionInput):
-    contenido = (data.contexto or data.input or data.texto or "").strip().lower()
+    contenido = (data.contexto or data.input or data.texto or "").strip()
     if not contenido:
         raise HTTPException(status_code=400, detail="Debe ingresar al menos un campo: contexto, input o texto.")
 
-    riesgo = "Bajo"
-    justificacion = "No se detectaron patrones críticos en el texto proporcionado."
-    alertas = []
-
-    if any(palabra in contenido for palabra in ["fraude", "inconstitucional", "incumplimiento", "nulidad", "arbitrariedad"]):
-        riesgo = "Alto"
-        justificacion = "Se detectaron términos indicativos de riesgo legal significativo."
-        alertas.append("Conflicto potencial con principios fundamentales.")
-
-    elif any(palabra in contenido for palabra in ["ambigüedad", "falta de competencia", "vacío legal"]):
-        riesgo = "Moderado"
-        justificacion = "Se identifican riesgos interpretativos o de competencia normativa."
-        alertas.append("Necesidad de revisión doctrinal y jurisprudencial.")
+    analisis = analizar_input_legal(contenido)
 
     resultado = {
-        "respuesta": f"Nivel de riesgo normativo: {riesgo}",
-        "clasificacion": riesgo,
-        "justificacion": justificacion,
-        "base_legal": {
-            "Ley 19880": "Sobre procedimientos administrativos. Principios de juridicidad y motivación.",
-            "Corte Suprema Rol 8632-2021": "Invalidez por infracción de principios esenciales del procedimiento."
-        } if riesgo != "Bajo" else {},
-        "derecho_comparado": {
-            "España - STS 298/2013": "La ambigüedad normativa genera inseguridad jurídica.",
-            "Colombia - C-084/2018": "El vacío legal requiere interpretación conforme a la Constitución."
-        } if riesgo != "Bajo" else {},
-        "contradicciones": alertas,
-        "estandares_internacionales": ["Convención Americana art. 8 y 25"],
-        "esquema_visual": f"Riesgo: {riesgo}",
-        "sintesis_audio": f"Evaluación de riesgo legal resultó en nivel {riesgo}.",
+        "respuesta": analisis,
+        "clasificacion": "Fuerte",
+        "justificacion": "Generado con motor predictivo jurídico especializado",
+        "base_legal": {},
+        "derecho_comparado": {},
+        "contradicciones": [],
+        "estandares_internacionales": [],
+        "esquema_visual": "",
+        "sintesis_audio": "Predicción jurídica completada",
         "fuentes": [],
         "logs": {
             "input": data.dict(),
-            "output": "Predicción legal realizada con reglas probabilísticas básicas."
+            "output": analisis
         }
     }
 
