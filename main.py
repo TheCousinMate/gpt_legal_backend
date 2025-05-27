@@ -13,7 +13,9 @@ from modules.legislacion_bcn import router as legislacion_router
 from modules.forensics_proxy import router as forensics_router
 from modules.bcn_parser import router as bcn_router
 from modules.bcn_text_search_parser import router as text_search_router
-from modules.predict import router as predict_router  # NUEVO
+from modules.predict import router as predict_router
+from modules.interprete import interpretar_input
+from pydantic import BaseModel
 
 app = FastAPI(
     title="Forensic Legal Cognition 4.1",
@@ -25,12 +27,11 @@ app = FastAPI(
         "url": "https://github.com/TheCousinMate/gpt_legal_backend"
     },
     license_info={
-        "name": "MIT",
-        "url": "https://www.safecreative.org/es"
+        "name": "SafeCreative",
+        "url": "https://www.safecreative.org/work/2405266632445"
     }
 )
 
-# Middleware CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -39,7 +40,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Incluir routers
 app.include_router(reflexion_router)
 app.include_router(prediccion_router)
 app.include_router(vision_router)
@@ -47,13 +47,18 @@ app.include_router(legislacion_router)
 app.include_router(forensics_router)
 app.include_router(bcn_router)
 app.include_router(text_search_router)
-app.include_router(predict_router)  # NUEVO
+app.include_router(predict_router)
 
-# Archivos estáticos
+class InterpretarInput(BaseModel):
+    mensaje: str
+
+@app.post("/interpretar/")
+def interpretar(data: InterpretarInput):
+    return interpretar_input(data.mensaje)
+
 if os.path.exists("static"):
     app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# Health check
 @app.get("/")
 @app.head("/")
 def health_check():
@@ -74,7 +79,6 @@ def status_json():
         "total_endpoints": len(app.routes)
     }
 
-# Global error handler
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
     return JSONResponse(

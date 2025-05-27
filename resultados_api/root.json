@@ -1,0 +1,23 @@
+{
+  "status": "alive",
+  "version": "4.1.0",
+  "title": "Forensic Legal Cognition 4.1",
+  "endpoints": [
+    "/docs",
+    "/docs/oauth2-redirect",
+    "/redoc",
+    "/reflexion/",
+    "/api/prediccion/",
+    "/vision/",
+    "/legislacion/buscar",
+    "/legislacion/norma/{id_norma}",
+    "/forensics/search",
+    "/api/bcn/norma/{id_norma}",
+    "/text-search",
+    "/predict",
+    "/static",
+    "/",
+    "/",
+    "/status/json"
+  ]
+}

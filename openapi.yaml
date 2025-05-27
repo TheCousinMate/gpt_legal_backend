@@ -1,273 +1,35 @@
 openapi: 3.1.0
 info:
   title: Forensic Legal Cognition 4.1
-  description: API chilena de análisis jurídico automatizado, evaluación doctrinal y verificación forense de alta precisión.
+  version: "4.1.0"
+  description: >
+    API privada de análisis jurídico chileno, con capacidad predictiva doctrinal,
+    evaluación forense y criterios de compatibilidad normativa. Uso reservado.
   contact:
     name: Kabir K. Hazbún Crovetto
-    url: https://github.com/TheCousinMate/gpt_legal_backend.git
     email: khazbun@gmail.com
-  version: 4.1.0
+    url: https://github.com/TheCousinMate/gpt_legal_backend
+  license:
+    name: Licencia Comercial Privada
+    url: https://www.safecreative.org
 
 servers:
-  - url: https://gpt-legal-backend.onrender.com
-    description: Servidor público en Render
+  - url: http://localhost:8000
+    description: Entorno de prueba local (privado)
 
 paths:
   /:
     get:
-      summary: Health Check
-      operationId: healthCheck
+      summary: Estado del sistema
+      operationId: estadoRaiz
       responses:
         '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: alive
-                  version:
-                    type: string
-                    example: 4.1.0
+          description: Sistema operativo
 
   /status/json:
     get:
-      summary: Status Json
-      operationId: statusJson
+      summary: Diagnóstico del sistema
+      operationId: estadoAvanzado
       responses:
         '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema: {}
-
-  /predict:
-    post:
-      summary: Analizar texto legal con modelo forense GPT
-      operationId: consultar_backend_predict
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                texto:
-                  type: string
-                  description: Texto legal o pregunta jurídica a analizar
-              required:
-                - texto
-      responses:
-        '200':
-          description: Respuesta legal generada por el backend
-          content:
-            application/json:
-              schema:
-                type: object
-
-  /reflexion/reflexion/:
-    post:
-      summary: Reflexionar
-      operationId: reflexionar
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ReflexionInput'
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema: {}
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-
-  /vision/vision/:
-    post:
-      summary: Analizar Imagen
-      operationId: analizarImagen
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/VisionInput'
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema: {}
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-
-  /prediccion/api/prediccion/:
-    post:
-      summary: Predecir Riesgo
-      operationId: predecirRiesgo
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PrediccionInput'
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema: {}
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-
-  /legislacion/buscar:
-    get:
-      summary: Buscar Norma
-      operationId: buscarNorma
-      parameters:
-        - name: palabra
-          in: query
-          required: true
-          schema:
-            type: string
-            title: Palabra
-            description: Palabra clave legal a buscar en Ley Chile
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema: {}
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-
-  /legislacion/norma/{id_norma}:
-    get:
-      summary: Obtener Norma
-      operationId: obtenerNorma
-      parameters:
-        - name: id_norma
-          in: path
-          required: true
-          schema:
-            type: integer
-            title: Id Norma
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema: {}
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-
-  /bcn/bcn/api/bcn/norma/{id_norma}:
-    get:
-      summary: Obtener Norma BCN
-      operationId: obtenerNormaBcn
-      parameters:
-        - name: id_norma
-          in: path
-          required: true
-          schema:
-            type: integer
-            title: Id Norma
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema: {}
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-
-components:
-  schemas:
-    ValidationError:
-      title: ValidationError
-      type: object
-      required: [loc, msg, type]
-      properties:
-        loc:
-          title: Location
-          type: array
-          items:
-            anyOf:
-              - type: string
-              - type: integer
-        msg:
-          title: Message
-          type: string
-        type:
-          title: Error Type
-          type: string
-
-    HTTPValidationError:
-      title: HTTPValidationError
-      type: object
-      properties:
-        detail:
-          title: Detail
-          type: array
-          items:
-            $ref: '#/components/schemas/ValidationError'
-
-    ReflexionInput:
-      title: ReflexionInput
-      type: object
-      required: [documento_analizado, criterios]
-      properties:
-        documento_analizado:
-          type: string
-          title: Documento Analizado
-        criterios:
-          type: array
-          title: Criterios
-          items:
-            type: string
-
-    VisionInput:
-      title: VisionInput
-      type: object
-      required: [image_id]
-      properties:
-        image_id:
-          type: string
-          title: Image Id
-
-    PrediccionInput:
-      title: PrediccionInput
-      type: object
-      required: [contexto]
-      properties:
-        contexto:
-          type: string
-          title: Contexto
+          description: Diagnóstico completo del backend

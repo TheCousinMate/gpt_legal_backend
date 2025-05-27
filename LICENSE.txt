@@ -1,42 +1,33 @@
-
-TODOS LOS DERECHOS RESERVADOS
-
-El titular de la obra conserva la titularidad exclusiva de sus derechos de propiedad intelectual. Esto abarca, entre otros, los derechos de reproducción, distribución, comunicación pública y transformación de la obra. Cualquier uso que exceda lo previsto en la normativa aplicable sin la autorización previa y por escrito del titular podría constituir una infracción de dichos derechos.
-
-Cualquier persona que desee reproducir, distribuir, comunicar públicamente o transformar la obra protegida por “Todos los derechos reservados” debe contar con un permiso expreso otorgado por el titular, de conformidad con la legislación vigente. El uso sin la debida autorización puede conllevar responsabilidades legales.
-
-—
-
-Copyright (c) 2025 Kabir K. Hazbún Crovetto
-
+LICENCIA Y DERECHOS DE AUTOR  
+Forensic Legal Cognition 4.1 © 2025 Kabir K. Hazbún Crovetto  
 Todos los derechos reservados.
 
-Esta obra, “Forensic Legal Cognition 4.1”, está protegida por la legislación internacional de propiedad intelectual como software original y diseño de base de datos.
+Esta obra está registrada bajo código 250xxxxxxxxxxx en Safe Creative y se encuentra protegida por la legislación internacional sobre propiedad intelectual como software original, modelo predictivo y diseño de base jurídica.
 
-Queda prohibida la reproducción, distribución, comunicación pública, modificación, comercialización, ingeniería inversa, integración parcial o total en otros sistemas, modelos de inteligencia artificial o bases de datos, sin autorización expresa y por escrito del titular.
+Se prohíbe expresamente:
+- La reproducción, distribución o comunicación pública total o parcial de esta obra.
+- La ingeniería inversa, descompilación o intento de desensamblaje del código fuente o arquitectura lógica.
+- La utilización con fines de entrenamiento de modelos de inteligencia artificial.
+- La comercialización, sublicencia, o modificación sin autorización escrita del autor.
 
-No se permite el uso para entrenamiento de modelos de IA.
+Cualquier infracción dará lugar a acciones legales según las leyes de Chile, el Convenio de Berna y tratados internacionales aplicables.
 
-Para cualquier uso, consulta o licencia, contactar al autor titular.
-
-—
-
-ALL RIGHTS RESERVED
-
-The copyright holder retains exclusive ownership of all intellectual property rights. This includes, among others, the rights of reproduction, distribution, public communication, and transformation of the work. Any use that exceeds what is provided by applicable regulations without the prior and written authorization of the holder may constitute an infringement of such rights.
-
-Anyone wishing to reproduce, distribute, publicly communicate, or transform the work protected by "All rights reserved" must have express permission granted by the rights holder, in accordance with current legislation. Use without proper authorization may result in legal liabilities.
+Esta licencia no otorga ningún derecho de explotación. Para licencias privadas, arriendos operativos o uso institucional, contactar directamente al autor.
 
 —
 
-Copyright (c) 2025 Kabir K. Hazbún Crovetto
-
+LICENSE AND COPYRIGHT NOTICE  
+Forensic Legal Cognition 4.1 © 2025 Kabir K. Hazbún Crovetto  
 All rights reserved.
 
-This work, “Forensic Legal Cognition 4.1”, is protected as original software and database design under international copyright law.
+This work is registered under code 250xxxxxxxxxxx at Safe Creative and is protected by international intellectual property law as an original software system, predictive model, and legal database architecture.
 
-No part of this work may be reproduced, distributed, publicly communicated, modified, commercialized, reverse engineered, or integrated (in whole or in part) into other systems, AI models, or databases without the express written permission of the copyright holder.
+The following is strictly prohibited:
+- Reproduction, distribution, or public communication of any part of this work.
+- Reverse engineering, decompilation, or attempts to disassemble the source code or logical design.
+- Use for the training of AI models.
+- Commercialization, sublicensing, or modification without written authorization from the author.
 
-Use for AI training is strictly prohibited.
+Any violation will trigger legal actions under Chilean law, the Berne Convention, and applicable international treaties.
 
-For licensing or inquiries, contact the copyright owner.
+This license does not grant any exploitation rights. For private licenses, operational rentals, or institutional use, contact the author directly.
