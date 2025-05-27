@@ -2,18 +2,18 @@
   "schema_version": "v1",
   "name_for_human": "Forensic Legal Cognition",
   "name_for_model": "forensicLegalCognition",
-  "description_for_human": "Análisis jurídico automatizado del derecho chileno con capacidades de predicción de riesgo legal, evaluación doctrinal y consulta de legislación.",
-  "description_for_model": "API especializada en análisis legal chileno que puede: 1) Predecir riesgos legales analizando texto jurídico, 2) Realizar evaluación doctrinal con criterios como constitucionalidad y convencionalidad, 3) Consultar legislación chilena en BCN, 4) Análisis forense digital, 5) Búsqueda especializada en normativa. Siempre usa endpoints específicos según el tipo de consulta legal.",
+  "description_for_human": "Sistema jurídico predictivo chileno. Evalúa doctrinas, normas y riesgos legales.",
+  "description_for_model": "API especializada en análisis jurídico chileno. Procesa input doctrinal, predice riesgos legales, evalúa normas BCN, analiza imágenes forenses y aplica estándares internacionales. Usa endpoints exactos por tipo de análisis legal.",
   "auth": {
     "type": "none"
   },
   "api": {
     "type": "openapi",
-    "url": "https://gpt-legal-backend.onrender.com/static/openapi.yaml",
+    "url": "https://gpt-legal-backend-bodukoeg-thecousinmates-projects.vercel.app/static/openapi.yaml",
     "is_user_authenticated": false
   },
   "logo_url": "https://raw.githubusercontent.com/TheCousinMate/gpt_legal_backend/main/static/logo.png",
-  "contact_email": "kharzun@gmail.com",
+  "contact_email": "khazbun@gmail.com",
   "legal_info_url": "https://github.com/TheCousinMate/gpt_legal_backend#terms",
   "privacy_policy_url": "https://github.com/TheCousinMate/gpt_legal_backend/blob/main/PRIVACY.md"
 }

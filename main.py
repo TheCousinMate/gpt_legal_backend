@@ -1,19 +1,18 @@
-﻿from fastapi import FastAPI, Request, HTTPException
+﻿
+from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import JSONResponse
 import os
 import uvicorn
 
-# Importar routers
+# Importar routers limpios
 from modules.reflexion import router as reflexion_router
-from modules.prediccion_bayesiana import router as prediccion_router
+from modules.predict import router as predict_router
 from modules.vision_forense import router as vision_router
 from modules.legislacion_bcn import router as legislacion_router
 from modules.forensics_proxy import router as forensics_router
 from modules.bcn_parser import router as bcn_router
-from modules.bcn_text_search_parser import router as text_search_router
-from modules.predict import router as predict_router
 from modules.interprete import interpretar_input
 from pydantic import BaseModel
 
@@ -41,13 +40,11 @@ app.add_middleware(
 )
 
 app.include_router(reflexion_router)
-app.include_router(prediccion_router)
+app.include_router(predict_router)
 app.include_router(vision_router)
 app.include_router(legislacion_router)
 app.include_router(forensics_router)
 app.include_router(bcn_router)
-app.include_router(text_search_router)
-app.include_router(predict_router)
 
 class InterpretarInput(BaseModel):
     mensaje: str

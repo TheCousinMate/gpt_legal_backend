@@ -1,35 +1,153 @@
 openapi: 3.1.0
 info:
   title: Forensic Legal Cognition 4.1
-  version: "4.1.0"
-  description: >
-    API privada de análisis jurídico chileno, con capacidad predictiva doctrinal,
-    evaluación forense y criterios de compatibilidad normativa. Uso reservado.
+  description: API chilena de análisis jurídico automatizado, evaluación doctrinal y verificación forense.
+  version: 4.1.0
   contact:
     name: Kabir K. Hazbún Crovetto
     email: khazbun@gmail.com
     url: https://github.com/TheCousinMate/gpt_legal_backend
   license:
-    name: Licencia Comercial Privada
-    url: https://www.safecreative.org
-
+    name: SafeCreative
+    url: https://www.safecreative.org/work/2405266632445
 servers:
-  - url: http://localhost:8000
-    description: Entorno de prueba local (privado)
+  - url: https://gpt-legal-backend-bodukoeg-thecousinmates-projects.vercel.app
+    description: Producción en Vercel
 
 paths:
   /:
     get:
-      summary: Estado del sistema
-      operationId: estadoRaiz
+      summary: Health check
+      operationId: rootStatus
       responses:
         '200':
-          description: Sistema operativo
+          description: Sistema vivo
 
   /status/json:
     get:
-      summary: Diagnóstico del sistema
-      operationId: estadoAvanzado
+      summary: Estado avanzado del backend
+      operationId: backendStatus
       responses:
         '200':
-          description: Diagnóstico completo del backend
+          description: Estado completo
+
+  /interpretar/:
+    post:
+      summary: Interpretación directa de input legal
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                mensaje:
+                  type: string
+                  example: "¿Qué efecto tiene la revocación de patrocinio?"
+      responses:
+        '200':
+          description: Interpretación legal semántica
+
+  /reflexion/:
+    post:
+      summary: Análisis doctrinal con criterios
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                documento_analizado:
+                  type: string
+                criterios:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Evaluación doctrinal completada
+
+  /predict:
+    post:
+      summary: Predicción de riesgo legal
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                contexto:
+                  type: string
+      responses:
+        '200':
+          description: Resultado predictivo
+
+  /vision/:
+    post:
+      summary: Análisis visual forense
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                image_id:
+                  type: string
+      responses:
+        '200':
+          description: Resultado del análisis de imagen
+
+  /forensics/search:
+    get:
+      summary: Búsqueda forense inteligente
+      parameters:
+        - name: pregunta
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Resultado forense
+
+  /api/bcn/norma/{id_norma}:
+    get:
+      summary: Obtener norma desde BCN
+      parameters:
+        - name: id_norma
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Norma encontrada
+
+  /legislacion/buscar:
+    get:
+      summary: Buscar normas por palabra clave
+      parameters:
+        - name: palabra
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Resultados normativos
+
+  /text-search:
+    get:
+      summary: Búsqueda textual legal
+      parameters:
+        - name: palabra
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Resultados encontrados

@@ -1,46 +1,45 @@
-# Byte-compiled / optimized / DLL files
+# Entorno virtual
+.venv/
+env/
+venv/
+
+# Archivos del sistema
 __pycache__/
 *.py[cod]
-*$py.class
-
-# Virtual environment
-.venv/
-venv/
-env/
-
-# Jupyter / IPython
-.ipynb_checkpoints
-
-# VSCode
-.vscode/
-
-# Logs, local env
-*.log
-.env
-*.sqlite3
-*.db
-
-# OS
-.DS_Store
+*.DS_Store
+*.swp
+*.swo
 Thumbs.db
 
-# Static content
-/static/openapi.json
+# Configuración local y API keys
+.env
+.env.*
 
-# Render or deploy artifacts
-*.zip
-*.tar.gz
-
-# Docker
+# Archivos de ejecución y logs
+*.log
 *.pid
-*.sock
+*.sqlite3
+instance/
+*.db
+*.bak
 
-# PyInstaller
-*.spec
+# Directorios de pruebas y salidas
+/tests/
+__snapshots__/
+*.test.js
+coverage/
+output/
+resultados_api/
+*.test.json
+*.test.txt
 
-# Test
-htmlcov/
-coverage.xml
-*.cover
-.tox/
-.pytest_cache/
+# Static & compiled
+static/*.cache
+static/*.tmp
+static/*.json
+static/*.old
+
+# Archivos de despliegue
+render.yaml
+Dockerfile
+*.ps1
