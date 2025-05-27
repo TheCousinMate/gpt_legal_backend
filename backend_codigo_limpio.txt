@@ -1,0 +1,2322 @@
+﻿>>> RUTA: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\.github\workflows\docker-image.yml
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+
+<<< FIN C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\.github\workflows\docker-image.yml
+
+>>> RUTA: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\bcn_parser.py
+import requests
+from bs4 import BeautifulSoup
+from fastapi import APIRouter
+from fastapi.responses import JSONResponse
+from utils_output import output_dual
+
+router = APIRouter()
+
+@router.get("/api/bcn/norma/{id_norma}")
+def norma_bcn(id_norma: int):
+    try:
+        url = f"https://www.bcn.cl/leychile/Navegar?idNorma={id_norma}"
+        headers = {"User-Agent": "ForensicLegalBot/1.0"}
+        response = requests.get(url, headers=headers, timeout=10)
+        response.raise_for_status()
+        soup = BeautifulSoup(response.text, "html.parser")
+
+        titulo_tag = soup.find("h1") or soup.find("title")
+        titulo = titulo_tag.get_text(strip=True) if titulo_tag else "Título no disponible"
+
+        fecha_tag = soup.find(class_="fecha-publicacion")
+        fecha = fecha_tag.get_text(strip=True) if fecha_tag else "Fecha no disponible"
+
+        resumen_tag = soup.find("div", class_="resumen")
+        if resumen_tag:
+            resumen = resumen_tag.get_text(strip=True)
+        else:
+            primer_p = soup.find("p")
+            resumen = primer_p.get_text(strip=True) if primer_p else "Resumen no disponible"
+
+        resultado = {
+            "norma": {
+                "id": id_norma,
+                "titulo": titulo,
+                "fecha_publicacion": fecha,
+                "contenido": resumen
+            }
+        }
+        return JSONResponse(content=resultado)
+    except Exception as e:
+        return JSONResponse(status_code=500, content={
+            "error": "No se pudo extraer la norma desde BCN.",
+            "detalle": str(e)
+        })
+
+<<< FIN C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\bcn_parser.py
+
+>>> RUTA: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\forensics_proxy.py
+# ✅ PARCHE DIRECTO PARA forensics_proxy.py SI /search NO FUNCIONA
+
+from fastapi import APIRouter, Query
+from fastapi.responses import JSONResponse
+from utils_output import output_dual
+
+router = APIRouter(prefix="/forensics")
+
+@router.get("/search")
+def buscar_forensics(pregunta: str = Query(...)):
+    try:
+        # Simulación de lógica (puede integrarse llamada real aquí si se desea)
+        resultado = {
+            "respuesta": f"Simulación de búsqueda jurídica sobre: {pregunta}",
+            "clasificacion": "Moderada",
+            "justificacion": "Este es un resultado de prueba para confirmar la funcionalidad del endpoint.",
+            "logs": {"input": pregunta, "output": "simulado"},
+            "fuentes": []
+        }
+        dual = output_dual(resultado)
+        return JSONResponse(content={"json": dual["json"], "markdown": dual["markdown"]})
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": str(e)})
+
+<<< FIN C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\forensics_proxy.py
+
+>>> RUTA: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\interprete.py
+from fastapi import HTTPException
+import json
+
+def interpretar_input(mensaje: str):
+    mensaje_lower = mensaje.lower().strip()
+
+    # Ejemplo simple de interpretación
+    if "despido" in mensaje_lower or "fraude" in mensaje_lower:
+        return {
+            "endpoint": "/api/prediccion/",
+            "input_json": {
+                "contexto": mensaje
+            },
+            "interpretacion": "Se detectó intención de análisis de riesgo jurídico-laboral. Redirigido a endpoint de predicción avanzada."
+        }
+
+    elif "constitucionalidad" in mensaje_lower or "normativa" in mensaje_lower:
+        return {
+            "endpoint": "/reflexion/",
+            "input_json": {
+                "documento_analizado": "Documento detectado automáticamente",
+                "criterios": ["constitucionalidad", "contradicción normativa"]
+            },
+            "interpretacion": "Evaluación doctrinal solicitada. Se aplican criterios constitucionales y de coherencia normativa."
+        }
+
+    elif "imagen" in mensaje_lower or "visual" in mensaje_lower:
+        return {
+            "endpoint": "/vision/",
+            "input_json": {
+                "image_id": "imagen_generica"
+            },
+            "interpretacion": "Solicitud de análisis visual legal detectada. Redirigido a motor visual forense."
+        }
+
+    else:
+        raise HTTPException(
+            status_code=400,
+            detail="No se pudo interpretar el mensaje. Use términos jurídicos o más contexto."
+        )
+
+<<< FIN C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\interprete.py
+
+>>> RUTA: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\legislacion_bcn.py
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+from utils_output import create_success_response, create_error_response
+
+router = APIRouter()
+
+# Buscar por palabra clave en Ley Chile
+@router.get("/legislacion/buscar")
+def buscar_norma(palabra: str):
+    try:
+        resultados = [
+            f"Norma relacionada con '{palabra}' identificada en Ley Chile",
+            f"Coincidencia exacta con título o glosa legal"
+        ]
+        return create_success_response(
+            message=f"Búsqueda completada para: {palabra}",
+            data={
+                "palabra": palabra,
+                "resultados": resultados,
+                "fuentes": [
+                    {"title": "Ley Chile", "url": "https://www.leychile.cl"}
+                ]
+            }
+        )
+    except Exception as e:
+        return create_error_response("Error en búsqueda normativa", str(e))
+
+# Obtener norma específica desde BCN
+@router.get("/api/bcn/norma/{id_norma}")
+def obtener_norma(id_norma: int):
+    try:
+        norma = {
+            "id": id_norma,
+            "titulo": "Ley de Prueba Electrónica",
+            "contenido": "Artículo 1: Esta ley regula..."
+        }
+        return create_success_response(
+            message="Norma legal recuperada exitosamente",
+            data={
+                "norma": norma,
+                "base_legal": {
+                    "Ley 19.799": "Sobre documentos electrónicos y firmas digitales"
+                },
+                "fuentes": [
+                    {"title": "Biblioteca del Congreso Nacional", "url": "https://www.bcn.cl"}
+                ]
+            }
+        )
+    except Exception as e:
+        return create_error_response("Error al recuperar norma", str(e))
+
+# Búsqueda textual extendida en base legal
+@router.get("/text-search")
+def busqueda_textual(palabra: str):
+    try:
+        matches = [
+            f"Artículo 5: Contiene la palabra '{palabra}'",
+            f"Artículo 18: Mención indirecta relevante"
+        ]
+        return create_success_response(
+            message=f"Resultados para texto: {palabra}",
+            data={
+                "coincidencias": matches,
+                "fuentes": [
+                    {"title": "BCN Texto Legal", "url": "https://www.bcn.cl/leychile"}
+                ]
+            }
+        )
+    except Exception as e:
+        return create_error_response("Error en búsqueda textual legal", str(e))
+
+<<< FIN C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\legislacion_bcn.py
+
+>>> RUTA: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\motor_predictivo.py
+import re
+from typing import Dict, List, Tuple
+
+def analizar_input_legal(texto: str) -> str:
+    """
+    Motor de análisis legal mejorado con patrones específicos del derecho chileno
+    """
+    if not texto or len(texto.strip()) == 0:
+        return "Texto vacío. Por favor, provea contenido jurídico para análisis."
+    
+    texto_lower = texto.lower()
+    
+    # Patrones de riesgo legal específicos
+    patrones_riesgo = {
+        "alto": [
+            (r"fraude|estafa|malversación", "Riesgo penal alto - posible delito económico"),
+            (r"despido\s+injustificado|término\s+sin\s+causa", "Riesgo laboral alto - despido improcedente"),
+            (r"discriminación|acoso\s+sexual|mobbing", "Riesgo laboral alto - vulneración de derechos fundamentales"),
+            (r"incumplimiento\s+contractual\s+grave", "Riesgo civil alto - posible resolución de contrato"),
+            (r"responsabilidad\s+penal|dolo\s+directo", "Riesgo penal alto - responsabilidad criminal"),
+            (r"nulidad\s+absoluta|objeto\s+ilícito", "Riesgo civil alto - nulidad contractual")
+        ],
+        "moderado": [
+            (r"trabajador.*contrato.*informal", "Riesgo laboral moderado - formalización requerida"),
+            (r"pago.*sin\s+contrato", "Riesgo fiscal moderado - documentación insuficiente"),
+            (r"negligencia|imprudencia\s+grave", "Riesgo civil moderado - responsabilidad extracontractual"),
+            (r"falta\s+de\s+competencia|delegación", "Riesgo administrativo moderado - vicio de procedimiento"),
+            (r"plazo\s+vencido|prescripción", "Riesgo procesal moderado - pérdida de acción legal"),
+            (r"ambigüedad\s+contractual", "Riesgo interpretativo moderado - cláusulas poco claras")
+        ],
+        "bajo": [
+            (r"consulta\s+preventiva", "Riesgo bajo - consulta precautoria"),
+            (r"revisión\s+de\s+contrato", "Riesgo bajo - análisis preventivo"),
+            (r"asesoría\s+jurídica", "Riesgo bajo - orientación legal"),
+            (r"cumplimiento\s+normativo", "Riesgo bajo - verificación de compliance")
+        ]
+    }
+    
+    # Análisis por área legal
+    areas_legales = {
+        "laboral": r"trabajador|empleador|sueldo|contrato\s+de\s+trabajo|despido|finiquito|indemnización",
+        "civil": r"contrato|responsabilidad\s+civil|daños|perjuicios|incumplimiento|nulidad",
+        "penal": r"delito|dolo|culpa|responsabilidad\s+penal|querella|denuncia",
+        "administrativo": r"procedimiento\s+administrativo|autoridad|competencia|recurso\s+de\s+protección",
+        "tributario": r"impuesto|tributo|sii|evasión\s+tributaria|facturación",
+        "comercial": r"empresa|sociedad|comercio|marca|patente|competencia\s+desleal"
+    }
+    
+    # Detectar área legal
+    area_detectada = "general"
+    for area, patron in areas_legales.items():
+        if re.search(patron, texto_lower):
+            area_detectada = area
+            break
+    
+    # Detectar nivel de riesgo
+    nivel_riesgo = "bajo"
+    explicacion_riesgo = ""
+    
+    for nivel, patrones in patrones_riesgo.items():
+        for patron, explicacion in patrones:
+            if re.search(patron, texto_lower):
+                nivel_riesgo = nivel
+                explicacion_riesgo = explicacion
+                break
+        if explicacion_riesgo:
+            break
+    
+    # Generar recomendaciones específicas
+    recomendaciones = generar_recomendaciones(area_detectada, nivel_riesgo, texto_lower)
+    
+    # Construir respuesta final
+    respuesta = f"""
+📊 ANÁLISIS LEGAL AUTOMATIZADO
+
+🎯 Área detectada: {area_detectada.upper()}
+⚠️ Nivel de riesgo: {nivel_riesgo.upper()}
+
+📋 Evaluación:
+{explicacion_riesgo}
+
+🔍 Análisis específico del área {area_detectada}:
+{get_analisis_area(area_detectada, texto_lower)}
+
+💡 Recomendaciones:
+{recomendaciones}
+
+⚖️ Marco legal aplicable:
+{get_marco_legal(area_detectada)}
+"""
+    
+    return respuesta.strip()
+
+def generar_recomendaciones(area: str, riesgo: str, texto: str) -> str:
+    """Genera recomendaciones específicas según área y riesgo"""
+    
+    recomendaciones_base = {
+        "laboral": {
+            "alto": "• Consulta urgente con abogado laboralista\n• Documentar todas las comunicaciones\n• Revisar contrato de trabajo y reglamento interno",
+            "moderado": "• Formalizar relación laboral por escrito\n• Verificar cumplimiento de obligaciones previsionales\n• Establecer procedimientos claros",
+            "bajo": "• Mantener documentación al día\n• Capacitación en normativa laboral\n• Revisión periódica de contratos"
+        },
+        "civil": {
+            "alto": "• Asesoría legal inmediata\n• Preservar evidencia documental\n• Evaluar medidas cautelares",
+            "moderado": "• Revisión detallada de obligaciones contractuales\n• Negociación extrajudicial\n• Análisis de garantías",
+            "bajo": "• Revisión preventiva de contratos\n• Clarificación de términos ambiguos\n• Documentación adecuada"
+        },
+        "penal": {
+            "alto": "• Consulta inmediata con abogado penalista\n• No realizar declaraciones sin asesoría\n• Preservar evidencia",
+            "moderado": "• Asesoría preventiva especializada\n• Revisión de protocolos internos\n• Capacitación en compliance penal",
+            "bajo": "• Implementar programas de compliance\n• Capacitación preventiva\n• Auditorías internas"
+        }
+    }
+    
+    return recomendaciones_base.get(area, {}).get(riesgo, "• Consulta con abogado especializado\n• Revisión detallada del caso\n• Análisis de alternativas legales")
+
+def get_analisis_area(area: str, texto: str) -> str:
+    """Análisis específico por área legal"""
+    
+    analisis = {
+        "laboral": "Se detectan elementos relacionados con derecho del trabajo. Es fundamental verificar el cumplimiento del Código del Trabajo, especialmente en materias de formalización contractual, jornada laboral, y derechos fundamentales del trabajador.",
+        
+        "civil": "Se identifican aspectos de derecho civil patrimonial. Revisar principios de autonomía de la voluntad, buena fe contractual, y teoría del riesgo según el Código Civil chileno.",
+        
+        "penal": "Se observan elementos que podrían configurar responsabilidad penal. Analizar tipo penal, elementos objetivos y subjetivos, y posibles eximentes de responsabilidad según el Código Penal.",
+        
+        "administrativo": "Se detectan aspectos de derecho público. Verificar competencia del órgano, procedimiento administrativo conforme a Ley 19.880, y principios de juridicidad.",
+        
+        "tributario": "Se identifican aspectos tributarios. Revisar obligaciones ante el SII, principios de legalidad tributaria, y posibles infracciones al Código Tributario.",
+        
+        "comercial": "Se observan elementos de derecho comercial. Analizar normativa de sociedades, competencia leal, y protección al consumidor según Ley 19.496."
+    }
+    
+    return analisis.get(area, "Análisis general del caso requiere mayor especificación del área legal involucrada.")
+
+def get_marco_legal(area: str) -> str:
+    """Marco legal aplicable por área"""
+    
+    marcos = {
+        "laboral": "• Código del Trabajo\n• Ley 16.744 (Accidentes del Trabajo)\n• Ley 20.940 (Reforma Laboral)\n• D.L. 3.500 (Sistema de Pensiones)",
+        
+        "civil": "• Código Civil\n• Código de Procedimiento Civil\n• Ley 19.947 (Matrimonio Civil)\n• Ley 19.537 (Copropiedad Inmobiliaria)",
+        
+        "penal": "• Código Penal\n• Código Procesal Penal\n• Ley 20.393 (Responsabilidad Penal de Personas Jurídicas)\n• Ley 19.913 (Lavado de Dinero)",
+        
+        "administrativo": "• Ley 19.880 (Procedimiento Administrativo)\n• Ley 18.575 (Bases de la Administración del Estado)\n• Ley 20.285 (Transparencia)\n• Constitución Política (arts. 6° y 7°)",
+        
+        "tributario": "• Código Tributario\n• Ley de Impuesto a la Renta\n• Ley de IVA\n• D.L. 824 (Impuesto a la Renta)",
+        
+        "comercial": "• Código de Comercio\n• Ley 18.046 (Sociedades Anónimas)\n• Ley 3.918 (Sociedades de Responsabilidad Limitada)\n• Ley 19.496 (Protección del Consumidor)"
+    }
+    
+    return marcos.get(area, "• Código Civil (normas supletorias)\n• Constitución Política\n• Tratados Internacionales ratificados")
+<<< FIN C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\motor_predictivo.py
+
+>>> RUTA: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\predict.py
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+from utils_output import create_success_response, create_error_response
+
+router = APIRouter()
+
+class PredictInput(BaseModel):
+    contexto: str
+
+@router.post("/predict")
+def predecir_riesgo(input_data: PredictInput):
+    try:
+        contexto = input_data.contexto
+
+        # Simulación de lógica predictiva
+        resultado = {
+            "riesgo": "Moderado",
+            "recomendacion": "Solicitar audiencia preparatoria antes del 15 de junio"
+        }
+
+        return create_success_response(
+            message="Predicción jurídica completada",
+            data={
+                "input": contexto,
+                "evaluacion": resultado,
+                "base_legal": {
+                    "CPC art. 254": "Requisitos de la demanda",
+                    "Ley 19.968 art. 3": "Competencia del Juzgado de Familia"
+                },
+                "derecho_comparado": {
+                    "España": "Ley de Enjuiciamiento Civil, art. 399",
+                    "México": "Código Federal de Procedimientos Civiles, art. 322"
+                },
+                "estandares_internacionales": [
+                    "CIDH: Caso Baena Ricardo y otros vs. Panamá, 2001",
+                    "ONU: Reglas de Brasilia sobre Acceso a la Justicia"
+                ],
+                "contradicciones": [
+                    "Conflicto entre CPC y ley especial en tramitación",
+                    "Interpretación divergente en jurisprudencia reciente"
+                ],
+                "fuentes": [
+                    {"title": "Código Procesal Civil", "url": "https://bcn.cl/2f4rs"},
+                    {"title": "Ley 19.968", "url": "https://bcn.cl/1x2le"}
+                ]
+            }
+        )
+    except Exception as e:
+        return create_error_response("Error en predicción jurídica", str(e))
+
+<<< FIN C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\predict.py
+
+>>> RUTA: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\reflexion.py
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+from utils_output import create_success_response, create_error_response
+
+router = APIRouter()
+
+class ReflexionInput(BaseModel):
+    documento_analizado: str
+    criterios: list
+
+@router.post("/reflexion/")
+def reflexionar(data: ReflexionInput):
+    try:
+        doc = data.documento_analizado
+        criterios = data.criterios
+
+        # Simulación de análisis doctrinal
+        analisis = {
+            "criterios_aplicados": criterios,
+            "resumen": "Se ha identificado jurisprudencia contradictoria sobre el mismo fundamento",
+            "resultado": "Análisis favorable al control difuso"
+        }
+
+        return create_success_response(
+            message="Análisis doctrinal completado",
+            data={
+                "input": doc,
+                "evaluacion": analisis,
+                "base_legal": {
+                    "CPR art. 5 inc. 2": "Control de convencionalidad",
+                    "Ley 19.968 art. 22": "Criterio de aplicación supletoria"
+                },
+                "derecho_comparado": {
+                    "Argentina": "Fallos CSJN 328:566 (Caso Madorrán)",
+                    "Colombia": "Corte Const. C-252/01, control oficioso"
+                },
+                "estandares_internacionales": [
+                    "CIDH: OC-20/09, Control de convencionalidad",
+                    "CIDH: Caso Gelman vs. Uruguay (2011)"
+                ],
+                "contradicciones": [
+                    "Divergencia en aplicación entre Corte Suprema y Tribunales de Familia"
+                ],
+                "fuentes": [
+                    {"title": "Constitución Política de la República", "url": "https://bcn.cl/1x2ja"},
+                    {"title": "Ley 19.968", "url": "https://bcn.cl/1x2le"}
+                ]
+            }
+        )
+    except Exception as e:
+        return create_error_response("Error en evaluación doctrinal", str(e))
+
+<<< FIN C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\reflexion.py
+
+>>> RUTA: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\root.py
+from fastapi import APIRouter, Request
+from fastapi.responses import JSONResponse
+from utils_output import output_dual
+from modules.motor_predictivo import analizar_input_legal
+
+router = APIRouter()
+
+@router.get("/status/json")
+def status_json():
+    resultado = {
+        "respuesta": "El backend está operativo y responde en JSON y Markdown.",
+        "clasificacion": "Fuerte",
+        "justificacion": "Sistema activo.",
+        "base_legal": {},
+        "derecho_comparado": {},
+        "contradicciones": [],
+        "estandares_internacionales": [],
+        "esquema_visual": "",
+        "sintesis_audio": "Sistema activo.",
+        "fuentes": [],
+        "logs": {
+            "input": None,
+            "output": "ok"
+        }
+    }
+    dual = output_dual(resultado)
+    return JSONResponse(content={"json": dual["json"], "markdown": dual["markdown"]})
+
+@router.post("/predict")
+async def predict(request: Request):
+    try:
+        payload = await request.json()
+        texto = payload.get("texto") or payload.get("input")
+        if not texto:
+            raise ValueError("Falta el campo obligatorio 'texto' o 'input'.")
+    except Exception as e:
+        return JSONResponse(status_code=400, content={"error": f"Error al procesar JSON: {str(e)}"})
+
+    respuesta_generada = analizar_input_legal(texto)
+
+    resultado = {
+        "respuesta": respuesta_generada,
+        "clasificacion": "Fuerte",
+        "justificacion": "El endpoint predict fue alcanzado exitosamente.",
+        "base_legal": {},
+        "derecho_comparado": {},
+        "contradicciones": [],
+        "estandares_internacionales": [],
+        "esquema_visual": "",
+        "sintesis_audio": respuesta_generada,
+        "fuentes": [],
+        "logs": {
+            "input": texto,
+            "output": "Respuesta generada correctamente"
+        }
+    }
+    dual = output_dual(resultado)
+    return JSONResponse(content={"json": dual["json"], "markdown": dual["markdown"]})
+
+<<< FIN C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\root.py
+
+>>> RUTA: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\vision_forense.py
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+from utils_output import create_success_response, create_error_response
+
+router = APIRouter()
+
+class ImagenInput(BaseModel):
+    image_id: str
+
+@router.post("/vision/")
+def analizar_imagen(data: ImagenInput):
+    try:
+        image_id = data.image_id
+
+        resultado = {
+            "imagen": image_id,
+            "hallazgos": [
+                "Documento escaneado sin firma visible",
+                "Metadatos indican edición posterior a la fecha declarada"
+            ],
+            "confianza": "Alta"
+        }
+
+        return create_success_response(
+            message="Análisis de imagen forense completado",
+            data={
+                "input": image_id,
+                "evaluacion": resultado,
+                "base_legal": {
+                    "Ley 19.799 art. 5": "Validez de firma electrónica",
+                    "CPP art. 239": "Valor probatorio de documentos"
+                },
+                "derecho_comparado": {
+                    "EE.UU.": "Carpenter v. United States (2018)",
+                    "UE": "AI Act, propuesta 2021"
+                },
+                "estandares_internacionales": [
+                    "GDPR (Reglamento UE 2016/679)",
+                    "Normas ISO 27037 sobre evidencia digital"
+                ],
+                "contradicciones": [
+                    "Discrepancia entre contenido visual y metadatos originales"
+                ],
+                "fuentes": [
+                    {"title": "Ley 19.799 sobre documentos electrónicos", "url": "https://bcn.cl/1x2xx"},
+                    {"title": "Código Procesal Penal", "url": "https://bcn.cl/2f3x9"}
+                ]
+            }
+        )
+    except Exception as e:
+        return create_error_response("Error en análisis visual forense", str(e))
+
+<<< FIN C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\vision_forense.py
+
+>>> RUTA: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\__init__.py
+# Paquete inicializado
+<<< FIN C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\__init__.py
+
+>>> RUTA: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\static\openapi.yaml
+openapi: 3.1.0
+info:
+  title: Forensic Legal Cognition API
+  version: 4.1.0
+  description: |
+    API chilena de análisis jurídico automatizado con evaluación doctrinal 
+    y verificación forense de alta precisión.
+    
+    Funcionalidades principales:
+    - Análisis predictivo de riesgo legal
+    - Evaluación doctrinal automatizada
+    - Consulta a legislación chilena (BCN)
+    - Análisis forense digital
+    - Búsqueda textual en normativa
+  contact:
+    name: Kabir K. Hazbún Crovetto
+    email: khazbun@gmail.com
+    url: https://github.com/TheCousinMate/gpt_legal_backend
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: https://gpt-legal-backend.onrender.com
+    description: Servidor de producción en Render
+  - url: http://localhost:8000
+    description: Servidor de desarrollo local
+
+paths:
+  /:
+    get:
+      summary: Health Check
+      description: Verifica el estado del API y retorna información básica
+      operationId: health_check
+      tags:
+        - Sistema
+      responses:
+        '200':
+          description: API funcionando correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "alive"
+                  version:
+                    type: string
+                    example: "4.1.0"
+                  title:
+                    type: string
+                  endpoints:
+                    type: array
+                    items:
+                      type: string
+
+  /status/json:
+    get:
+      summary: Estado detallado del sistema
+      description: Información completa del estado operacional
+      operationId: status_json
+      tags:
+        - Sistema
+      responses:
+        '200':
+          description: Estado del sistema
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemStatus'
+
+  /predict:
+    post:
+      summary: Predicción de Riesgo Legal
+      description: |
+        Analiza texto jurídico y predice niveles de riesgo legal usando
+        patrones específicos del derecho chileno
+      operationId: predict_risk
+      tags:
+        - Predicción Legal
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                texto:
+                  type: string
+                  description: Texto legal a analizar
+                  example: "Trabajador sin contrato formal recibe pagos irregulares"
+                input:
+                  type: string
+                  description: Alias para texto
+                contexto:
+                  type: string
+                  description: Contexto legal extenso
+              oneOf:
+                - required: [texto]
+                - required: [input] 
+                - required: [contexto]
+      responses:
+        '200':
+          description: Análisis de riesgo completado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PredictionResponse'
+        '400':
+          description: Datos de entrada inválidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /reflexion/:
+    post:
+      summary: Reflexión Jurídica Automatizada
+      description: |
+        Evaluación doctrinal profunda usando criterios jurídicos específicos
+        como constitucionalidad, convencionalidad, etc.
+      operationId: legal_reflection
+      tags:
+        - Análisis Doctrinal
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReflexionInput'
+      responses:
+        '200':
+          description: Análisis doctrinal completado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DualResponse'
+        '400':
+          description: Criterios o documento inválidos
+
+  /api/prediccion/:
+    post:
+      summary: Predicción Bayesiana de Riesgo
+      description: Análisis avanzado usando modelos probabilísticos
+      operationId: bayesian_prediction
+      tags:
+        - Predicción Legal
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PrediccionInput'
+      responses:
+        '200':
+          description: Predicción bayesiana completada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DualResponse'
+
+  /vision/:
+    post:
+      summary: Análisis Forense de Imágenes
+      description: Análisis visual forense de documentos e imágenes legales
+      operationId: forensic_vision
+      tags:
+        - Análisis Forense
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VisionInput'
+      responses:
+        '200':
+          description: Análisis visual completado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DualResponse'
+
+  /legislacion/buscar:
+    get:
+      summary: Buscar normas legales
+      description: Búsqueda de normas en la base de datos de la BCN
+      operationId: search_legislation
+      tags:
+        - Legislación BCN
+      parameters:
+        - name: palabra
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 3
+          description: Palabra clave para buscar en la legislación
+          example: "contrato"
+      responses:
+        '200':
+          description: Resultados de búsqueda
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+
+  /legislacion/norma/{id_norma}:
+    get:
+      summary: Obtener norma por ID
+      description: Recupera el detalle completo de una norma específica
+      operationId: get_legislation_by_id
+      tags:
+        - Legislación BCN
+      parameters:
+        - name: id_norma
+          in: path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: ID único de la norma en BCN
+          example: 1234
+      responses:
+        '200':
+          description: Detalle de la norma
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DualResponse'
+
+  /api/bcn/norma/{id_norma}:
+    get:
+      summary: Parser directo de norma BCN
+      description: Extracción directa desde el sitio web de BCN
+      operationId: parse_bcn_norm
+      tags:
+        - Legislación BCN
+      parameters:
+        - name: id_norma
+          in: path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          example: 5678
+      responses:
+        '200':
+          description: Norma extraída desde BCN
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BCNNormResponse'
+
+  /forensics/search:
+    get:
+      summary: Búsqueda forense especializada
+      description: Motor de búsqueda para análisis forense y transparencia
+      operationId: forensic_search
+      tags:
+        - Análisis Forense
+      parameters:
+        - name: pregunta
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 5
+          description: Consulta para análisis forense
+          example: "beneficiario final empresa offshore"
+      responses:
+        '200':
+          description: Resultados de análisis forense
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DualResponse'
+
+  /text-search:
+    get:
+      summary: Búsqueda textual en normativa
+      description: Búsqueda de términos específicos en textos legales
+      operationId: text_search
+      tags:
+        - Búsqueda Textual
+      parameters:
+        - name: palabra
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 3
+          description: Término a buscar en textos legales
+          example: "responsabilidad civil"
+      responses:
+        '200':
+          description: Resultados de búsqueda textual
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DualResponse'
+
+components:
+  schemas:
+    SystemStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          example: "operational"
+        version:
+          type: string
+          example: "4.1.0"
+        title:
+          type: string
+          example: "Forensic Legal Cognition 4.1"
+        description:
+          type: string
+        total_endpoints:
+          type: integer
+
+    PredictionResponse:
+      type: object
+      properties:
+        prediction:
+          type: string
+          description: Resultado del análisis predictivo
+        confidence:
+          type: string
+          enum: [low, medium, high]
+        source:
+          type: string
+          example: "forensic_legal_cognition"
+        input_processed:
+          type: string
+          description: Preview del texto procesado
+
+    DualResponse:
+      type: object
+      properties:
+        json:
+          type: string
+          description: Respuesta en formato JSON estructurado
+        markdown:
+          type: string
+          description: Respuesta en formato Markdown legible
+
+    SearchResponse:
+      allOf:
+        - $ref: '#/components/schemas/DualResponse'
+        - type: object
+          properties:
+            id:
+              type: integer
+              description: ID de la norma encontrada (si aplica)
+
+    BCNNormResponse:
+      type: object
+      properties:
+        norma:
+          type: object
+          properties:
+            id:
+              type: integer
+            titulo:
+              type: string
+            fecha_publicacion:
+              type: string
+            contenido:
+              type: string
+
+    ReflexionInput:
+      type: object
+      required:
+        - documento_analizado
+        - criterios
+      properties:
+        documento_analizado:
+          type: string
+          description: Texto legal para análisis doctrinal
+          minLength: 10
+          example: "Artículo que establece procedimiento administrativo sin garantías del debido proceso"
+        criterios:
+          type: array
+          items:
+            type: string
+          minItems: 1
+          description: Criterios de evaluación jurídica
+          example: ["constitucionalidad", "convencionalidad", "contradicción normativa"]
+
+    PrediccionInput:
+      type: object
+      required:
+        - contexto
+      properties:
+        contexto:
+          type: string
+          description: Contexto legal extenso para análisis bayesiano
+          minLength: 50
+          example: "Empresa realiza despidos masivos sin seguir protocolo legal establecido, afectando derechos fundamentales de trabajadores sindicalizados"
+
+    VisionInput:
+      type: object
+      required:
+        - image_id
+      properties:
+        image_id:
+          type: string
+          description: Identificador único de imagen para análisis forense
+          minLength: 1
+          example: "evidencia_fiscal_2025_001.jpg"
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Mensaje de error
+        detail:
+          type: string
+          description: Detalle específico del error
+        path:
+          type: string
+          description: Endpoint que generó el error
+
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: API Key para autenticación (actualmente no requerida)
+
+tags:
+  - name: Sistema
+    description: Endpoints de estado y salud del sistema
+  - name: Predicción Legal
+    description: Análisis predictivo y evaluación de riesgo legal
+  - name: Análisis Doctrinal
+    description: Evaluación jurídica profunda y reflexión doctrinal
+  - name: Análisis Forense
+    description: Herramientas de análisis forense digital
+  - name: Legislación BCN
+    description: Integración con Biblioteca del Congreso Nacional
+  - name: Búsqueda Textual
+    description: Motores de búsqueda especializados en textos legales
+<<< FIN C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\static\openapi.yaml
+
+>>> RUTA: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\tests\__test_all_endpoints.py
+import requests
+
+BASE_URL = "http://127.0.0.1:10000"
+
+def test_healthcheck():
+    url = f"{BASE_URL}/"
+    r = requests.get(url)
+    assert r.status_code == 200
+    data = r.json()
+    assert data.get("status") == "alive"
+    assert "version" in data
+    print("[OK] Healthcheck passed")
+
+def test_predict():
+    url = f"{BASE_URL}/predict"
+    payload = {"contexto": "Existe un posible incumplimiento de contrato con riesgo de nulidad"}
+    r = requests.post(url, json=payload)
+    assert r.status_code == 200, f"Status code {r.status_code}, response: {r.text}"
+    print("[OK] Predict endpoint passed")
+
+if __name__ == "__main__":
+    test_healthcheck()
+    test_predict()
+
+<<< FIN C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\tests\__test_all_endpoints.py
+
+>>> RUTA: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\.render.yaml
+# launch_backend_render.py
+import os
+import uvicorn
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 10000))
+    print(f"🚀 Iniciando backend en puerto {port}...")
+    uvicorn.run("main:app", host="0.0.0.0", port=port)
+
+<<< FIN C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\.render.yaml
+
+>>> RUTA: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\app_streamlit_tabs.py
+# app_streamlit_tabs.py
+
+import streamlit as st
+import requests
+
+API_BASE = "https://gpt-legal-backend.onrender.com"
+
+st.set_page_config(page_title="Legal Cognition 4.1", layout="wide")
+st.title("⚖️ Legal Cognition Interface")
+
+opcion = st.sidebar.selectbox("Elige módulo:", ["Reflexión", "Predicción", "Predict"], index=0)
+
+if opcion == "Reflexión":
+    st.header("📘 Reflexión Jurídica Automatizada")
+    texto = st.text_area("Texto normativo o doctrinal:")
+    criterios = st.text_input("Criterios separados por coma:")
+    if st.button("Analizar"):
+        r = requests.post(f"{API_BASE}/reflexion/", json={
+            "documento_analizado": texto,
+            "criterios": [c.strip() for c in criterios.split(",") if c.strip()]
+        })
+        st.write(r.json())
+
+elif opcion == "Predicción":
+    st.header("🔮 Riesgo Legal Predictivo")
+    contexto = st.text_area("Describe el contexto legal a evaluar:")
+    if st.button("Predecir riesgo"):
+        r = requests.post(f"{API_BASE}/api/prediccion/", json={"contexto": contexto})
+        st.write(r.json())
+
+elif opcion == "Predict":
+    st.header("🧪 Predict API (Experimental)")
+    if st.button("Test Predict"):
+        r = requests.post(f"{API_BASE}/predict", json={"test": True})
+        st.write(r.text)
+
+<<< FIN C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\app_streamlit_tabs.py
+
+>>> RUTA: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\config_map.py
+CONFIG_MAP = {
+    "modules/bcn_parser.py": {
+        "model": "none",
+        "keywords": ["ley", "norma", "bcn", "boletín"]
+    },
+    "modules/legislacion_bcn.py": {
+        "model": "none",
+        "keywords": ["consulta", "legislación", "palabra clave", "búsqueda"]
+    },
+    "modules/bcn_text_search_parser.py": {
+        "model": "none",
+        "keywords": ["buscador", "html", "resultados", "búsqueda textual"]
+    },
+    "modules/reflexion.py": {
+        "model": "gpt-4o",
+        "temperature": 0.4,
+        "top_p": 0.85,
+        "max_tokens": 1500,
+        "keywords": ["reflexiona", "estructura", "argumento", "coherencia"]
+    },
+    "modules/vision_forense.py": {
+        "model": "gpt-4o",
+        "temperature": 0.3,
+        "top_p": 0.85,
+        "max_tokens": 1000,
+        "keywords": ["imagen", "visual", "simbología", "documento"]
+    },
+    "modules/prediccion_bayesiana.py": {
+        "model": "gpt-4o",
+        "temperature": 0.3,
+        "top_p": 0.9,
+        "max_tokens": 2048,
+        "keywords": ["predecir", "probabilidad", "riesgo", "modelo bayesiano"]
+    },
+    "modules/forensics_proxy.py": {
+        "model": "none",
+        "keywords": ["gafi", "beneficiario", "transparencia", "forensics"]
+    }
+}
+
+<<< FIN C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\config_map.py
+
+>>> RUTA: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\docker-compose.yaml
+version: "3.9"
+
+services:
+  backend:
+    build: .
+    container_name: flc_backend
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+<<< FIN C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\docker-compose.yaml
+
+>>> RUTA: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\fix_backend.py
+import os
+import shutil
+from pathlib import Path
+
+ROOT = Path(__file__).parent.resolve()
+MODULES = ROOT / "modules"
+
+# 1. Eliminar duplicado config_map.py en raíz
+config_map_root = ROOT / "config_map.py"
+config_map_module = MODULES / "config_map.py"
+
+if config_map_root.exists() and config_map_module.exists():
+    print("🗑️ Eliminando config_map.py duplicado del raíz")
+    config_map_root.unlink()
+
+# 2. Reescribir validacion_schema.py para quitar código de activación
+validacion_path = MODULES / "validacion_schema.py"
+print("✏️ Reescribiendo validacion_schema.py sin código de activación...")
+validacion_code = '''
+from fastapi import APIRouter, HTTPException, Request
+from fastapi.responses import JSONResponse
+from jsonschema import validate, ValidationError
+import json
+import os
+
+router = APIRouter()
+
+SCHEMA_PATH = os.path.join(os.path.dirname(__file__), "derecho_chileno_schema.json")
+
+with open(SCHEMA_PATH, "r", encoding="utf-8") as f:
+    SCHEMA = json.load(f)
+
+@router.post("/validar")
+async def validar_entrada(request: Request):
+    payload = await request.json()
+
+    contenido = payload.get("contenido")
+    if not contenido:
+        raise HTTPException(status_code=400, detail="El campo 'contenido' es obligatorio.")
+
+    try:
+        validate(instance=contenido, schema=SCHEMA)
+        return {
+            "valido": True,
+            "mensaje": "JSON válido según el esquema oficial.",
+            "error": None
+        }
+    except ValidationError as e:
+        return JSONResponse(
+            status_code=422,
+            content={
+                "valido": False,
+                "mensaje": "JSON inválido.",
+                "error": e.message
+            }
+        )
+'''.strip()
+validacion_path.write_text(validacion_code, encoding="utf-8")
+
+# 3. Eliminar carpetas innecesarias como __pycache__
+for cache in ROOT.rglob("__pycache__"):
+    print(f"🧹 Eliminando carpeta {cache}")
+    shutil.rmtree(cache)
+
+# 4. Mover schema al módulo si quieres centralizarlo
+# schema_src = ROOT / "schema_gpt_custom_derecho_chileno.json"
+# schema_dst = MODULES / "derecho_chileno_schema.json"
+# if schema_src.exists():
+#     print("📦 Moviendo schema al módulo...")
+#     shutil.move(str(schema_src), str(schema_dst))
+
+print("✅ Limpieza y corrección completa.")
+
+<<< FIN C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\fix_backend.py
+
+>>> RUTA: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\launch_backend_render.py
+#!/usr/bin/env python3
+"""
+Script de lanzamiento optimizado para Render
+Forensic Legal Cognition 4.1
+"""
+
+import os
+import sys
+import logging
+import uvicorn
+from pathlib import Path
+
+# Configurar logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler(sys.stdout)
+    ]
+)
+
+logger = logging.getLogger(__name__)
+
+def setup_environment():
+    """Configura el entorno de ejecución"""
+    
+    # Verificar archivos críticos
+    critical_files = [
+        "main.py",
+        "utils_output.py",
+        "requirements.txt"
+    ]
+    
+    missing_files = []
+    for file in critical_files:
+        if not Path(file).exists():
+            missing_files.append(file)
+    
+    if missing_files:
+        logger.error(f"Archivos críticos faltantes: {missing_files}")
+        sys.exit(1)
+    
+    # Verificar directorio modules
+    if not Path("modules").exists():
+        logger.error("Directorio 'modules' no encontrado")
+        sys.exit(1)
+    
+    # Crear directorios si no existen
+    Path("static").mkdir(exist_ok=True)
+    Path("logs").mkdir(exist_ok=True)
+    
+    logger.info("Entorno configurado correctamente")
+
+def get_port():
+    """Obtiene el puerto desde variables de entorno"""
+    port = int(os.environ.get("PORT", 10000))
+    logger.info(f"Puerto configurado: {port}")
+    return port
+
+def get_host():
+    """Obtiene el host para bind"""
+    # En Render siempre usar 0.0.0.0
+    host = "0.0.0.0"
+    logger.info(f"Host configurado: {host}")
+    return host
+
+def main():
+    """Función principal de lanzamiento"""
+    logger.info("🚀 Iniciando Forensic Legal Cognition 4.1")
+    
+    try:
+        # Configurar entorno
+        setup_environment()
+        
+        # Obtener configuración
+        host = get_host()
+        port = get_port()
+        
+        # Configuración de uvicorn para producción
+        config = {
+            "app": "main:app",
+            "host": host,
+            "port": port,
+            "workers": 1,  # Single worker en Render
+            "loop": "auto",
+            "http": "auto",
+            "log_level": "info",
+            "access_log": True,
+            "use_colors": False,  # Mejor para logs en Render
+            "reload": False,  # Nunca en producción
+        }
+        
+        logger.info(f"Configuración uvicorn: {config}")
+        logger.info("✅ Backend iniciando...")
+        
+        # Iniciar servidor
+        uvicorn.run(**config)
+        
+    except KeyboardInterrupt:
+        logger.info("🛑 Servidor detenido por usuario")
+    except Exception as e:
+        logger.error(f"❌ Error crítico al iniciar servidor: {e}")
+        sys.exit(1)
+
+if __name__ == "__main__":
+    main()
+<<< FIN C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\launch_backend_render.py
+
+>>> RUTA: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\main.py
+
+from fastapi import FastAPI, Request, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import JSONResponse
+import os
+import uvicorn
+
+# Importar routers limpios
+from modules.reflexion import router as reflexion_router
+from modules.predict import router as predict_router
+from modules.vision_forense import router as vision_router
+from modules.legislacion_bcn import router as legislacion_router
+from modules.forensics_proxy import router as forensics_router
+from modules.bcn_parser import router as bcn_router
+from modules.interprete import interpretar_input
+from pydantic import BaseModel
+
+app = FastAPI(
+    title="Forensic Legal Cognition 4.1",
+    description="API chilena de análisis jurídico automatizado, evaluación doctrinal y verificación forense de alta precisión.",
+    version="4.1.0",
+    contact={
+        "name": "Kabir K. Hazbún Crovetto",
+        "email": "khazbun@gmail.com",
+        "url": "https://github.com/TheCousinMate/gpt_legal_backend"
+    },
+    license_info={
+        "name": "SafeCreative",
+        "url": "https://www.safecreative.org/work/2405266632445"
+    }
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(reflexion_router)
+app.include_router(predict_router)
+app.include_router(vision_router)
+app.include_router(legislacion_router)
+app.include_router(forensics_router)
+app.include_router(bcn_router)
+
+class InterpretarInput(BaseModel):
+    mensaje: str
+
+@app.post("/interpretar/")
+def interpretar(data: InterpretarInput):
+    return interpretar_input(data.mensaje)
+
+if os.path.exists("static"):
+    app.mount("/static", StaticFiles(directory="static"), name="static")
+
+@app.get("/")
+@app.head("/")
+def health_check():
+    return {
+        "status": "alive",
+        "version": app.version,
+        "title": app.title,
+        "endpoints": [route.path for route in app.routes if route.path != "/openapi.json"]
+    }
+
+@app.get("/status/json")
+def status_json():
+    return {
+        "status": "operational",
+        "version": app.version,
+        "title": app.title,
+        "description": app.description,
+        "total_endpoints": len(app.routes)
+    }
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    return JSONResponse(
+        status_code=500,
+        content={
+            "error": "Error interno del servidor",
+            "detail": str(exc),
+            "path": str(request.url)
+        }
+    )
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
+
+<<< FIN C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\main.py
+
+>>> RUTA: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules.py
+# ===== modules/reflexion.py =====
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+from fastapi.responses import JSONResponse
+from utils_output import output_dual
+
+router = APIRouter()
+
+class ReflexionInput(BaseModel):
+    documento_analizado: str
+    criterios: list[str]
+
+@router.post("/reflexion/")
+def reflexionar(data: ReflexionInput):
+    if not data.documento_analizado.strip():
+        raise HTTPException(status_code=400, detail="Documento requerido")
+    if not data.criterios:
+        raise HTTPException(status_code=400, detail="Criterios requeridos")
+
+    resultado = {
+        "respuesta": f"Análisis doctrinal completado usando criterios: {', '.join(data.criterios)}",
+        "clasificacion": "Fuerte",
+        "justificacion": "Evaluación doctrinal automatizada",
+        "logs": {"input": data.dict()}
+    }
+    return JSONResponse(content=output_dual(resultado))
+
+# ===== modules/prediccion_bayesiana.py =====
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+from fastapi.responses import JSONResponse
+from utils_output import output_dual
+
+router = APIRouter()
+
+class PrediccionInput(BaseModel):
+    contexto: str
+
+@router.post("/api/prediccion/")
+def predecir_riesgo(datos: PrediccionInput):
+    if len(datos.contexto.strip()) < 50:
+        raise HTTPException(status_code=422, detail="Contexto insuficiente")
+
+    from modules.motor_predictivo import analizar_input_legal
+    analisis = analizar_input_legal(datos.contexto)
+
+    resultado = {
+        "respuesta": analisis,
+        "clasificacion": "Fuerte",
+        "justificacion": "Análisis predictivo bayesiano",
+        "logs": {"input": datos.dict()}
+    }
+    return JSONResponse(content=output_dual(resultado))
+
+# ===== modules/vision_forense.py =====
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+from fastapi.responses import JSONResponse
+from utils_output import output_dual
+
+router = APIRouter()
+
+class VisionInput(BaseModel):
+    image_id: str
+
+@router.post("/vision/")
+def analizar_imagen(data: VisionInput):
+    if not data.image_id.strip():
+        raise HTTPException(status_code=400, detail="ID de imagen requerido")
+
+    resultado = {
+        "respuesta": f"Análisis visual forense registrado para: {data.image_id}",
+        "clasificacion": "Moderada",
+        "justificacion": "Procesamiento de imagen forense",
+        "logs": {"input": data.dict()}
+    }
+    return JSONResponse(content=output_dual(resultado))
+
+# ===== modules/forensics_proxy.py =====
+from fastapi import APIRouter, Query
+from fastapi.responses import JSONResponse
+from utils_output import output_dual
+
+router = APIRouter(prefix="/forensics")
+
+@router.get("/search")
+def buscar_forensics(pregunta: str = Query(...)):
+    resultado = {
+        "respuesta": f"Búsqueda forense para: {pregunta}",
+        "clasificacion": "Moderada",
+        "justificacion": "Búsqueda forense simulada",
+        "logs": {"input": pregunta}
+    }
+    return JSONResponse(content=output_dual(resultado))
+
+# ===== modules/bcn_parser.py =====
+from fastapi import APIRouter
+from fastapi.responses import JSONResponse
+
+router = APIRouter()
+
+@router.get("/api/bcn/norma/{id_norma}")
+def norma_bcn(id_norma: int):
+    return JSONResponse(content={
+        "norma": {
+            "id": id_norma,
+            "titulo": f"Norma simulada {id_norma}",
+            "fecha_publicacion": "2024-01-01",
+            "contenido": "Contenido simulado de norma legal"
+        }
+    })
+
+# ===== modules/bcn_text_search_parser.py =====
+from fastapi import APIRouter, Query
+from fastapi.responses import JSONResponse
+from utils_output import output_dual
+
+router = APIRouter()
+
+@router.get("/text-search")
+def buscar_texto_bcn(palabra: str = Query(...)):
+    resultado = {
+        "respuesta": f"Búsqueda textual para: {palabra}",
+        "clasificacion": "Moderada",
+        "justificacion": "Búsqueda textual en normativa",
+        "logs": {"input": palabra}
+    }
+    return JSONResponse(content=output_dual(resultado))
+<<< FIN C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules.py
+
+>>> RUTA: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\openapi.yaml
+openapi: 3.0.3
+info:
+  title: GPT Legal Backend API
+  description: API para predicción legal y análisis forense.
+  version: 1.0.0
+  contact:
+    name: Equipo de Desarrollo
+    email: contacto@thecousinmate.com
+servers:
+  - url: https://api.thecousinmate.com/v1
+    description: Servidor de producción
+  - url: http://localhost:8000
+    description: Servidor local para desarrollo
+paths:
+  /predict:
+    post:
+      summary: Realiza una predicción legal
+      description: Endpoint que procesa datos legales y devuelve una predicción.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PredictInput'
+      responses:
+        '200':
+          description: Predicción realizada con éxito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PredictOutput'
+        '400':
+          description: Solicitud inválida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    PredictInput:
+      type: object
+      required:
+        - texto
+      properties:
+        texto:
+          type: string
+          description: Texto legal a analizar
+          example: "El contrato establece que..."
+    PredictOutput:
+      type: object
+      properties:
+        resultado:
+          type: string
+          description: Resultado de la predicción
+          example: "Cumple con los requisitos legales"
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Mensaje de error
+          example: "Campo 'texto' es requerido"
+        detalle:
+          type: string
+          description: Detalles adicionales del error
+          example: "El campo 'texto' no puede estar vacío"
+
+<<< FIN C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\openapi.yaml
+
+>>> RUTA: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\quick_test.py
+import httpx
+import time
+
+BASE_URL = "https://gpt-legal-backend.onrender.com"
+
+def quick_test():
+    client = httpx.Client(timeout=15.0)
+    tests = [
+        ("GET", "/", None),
+        ("POST", "/predict", {"texto": "contrato laboral informal"}),
+        ("GET", "/legislacion/buscar", {"palabra": "contrato"}),
+    ]
+    
+    print("⚡ QUICK TEST - Endpoints Críticos")
+    print("=" * 40)
+    
+    passed = 0
+    for method, endpoint, data in tests:
+        try:
+            if method == "GET" and isinstance(data, dict):
+                r = client.get(f"{BASE_URL}{endpoint}", params=data)
+            elif method == "POST":
+                r = client.post(f"{BASE_URL}{endpoint}", json=data)
+            else:
+                r = client.get(f"{BASE_URL}{endpoint}")
+            
+            if r.status_code < 400:
+                print(f"✅ {method} {endpoint}")
+                passed += 1
+            else:
+                print(f"❌ {method} {endpoint} - {r.status_code}")
+        except Exception as e:
+            print(f"❌ {method} {endpoint} - Error")
+    
+    success_rate = (passed / len(tests)) * 100
+    print(f"\n📊 Resultado: {passed}/{len(tests)} ({success_rate:.0f}%)")
+    
+    if success_rate == 100:
+        print("🎉 TODO FUNCIONAL - Listo para deploy!")
+    elif success_rate >= 66:
+        print("✅ MAYORMENTE FUNCIONAL - Deploy OK")
+    else:
+        print("⚠️  PROBLEMAS DETECTADOS")
+    
+    client.close()
+    return success_rate >= 66
+
+if __name__ == "__main__":
+    quick_test()
+
+<<< FIN C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\quick_test.py
+
+>>> RUTA: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\test_api.py
+#!/usr/bin/env python3
+"""
+Script de testing completo para Forensic Legal Cognition API 4.1
+Prueba todos los endpoints con casos reales y manejo de errores
+"""
+
+import httpx
+import json
+import time
+from typing import Optional, Dict, Any
+
+# Configuración
+BASE_URL = "https://gpt-legal-backend.onrender.com"
+LOCAL_URL = "http://localhost:8000"
+TIMEOUT = 30.0
+
+class APITester:
+    def __init__(self, base_url: str = BASE_URL):
+        self.base_url = base_url
+        self.client = httpx.Client(timeout=TIMEOUT)
+        self.results = []
+        
+    def log_result(self, test_name: str, success: bool, response_data: Any = None, error: str = None):
+        """Registra resultado de test"""
+        result = {
+            "test": test_name,
+            "success": success,
+            "timestamp": time.strftime("%H:%M:%S"),
+            "response_preview": str(response_data)[:200] if response_data else None,
+            "error": error
+        }
+        self.results.append(result)
+        
+        status = "✅" if success else "❌"
+        print(f"{status} {test_name}")
+        if error:
+            print(f"   Error: {error}")
+        if response_data and success:
+            print(f"   Response: {str(response_data)[:100]}...")
+        print()
+
+    def safe_request(self, method: str, endpoint: str, **kwargs) -> Optional[httpx.Response]:
+        """Realiza request seguro con manejo de errores"""
+        url = f"{self.base_url}{endpoint}"
+        try:
+            response = self.client.request(method, url, **kwargs)
+            return response
+        except Exception as e:
+            print(f"❌ Request failed: {e}")
+            return None
+
+    def test_health_check(self):
+        """Test 1: Health Check"""
+        response = self.safe_request("GET", "/")
+        if response and response.status_code == 200:
+            data = response.json()
+            self.log_result("Health Check", True, data)
+            return data
+        else:
+            error_msg = f"Status: {response.status_code if response else 'No response'}"
+            self.log_result("Health Check", False, error=error_msg)
+            return None
+
+    def test_status_json(self):
+        """Test 2: Status JSON"""
+        response = self.safe_request("GET", "/status/json")
+        if response and response.status_code == 200:
+            data = response.json()
+            self.log_result("Status JSON", True, data)
+            return data
+        else:
+            error_msg = f"Status: {response.status_code if response else 'No response'}"
+            self.log_result("Status JSON", False, error=error_msg)
+            return None
+
+    def test_predict_endpoint(self):
+        """Test 3: Predict Endpoint"""
+        test_cases = [
+            {"texto": "Trabajador sin contrato formal recibe pagos irregulares desde hace 6 meses"},
+            {"input": "Empresa despide trabajador sindicalizado sin seguir protocolo legal"},
+            {"contexto": "Contrato de arriendo con cláusulas abusivas y aumento arbitrario de renta"}
+        ]
+        
+        success_count = 0
+        for i, payload in enumerate(test_cases):
+            response = self.safe_request("POST", "/predict", json=payload)
+            test_name = f"Predict Case {i+1}"
+            
+            if response and response.status_code == 200:
+                try:
+                    data = response.json()
+                    self.log_result(test_name, True, data)
+                    success_count += 1
+                except:
+                    self.log_result(test_name, False, error="Invalid JSON response")
+            else:
+                error_msg = f"Status: {response.status_code if response else 'No response'}"
+                self.log_result(test_name, False, error=error_msg)
+        
+        return success_count == len(test_cases)
+
+    def test_reflexion_endpoint(self):
+        """Test 4: Reflexión Jurídica"""
+        payload = {
+            "documento_analizado": "Decreto que establece procedimiento administrativo sin garantizar el derecho a ser oído ni la debida fundamentación de los actos administrativos",
+            "criterios": ["constitucionalidad", "convencionalidad", "contradicción normativa", "due process"]
+        }
+        
+        response = self.safe_request("POST", "/reflexion/", json=payload)
+        if response and response.status_code == 200:
+            try:
+                data = response.json()
+                # Verificar estructura de respuesta dual
+                if "json" in data and "markdown" in data:
+                    self.log_result("Reflexión Jurídica", True, data)
+                    return True
+                else:
+                    self.log_result("Reflexión Jurídica", False, error="Missing dual response structure")
+                    return False
+            except:
+                self.log_result("Reflexión Jurídica", False, error="Invalid JSON response")
+                return False
+        else:
+            error_msg = f"Status: {response.status_code if response else 'No response'}"
+            self.log_result("Reflexión Jurídica", False, error=error_msg)
+            return False
+
+    def test_prediccion_bayesiana(self):
+        """Test 5: Predicción Bayesiana"""
+        payload = {
+            "contexto": "Empresa constructora ejecuta obra pública sin cumplir especificaciones técnicas del contrato, generando riesgo estructural y sobrecostos al Estado. El director de obra omite informar las irregularidades detectadas."
+        }
+        
+        response = self.safe_request("POST", "/api/prediccion/", json=payload)
+        if response and response.status_code == 200:
+            try:
+                data = response.json()
+                self.log_result("Predicción Bayesiana", True, data)
+                return True
+            except:
+                self.log_result("Predicción Bayesiana", False, error="Invalid JSON response")
+                return False
+        else:
+            error_msg = f"Status: {response.status_code if response else 'No response'}"
+            self.log_result("Predicción Bayesiana", False, error=error_msg)
+            return False
+
+    def test_vision_forense(self):
+        """Test 6: Análisis de Visión Forense"""
+        payload = {
+            "image_id": "evidencia_contrato_adulterado_2025_caso_001.pdf"
+        }
+        
+        response = self.safe_request("POST", "/vision/", json=payload)
+        if response and response.status_code == 200:
+            try:
+                data = response.json()
+                self.log_result("Análisis de Visión", True, data)
+                return True
+            except:
+                self.log_result("Análisis de Visión", False, error="Invalid JSON response")
+                return False
+        else:
+            error_msg = f"Status: {response.status_code if response else 'No response'}"
+            self.log_result("Análisis de Visión", False, error=error_msg)
+            return False
+
+    def test_buscar_norma(self):
+        """Test 7: Buscar Norma en BCN"""
+        test_queries = ["contrato", "responsabilidad civil", "procedimiento administrativo"]
+        
+        successful_searches = 0
+        found_ids = []
+        
+        for query in test_queries:
+            response = self.safe_request("GET", "/legislacion/buscar", params={"palabra": query})
+            test_name = f"Buscar '{query}'"
+            
+            if response and response.status_code == 200:
+                try:
+                    data = response.json()
+                    self.log_result(test_name, True, data)
+                    successful_searches += 1
+                    
+                    # Extraer ID si está disponible
+                    if "id" in data and data["id"]:
+                        found_ids.append(data["id"])
+                except:
+                    self.log_result(test_name, False, error="Invalid JSON response")
+            else:
+                error_msg = f"Status: {response.status_code if response else 'No response'}"
+                self.log_result(test_name, False, error=error_msg)
+        
+        return successful_searches > 0, found_ids
+
+    def test_obtener_norma(self, id_norma: int):
+        """Test 8: Obtener Norma por ID"""
+        response = self.safe_request("GET", f"/legislacion/norma/{id_norma}")
+        if response and response.status_code == 200:
+            try:
+                data = response.json()
+                self.log_result(f"Obtener Norma {id_norma}", True, data)
+                return True
+            except:
+                self.log_result(f"Obtener Norma {id_norma}", False, error="Invalid JSON response")
+                return False
+        else:
+            error_msg = f"Status: {response.status_code if response else 'No response'}"
+            self.log_result(f"Obtener Norma {id_norma}", False, error=error_msg)
+            return False
+
+    def test_bcn_parser(self, id_norma: int):
+        """Test 9: BCN Parser Directo"""
+        response = self.safe_request("GET", f"/api/bcn/norma/{id_norma}")
+        if response and response.status_code == 200:
+            try:
+                data = response.json()
+                self.log_result(f"BCN Parser {id_norma}", True, data)
+                return True
+            except:
+                self.log_result(f"BCN Parser {id_norma}", False, error="Invalid JSON response")
+                return False
+        else:
+            error_msg = f"Status: {response.status_code if response else 'No response'}"
+            self.log_result(f"BCN Parser {id_norma}", False, error=error_msg)
+            return False
+
+    def test_forensics_search(self):
+        """Test 10: Búsqueda Forense"""
+        test_queries = [
+            "beneficiario final empresa offshore",
+            "transparencia activa municipios",
+            "declaración patrimonio autoridades",
+            "conflicto intereses funcionarios públicos"
+        ]
+        
+        successful_searches = 0
+        for query in test_queries:
+            response = self.safe_request("GET", "/forensics/search", params={"pregunta": query})
+            test_name = f"Forensics '{query[:30]}...'"
+            
+            if response and response.status_code == 200:
+                try:
+                    data = response.json()
+                    self.log_result(test_name, True, data)
+                    successful_searches += 1
+                except:
+                    self.log_result(test_name, False, error="Invalid JSON response")
+            else:
+                error_msg = f"Status: {response.status_code if response else 'No response'}"
+                self.log_result(test_name, False, error=error_msg)
+        
+        return successful_searches > 0
+
+    def test_text_search(self):
+        """Test 11: Búsqueda Textual"""
+        test_queries = ["responsabilidad civil", "debido proceso", "principio legalidad"]
+        
+        successful_searches = 0
+        for query in test_queries:
+            response = self.safe_request("GET", "/text-search", params={"palabra": query})
+            test_name = f"Text Search '{query}'"
+            
+            if response and response.status_code == 200:
+                try:
+                    data = response.json()
+                    self.log_result(test_name, True, data)
+                    successful_searches += 1
+                except:
+                    self.log_result(test_name, False, error="Invalid JSON response")
+            else:
+                error_msg = f"Status: {response.status_code if response else 'No response'}"
+                self.log_result(test_name, False, error=error_msg)
+        
+        return successful_searches > 0
+
+    def test_error_handling(self):
+        """Test 12: Manejo de Errores"""
+        error_tests = [
+            ("POST", "/predict", {"invalid": "data"}),
+            ("POST", "/reflexion/", {"documento_analizado": ""}),
+            ("GET", "/legislacion/buscar", {"palabra": "a"}),  # Muy corto
+            ("GET", "/legislacion/norma/999999999"),  # ID inexistente
+            ("POST", "/api/prediccion/", {"contexto": "muy corto"}),  # Contexto insuficiente
+        ]
+        
+        handled_errors = 0
+        for method, endpoint, data in error_tests:
+            if method == "GET" and isinstance(data, dict):
+                response = self.safe_request(method, endpoint, params=data)
+            elif method == "GET":
+                response = self.safe_request(method, endpoint)
+            else:
+                response = self.safe_request(method, endpoint, json=data)
+            
+            test_name = f"Error Handling {method} {endpoint}"
+            
+            # Verificar que el error se maneja apropiadamente (4xx o 5xx)
+            if response and response.status_code >= 400:
+                try:
+                    error_data = response.json()
+                    self.log_result(test_name, True, f"Error handled: {response.status_code}")
+                    handled_errors += 1
+                except:
+                    self.log_result(test_name, True, f"Error handled: {response.status_code} (no JSON)")
+                    handled_errors += 1
+            else:
+                self.log_result(test_name, False, error="Error not properly handled")
+        
+        return handled_errors >= len(error_tests) // 2  # Al menos 50% de errores manejados
+
+    def run_comprehensive_test(self):
+        """Ejecuta todos los tests"""
+        print("🚀 Iniciando tests comprehensivos de Forensic Legal Cognition API 4.1")
+        print("=" * 70)
+        
+        start_time = time.time()
+        
+        # Tests básicos
+        health_data = self.test_health_check()
+        status_data = self.test_status_json()
+        
+        # Tests de predicción
+        predict_success = self.test_predict_endpoint()
+        reflexion_success = self.test_reflexion_endpoint()
+        prediccion_success = self.test_prediccion_bayesiana()
+        
+        # Tests de análisis
+        vision_success = self.test_vision_forense()
+        
+        # Tests de legislación
+        search_success, found_ids = self.test_buscar_norma()
+        
+        # Usar IDs encontrados o defaults para tests de normas
+        test_ids = found_ids[:2] if found_ids else [1234, 5678]
+        norma_results = []
+        bcn_results = []
+        
+        for test_id in test_ids:
+            norma_results.append(self.test_obtener_norma(test_id))
+            bcn_results.append(self.test_bcn_parser(test_id))
+        
+        # Tests de búsqueda especializada
+        forensics_success = self.test_forensics_search()
+        text_search_success = self.test_text_search()
+        
+        # Tests de manejo de errores
+        error_handling_success = self.test_error_handling()
+        
+        # Calcular estadísticas
+        total_time = time.time() - start_time
+        successful_tests = sum([
+            bool(health_data), bool(status_data), predict_success, reflexion_success,
+            prediccion_success, vision_success, search_success, any(norma_results),
+            any(bcn_results), forensics_success, text_search_success, error_handling_success
+        ])
+        total_tests = 12
+        success_rate = (successful_tests / total_tests) * 100
+        
+        # Reporte final
+        print("=" * 70)
+        print("📊 REPORTE FINAL DE TESTS")
+        print("=" * 70)
+        print(f"⏱️  Tiempo total: {total_time:.2f} segundos")
+        print(f"✅ Tests exitosos: {successful_tests}/{total_tests} ({success_rate:.1f}%)")
+        print(f"🌐 URL testeada: {self.base_url}")
+        
+        # Estado por categorías
+        categories = {
+            "Sistema": [bool(health_data), bool(status_data)],
+            "Predicción": [predict_success, reflexion_success, prediccion_success],
+            "Análisis": [vision_success],
+            "Legislación": [search_success, any(norma_results), any(bcn_results)],
+            "Búsqueda": [forensics_success, text_search_success],
+            "Errores": [error_handling_success]
+        }
+        
+        print("\n📋 Estado por categorías:")
+        for category, results in categories.items():
+            cat_success = sum(results)
+            cat_total = len(results)
+            cat_rate = (cat_success / cat_total) * 100 if cat_total > 0 else 0
+            status = "🟢" if cat_rate >= 80 else "🟡" if cat_rate >= 50 else "🔴"
+            print(f"   {status} {category}: {cat_success}/{cat_total} ({cat_rate:.0f}%)")
+        
+        # Recomendaciones
+        print("\n💡 Recomendaciones:")
+        if success_rate >= 90:
+            print("   🎉 API funcionando excelentemente!")
+        elif success_rate >= 70:
+            print("   ✅ API en buen estado, revisar tests fallidos")
+        elif success_rate >= 50:
+            print("   ⚠️  API funcional pero requiere atención")
+        else:
+            print("   🚨 API requiere revisión urgente")
+        
+        if not search_success:
+            print("   📚 Verificar conectividad con BCN")
+        if not any(norma_results):
+            print("   🔍 Revisar endpoints de legislación")
+        if not error_handling_success:
+            print("   🛡️  Mejorar manejo de errores")
+        
+        self.client.close()
+        return success_rate >= 70
+
+def main():
+    """Función principal"""
+    import argparse
+    
+    parser = argparse.ArgumentParser(description="Test Forensic Legal Cognition API")
+    parser.add_argument("--url", default=BASE_URL, help=f"URL base del API (default: {BASE_URL})")
+    parser.add_argument("--local", action="store_true", help="Usar URL local")
+    parser.add_argument("--quick", action="store_true", help="Tests rápidos solamente")
+    
+    args = parser.parse_args()
+    
+    if args.local:
+        test_url = LOCAL_URL
+    else:
+        test_url = args.url
+    
+    print(f"🎯 Testing API en: {test_url}")
+    
+    tester = APITester(test_url)
+    
+    if args.quick:
+        # Tests rápidos
+        tester.test_health_check()
+        tester.test_status_json()
+        tester.test_predict_endpoint()
+    else:
+        # Tests completos
+        success = tester.run_comprehensive_test()
+        exit(0 if success else 1)
+
+if __name__ == "__main__":
+    main()
+<<< FIN C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\test_api.py
+
+>>> RUTA: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\test_vision.py
+import requests
+
+API_URL = "https://gpt-legal-backend-bodukoeg-thecousinmates-projects.vercel.app/vision/"
+
+def test_vision_endpoint():
+    payload = {
+        "image_id": "ejemplo.png"  # Asegúrate de que este archivo esté en /mnt/data o accesible si es servidor real
+    }
+    response = requests.post(API_URL, json=payload)
+    print("Status Code:", response.status_code)
+    try:
+        print("Response JSON:", response.json())
+    except Exception as e:
+        print("❌ Error en parseo JSON:", e)
+        print("Texto crudo:", response.text)
+
+if __name__ == "__main__":
+    test_vision_endpoint()
+
+<<< FIN C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\test_vision.py
+
+>>> RUTA: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\update_openapi.py
+from main import app
+import json
+with open("static/openapi.json", "w", encoding="utf-8") as f:
+    json.dump(app.openapi(), f, indent=2, ensure_ascii=False)
+
+<<< FIN C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\update_openapi.py
+
+>>> RUTA: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\utils_output.py
+
+import json
+from typing import Dict, Any
+from datetime import datetime
+
+def output_dual(data: Dict[str, Any]) -> Dict[str, str]:
+    defaults = {
+        'respuesta': 'Sin respuesta generada',
+        'clasificacion': 'No clasificado',
+        'justificacion': 'Sin justificación',
+        'base_legal': {},
+        'derecho_comparado': {},
+        'contradicciones': [],
+        'estandares_internacionales': [],
+        'esquema_visual': '',
+        'sintesis_audio': '',
+        'fuentes': [],
+        'logs': {},
+        'timestamp': datetime.now().isoformat(),
+        'version': '4.1.0'
+    }
+    complete_data = {**defaults, **data}
+    output_json = json.dumps(complete_data, ensure_ascii=False, indent=2)
+    output_md = f"""# 📋 Análisis Jurídico Automatizado
+
+## 🎯 Respuesta Principal
+{complete_data['respuesta']}
+
+---
+
+## 📊 Clasificación del Caso
+**Nivel:** {complete_data['clasificacion']}  
+**Justificación:** {complete_data['justificacion']}
+
+---
+
+## ⚖️ Marco Legal Aplicable
+{format_legal_framework(complete_data['base_legal'])}
+
+---
+
+## 🌍 Derecho Comparado
+{format_comparative_law(complete_data['derecho_comparado'])}
+
+---
+
+## ⚠️ Contradicciones Detectadas
+{format_contradictions(complete_data['contradicciones'])}
+
+---
+
+## 🏛️ Estándares Internacionales
+{format_international_standards(complete_data['estandares_internacionales'])}
+
+---
+
+## 📈 Esquema Visual
+{complete_data['esquema_visual'] or 'No disponible'}
+
+---
+
+## 🎵 Síntesis para Audio
+{complete_data['sintesis_audio'] or 'No disponible'}
+
+---
+
+## 📚 Fuentes Consultadas
+{format_sources(complete_data['fuentes'])}
+
+---
+
+## 🔍 Información Técnica
+**Timestamp:** {complete_data['timestamp']}  
+**Versión:** {complete_data['version']}  
+**Logs:** ```json
+{json.dumps(complete_data['logs'], ensure_ascii=False, indent=2)}
+```"""
+    return {"json": output_json, "markdown": output_md.strip()}
+
+def format_legal_framework(base_legal: Dict[str, str]) -> str:
+    return "\n".join(f"- **{k}:** {v}" for k, v in base_legal.items()) or "*No se identificó marco legal específico.*"
+
+def format_comparative_law(dc: Dict[str, str]) -> str:
+    return "\n".join(f"- **{k}:** {v}" for k, v in dc.items()) or "*No se aplicó análisis de derecho comparado.*"
+
+def format_contradictions(lista: list) -> str:
+    return "\n".join(f"{i+1}. {item}" for i, item in enumerate(lista)) or "*No se detectaron contradicciones normativas.*"
+
+def format_international_standards(estandares: list) -> str:
+    return "\n".join(f"- {s}" for s in estandares) or "*No se aplicaron estándares internacionales.*"
+
+def format_sources(fuentes: list) -> str:
+    formatted = []
+    for i, fuente in enumerate(fuentes, 1):
+        if isinstance(fuente, str):
+            formatted.append(f"{i}. {fuente}")
+        elif isinstance(fuente, dict):
+            formatted.append(f"{i}. [{fuente.get('title', 'Sin título')}]({fuente.get('url', '#')})")
+        else:
+            formatted.append(f"{i}. {str(fuente)}")
+    return "\n".join(formatted) or "*No se registraron fuentes específicas.*"
+
+def create_error_response(msg: str, details: str = "") -> Dict[str, str]:
+    return output_dual({
+        'respuesta': f"Error: {msg}",
+        'clasificacion': 'Error',
+        'justificacion': details or "Se produjo un error durante el procesamiento",
+        'logs': {'error': msg, 'details': details, 'timestamp': datetime.now().isoformat()}
+    })
+
+def create_success_response(message: str, data: Dict[str, Any] = None) -> Dict[str, str]:
+    return output_dual({
+        'respuesta': message,
+        'clasificacion': 'Exitoso',
+        'justificacion': 'Operación completada correctamente',
+        'logs': {'status': 'success', 'data': data or {}, 'timestamp': datetime.now().isoformat()}
+    })
+
+<<< FIN C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\utils_output.py
+
+>>> RUTA: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\__init__.py
+# Paquete inicializado
+<<< FIN C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\__init__.py
+

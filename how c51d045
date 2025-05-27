@@ -1,0 +1,67 @@
+[33mc51d045[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m Actualizar OpenAPI, limpiar licencia, configurar Render como servidor principal
+[33m49ea10b[m Push completo del proyecto inicial
+[33m113f423[m Push completo del proyecto inicial
+[33md1399a0[m fix: actualizados predict, main y openapi.yaml; añadido docker-compose y test
+[33m458cc7d[m fix: endpoint /predict ahora acepta múltiples campos y mejora validación
+[33mccf4142[m Trigger redeploy
+[33me54e17f[m Forzar redeploy tras error temporal
+[33m28611f9[m Actualización README.md: referencia Safe Creative y derechos
+[33m07145e0[m Add LICENSE.txt
+[33mddde202[m Backend v4.1.0 - Test final 100% exitoso - Listo para producción
+[33mb2d1ece[m Backend v4.1.0 - Test final 100% exitoso - Listo para producción
+[33m6925c2c[m Backend funcional - tests básicos OK
+[33m3cde748[m Backend corregido y funcional - syntax OK
+[33m5312333[m 📘 Versión pública del README sin arquitectura interna
+[33mde28bb4[m 🧹 Agrega .gitignore optimizado para backend legal
+[33mb3371cf[m 🚀 Backend legal funcional completo con puerto 10000 y Docker
+[33m4948599[m Fix: integración de motor_predictivo con FastAPI router
+[33ma436352[m Fix: soporte para HEAD / en health check
+[33mc29e71e[m Fix: Eliminada simulación en análisis visual. Respuesta ahora estructurada y válida.
+[33m60d50f3[m Refactor: alineación final de backend jurídico y frontend básico
+[33m409203d[m Fix: validación robusta para reflexión y predicción legal
+[33m9781f1b[m Update README.md
+[33mbafbeeb[m Update README.md
+[33m80887a1[m 🧹 Limpieza final antes de aplicar hook
+[33mdd7e526[m 🧪 Verificando ejecución del pre-commit
+[33m13da0a9[m 🧪 Verificando ejecución del pre-commit
+[33m936146f[m 🧪 Verificando ejecución del pre-commit
+[33m570aebd[m ✅ .gitignore final optimizado y seguro
+[33m19f7e89[m 🔥 Backend GPT Legal final validado por Kabir
+[33ma5c627b[m Create docker-image.yml
+[33mc87ba8f[m Add comprehensive .gitignore and remove .venv from tracking
+[33me8a3b95[m Automatiza pruebas y ajusta integración completa de endpoints
+[33m11e4c9f[m Corrige endpoint /buscar con ID simulado para integración y pruebas
+[33mf8f4680[m  Usa solo openapi.json como especificación externa y elimina YAML
+[33m68a1186[m Remove googletrans to resolve httpx conflict for Render
+[33m6642aa1[m Remove pywin32 for Render deployment
+[33m237db84[m Ignorar archivo de backend demasiado grande
+[33mc00bc73[m actualizo openapi.json y main.py con mejoras de validación
+[33mafd9068[m fix: endpoint explícito para servir openapi.yaml en Render
+[33m5fdc3f8[m fix: corrige ruta de servers en OpenAPI para GPT
+[33m3f07433[m fix: YAML corregido con validación para GPT Custom Actions
+[33mfda86d9[m fix: openapi.yaml validado y corregido para ChatGPT
+[33m53dff4b[m feat: nuevo openapi.yaml funcional y actualizado en static/
+[33m5aa1ec0[m feat: nuevos módulos, streamlit y tests añadidos
+[33me11e3db[m chore: renombrado y agregado openapi.yaml con definición actualizada
+[33m9457c9b[m fix: se agregó el endpoint /predict en root.py y se actualizó main.py para incluir routers
+[33m6001cd6[m Update README.md
+[33m3e28581[m Update README.md
+[33m84b0033[m fix: actualiza openapi.yaml con política de privacidad y estructura optimizada
+[33m58cdd28[m fix: actualiza backend legal forense completo con mejoras en main.py, openapi.yaml y módulos
+[33mab86eb9[m Rename .env.example to .env
+[33mab43d62[m fix: schema completo compatible con GPT
+[33m31115e1[m fix: actualiza openapi.yaml con últimas rutas
+[33m4c59234[m chore: eliminar config_map duplicado de modules
+[33maf44304[m Tu mensaje
+[33m92dd01f[m Versión limpia del backend real, sin entorno virtual
+[33m0b93dfb[m Actualización total del backend legal forensic v4.1 - archivos completos
+[33mf68dbf7[m chore: excluir archivo Docker tar del repositorio
+[33mcc3aa94[m fix: mejora en reflexión jurídica y Dockerfile final incluido
+[33mad1adcc[m fix: endpoint /vision reparado con respuesta válida
+[33mea62621[m fix: add root endpoint and finalize backend integration
+[33m959c861[m fix: regenerate openapi schema with proper response
+[33mc613b06[m fix: add explicit response_model to /reflexion for GPT compatibility
+[33m27adaad[m fix: working version with manual openapi schema override
+[33mc1ca283[m fix: custom OpenAPI schema with 'servers' field for GPT Actions
+[33mb1d2cf0[m fix: add 'servers' field to OpenAPI schema
+[33m7bc28b9[m Versión inicial del backend GPT Legal Forensic
