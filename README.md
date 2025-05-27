@@ -15,13 +15,8 @@ API chilena de analisis juridico automatizado con capacidades de:
 - Busqueda normativa y textual
 - Analisis de imagenes legales
 
-Procesa mas de 50 millones de palabras en escenarios de litigacion, cumplimiento normativo y control de legalidad.
+Desarrollado y entrenado conversacionalmente con mas de 50 millones de palabras en escenarios de litigacion, cumplimiento normativo y control de legalidad. Entrenado con 95% de razonamiento natural sin configuraciones ni estructuras previas.
 
 ---
 
-## Uso local
 
-1. Clonar repositorio:
-```bash
-git clone https://github.com/TheCousinMate/gpt_legal_backend.git
-cd gpt_legal_backend
