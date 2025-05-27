@@ -1,4 +1,4 @@
-openapi: 3.1.0
+openapi: 3.0.3
 info:
   title: Forensic Legal Cognition 4.1
   description: API chilena de análisis jurídico automatizado, evaluación doctrinal y verificación forense.
@@ -8,11 +8,11 @@ info:
     email: khazbun@gmail.com
     url: https://github.com/TheCousinMate/gpt_legal_backend
   license:
-    name: SafeCreative
-    url: https://www.safecreative.org/work/2405266632445
+    name: SafeCreative 2405XXXXXX
+
 servers:
-  - url: https://gpt-legal-backend-bodukoeg-thecousinmates-projects.vercel.app
-    description: Producción en Vercel
+  - url: https://gpt-legal-backend.onrender.com
+    description: Producción en Render
 
 paths:
   /:
