@@ -1,124 +1,159 @@
 openapi: 3.1.0
 info:
-  title: Forensic Legal Cognition API
+  title: Forensic Legal Cognition 4.1
+  description: API chilena de análisis jurídico, doctrinal y forense.
   version: 4.1.0
-  description: API chilena de análisis jurídico automatizado con evaluación doctrinal y verificación forense.
-  contact:
-    name: Kabir K. Hazbún Crovetto
-    email: khazbun@gmail.com
+
 servers:
   - url: https://gpt-legal-backend.onrender.com
-    description: Producción Render
+
 paths:
+  /:
+    get:
+      summary: Página principal
+      operationId: getHome
+      responses:
+        '200':
+          description: OK
+
+  /status/json:
+    get:
+      summary: Estado del sistema
+      operationId: getStatus
+      responses:
+        '200':
+          description: Estado del backend
+
   /predict:
     post:
-      operationId: predict_risk
-      summary: Predicción jurídica
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PrediccionInput'
-      responses:
-        '200':
-          description: Resultado
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DualResponse'
-  /reflexion/:
-    post:
-      operationId: doctrinal_reflection
-      summary: Reflexión doctrinal
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ReflexionInput'
-      responses:
-        '200':
-          description: Reflexión generada
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DualResponse'
-  /vision/:
-    post:
-      operationId: forensic_vision
-      summary: Análisis visual forense
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/VisionInput'
-      responses:
-        '200':
-          description: Resultado visual
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DualResponse'
-  /interpretar/:
-    post:
-      operationId: interpretar_mensaje
-      summary: Interpretación legal de lenguaje natural
+      summary: Evaluar riesgo jurídico
+      operationId: postPredict
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
-              required: [mensaje]
               properties:
-                mensaje:
+                contexto:
+                  type: string
+                  example: "El trabajador fue despedido sin carta ni cotizaciones pagadas"
+      responses:
+        '200':
+          description: Resultado del análisis
+
+  /reflexion/:
+    post:
+      summary: Análisis doctrinal estructurado
+      operationId: postReflexion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                contexto:
                   type: string
       responses:
         '200':
-          description: Interpretación
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  interpretacion:
-                    type: string
-components:
-  schemas:
-    PrediccionInput:
-      type: object
-      required: [contexto]
-      properties:
-        contexto:
-          type: string
-          minLength: 50
-          example: "El empleador terminó el contrato sin carta de aviso y sin pagar cotizaciones."
-    ReflexionInput:
-      type: object
-      required: [documento_analizado, criterios]
-      properties:
-        documento_analizado:
-          type: string
-        criterios:
-          type: array
-          items:
+          description: Resultado reflexivo
+
+  /vision/:
+    post:
+      summary: Análisis de imagen o evidencia digital
+      operationId: postVision
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                contexto:
+                  type: string
+                  example: "image-id-demo"
+      responses:
+        '200':
+          description: Resultado del análisis visual
+
+  /interpretar/:
+    post:
+      summary: Interpretar mensaje legal para redirección
+      operationId: postInterpretar
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                mensaje:
+                  type: string
+                  example: "Me despidieron sin finiquito ni contrato"
+      responses:
+        '200':
+          description: Endpoint sugerido
+
+  /legislacion/buscar:
+    get:
+      summary: Buscar normas jurídicas
+      operationId: getBuscarNorma
+      parameters:
+        - in: query
+          name: q
+          schema:
             type: string
-    VisionInput:
-      type: object
-      required: [image_id]
-      properties:
-        image_id:
-          type: string
-    DualResponse:
-      type: object
-      properties:
-        respuesta:
-          type: string
-        clasificacion:
-          type: string
-        justificacion:
-          type: string
-        logs:
-          type: object
+          required: true
+          description: Término a buscar en legislación chilena
+      responses:
+        '200':
+          description: Resultados legales
+
+  /api/bcn/norma/{id_norma}:
+    get:
+      summary: Obtener norma desde BCN
+      operationId: getNormaBCN
+      parameters:
+        - in: path
+          name: id_norma
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Norma legal obtenida
+
+  /text-search:
+    post:
+      summary: Búsqueda textual compleja
+      operationId: postTextSearch
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                texto:
+                  type: string
+      responses:
+        '200':
+          description: Resultado de búsqueda
+
+  /forensics/search:
+    post:
+      summary: Búsqueda forense de documentos o firmas
+      operationId: postForensicsSearch
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                evidencia:
+                  type: string
+      responses:
+        '200':
+          description: Resultado forense

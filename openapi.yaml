@@ -1,158 +1,159 @@
-openapi: 3.0.3
+openapi: 3.1.0
 info:
-  title: GPT Legal Backend API
-  version: 1.0.0
-  description: API jurídica avanzada para análisis predictivo, forense, doctrinal y legal.
+  title: Forensic Legal Cognition 4.1
+  description: API chilena de análisis jurídico, doctrinal y forense.
+  version: 4.1.0
+
 servers:
   - url: https://gpt-legal-backend.onrender.com
-    description: Producción Render
-  - url: http://localhost:8000
-    description: Desarrollo local
 
 paths:
+  /:
+    get:
+      summary: Página principal
+      operationId: getHome
+      responses:
+        '200':
+          description: OK
+
+  /status/json:
+    get:
+      summary: Estado del sistema
+      operationId: getStatus
+      responses:
+        '200':
+          description: Estado del backend
+
   /predict:
     post:
-      operationId: predecirRiesgoLegal
-      summary: Predicción de riesgo legal
+      summary: Evaluar riesgo jurídico
+      operationId: postPredict
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PrediccionInput'
+              type: object
+              properties:
+                contexto:
+                  type: string
+                  example: "El trabajador fue despedido sin carta ni cotizaciones pagadas"
       responses:
         '200':
-          description: Resultado de predicción
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PrediccionOutput'
+          description: Resultado del análisis
 
   /reflexion/:
     post:
-      operationId: generarReflexionJuridica
-      summary: Análisis doctrinal basado en reflexión
+      summary: Análisis doctrinal estructurado
+      operationId: postReflexion
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TextInput'
+              type: object
+              properties:
+                contexto:
+                  type: string
       responses:
         '200':
-          description: Respuesta reflexiva
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  resultado:
-                    type: string
+          description: Resultado reflexivo
 
   /vision/:
     post:
-      operationId: generarVisionLegal
-      summary: Análisis visual de situación legal
+      summary: Análisis de imagen o evidencia digital
+      operationId: postVision
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TextInput'
+              type: object
+              properties:
+                contexto:
+                  type: string
+                  example: "image-id-demo"
       responses:
         '200':
-          description: Visión generada
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  respuesta:
-                    type: string
+          description: Resultado del análisis visual
 
   /interpretar/:
     post:
-      operationId: interpretarMensajeLegal
-      summary: Interpreta una situación legal en lenguaje natural
+      summary: Interpretar mensaje legal para redirección
+      operationId: postInterpretar
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/InterpretacionInput'
+              type: object
+              properties:
+                mensaje:
+                  type: string
+                  example: "Me despidieron sin finiquito ni contrato"
       responses:
         '200':
-          description: Interpretación jurídica generada
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  interpretacion:
-                    type: string
+          description: Endpoint sugerido
 
-  /text-search:
+  /legislacion/buscar:
     get:
-      operationId: buscarTextoNormativo
-      summary: Búsqueda textual en la base de normativa
+      summary: Buscar normas jurídicas
+      operationId: getBuscarNorma
       parameters:
-        - name: q
-          in: query
-          required: true
+        - in: query
+          name: q
           schema:
             type: string
+          required: true
+          description: Término a buscar en legislación chilena
       responses:
         '200':
-          description: Resultados de búsqueda
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  resultados:
-                    type: array
-                    items:
-                      type: string
+          description: Resultados legales
 
-components:
-  schemas:
-    TextInput:
-      type: object
-      required:
-        - texto
-      properties:
-        texto:
-          type: string
-          example: "El empleador no entregó carta de despido."
-
-    PrediccionInput:
-      type: object
-      required:
-        - contexto
-      properties:
-        contexto:
-          type: string
-          example: "La empresa terminó el contrato sin previo aviso ni carta escrita."
-
-    PrediccionOutput:
-      type: object
-      properties:
-        riesgo:
-          type: string
-          example: "Alto"
-        justificacion:
-          type: string
-          example: "Se detectaron términos críticos: 'despido sin aviso'."
-        alertas:
-          type: array
-          items:
+  /api/bcn/norma/{id_norma}:
+    get:
+      summary: Obtener norma desde BCN
+      operationId: getNormaBCN
+      parameters:
+        - in: path
+          name: id_norma
+          schema:
             type: string
+          required: true
+      responses:
+        '200':
+          description: Norma legal obtenida
 
-    InterpretacionInput:
-      type: object
-      required:
-        - mensaje
-      properties:
-        mensaje:
-          type: string
-          example: "Me despidieron por teléfono sin contrato. ¿Es legal?"
+  /text-search:
+    post:
+      summary: Búsqueda textual compleja
+      operationId: postTextSearch
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                texto:
+                  type: string
+      responses:
+        '200':
+          description: Resultado de búsqueda
+
+  /forensics/search:
+    post:
+      summary: Búsqueda forense de documentos o firmas
+      operationId: postForensicsSearch
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                evidencia:
+                  type: string
+      responses:
+        '200':
+          description: Resultado forense
