@@ -1,49 +1,92 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from fastapi.responses import JSONResponse
-from utils_output import output_dual
+import os
+import openai
 
 router = APIRouter()
+
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 class MensajeInput(BaseModel):
     mensaje: str
 
-# --- API Route ---
+# --- Ruta API principal ---
 @router.post("/interpretar/")
 def interpretar_mensaje(data: MensajeInput):
     return interpretar_input(data.mensaje)
 
-
-# --- Función exportable (para main.py y pruebas automáticas) ---
+# --- Clasificador IA con fallback lógico ---
 def interpretar_input(mensaje: str) -> dict:
-    mensaje = mensaje.lower().strip()
+    mensaje = mensaje.strip()
 
     if not mensaje or len(mensaje) < 10:
         raise HTTPException(status_code=400, detail="Mensaje demasiado corto para interpretar.")
 
-    prediccion_keys = ["despido", "fraude", "finiquito", "contrato", "cotizaciones", "afp", "trabajo informal", "indemnización"]
-    reflexion_keys = ["constitucionalidad", "normativa", "nulidad", "vacío legal", "arbitrariedad", "proceso judicial", "jurisprudencia"]
-    vision_keys = ["imagen", "visual", "foto", "documento escaneado", "evidencia digital", "firma"]
+    try:
+        system_prompt = (
+            "Eres un modelo jurídico chileno. Dado un mensaje, clasifícalo en una de estas tres categorías:\n"
+            "- 'predict' si describe un caso o problema legal concreto\n"
+            "- 'reflexion' si es una consulta doctrinal, constitucional o interpretativa\n"
+            "- 'vision' si hace referencia a un documento escaneado, imagen o evidencia visual.\n"
+            "Responde SOLO con una de estas palabras: predict, reflexion, vision."
+        )
 
-    if any(p in mensaje for p in prediccion_keys):
-        return {
-            "endpoint": "/predict",
-            "input_json": {"contexto": mensaje},
-            "interpretacion": "Se detectó intención de análisis de riesgo jurídico-laboral. Redirigido a endpoint de predicción avanzada."
-        }
+        completion = openai.ChatCompletion.create(
+            model="gpt-4o",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": mensaje}
+            ],
+            temperature=0,
+            max_tokens=5
+        )
 
-    elif any(p in mensaje for p in reflexion_keys):
-        return {
-            "endpoint": "/reflexion/",
-            "input_json": {"contexto": mensaje},
-            "interpretacion": "Se identificó interés en análisis doctrinal. Redirigido a reflexión jurídica estructurada."
-        }
+        decision = completion.choices[0].message["content"].strip().lower()
 
-    elif any(p in mensaje for p in vision_keys):
-        return {
-            "endpoint": "/vision/",
-            "input_json": {"contexto": mensaje},
-            "interpretacion": "Contenido visual detectado. Redirigido a análisis forense de imagen."
-        }
+        if decision == "predict":
+            return {
+                "endpoint": "/predict",
+                "input_json": {"contexto": mensaje},
+                "interpretacion": "Clasificado como análisis de riesgo jurídico concreto."
+            }
 
-    raise HTTPException(status_code=400, detail="No se pudo interpretar el mensaje. Use términos jurídicos o más contexto.")
+        elif decision == "reflexion":
+            return {
+                "endpoint": "/reflexion",
+                "input_json": {"consulta": mensaje},
+                "interpretacion": "Clasificado como reflexión o consulta doctrinal."
+            }
+
+        elif decision == "vision":
+            return {
+                "endpoint": "/vision",
+                "input_json": {"mensaje": mensaje},
+                "interpretacion": "Clasificado como contenido visual o documento escaneado."
+            }
+
+        else:
+            raise ValueError("Respuesta fuera de rango")
+
+    except Exception as e:
+        # Fallback: método por palabras clave
+        mensaje_lower = mensaje.lower()
+        if any(p in mensaje_lower for p in ["despido", "finiquito", "contrato"]):
+            return {
+                "endpoint": "/predict",
+                "input_json": {"contexto": mensaje},
+                "interpretacion": "Fallback: clasificación básica por palabra clave (riesgo jurídico)."
+            }
+        elif any(p in mensaje_lower for p in ["nulidad", "jurisprudencia", "constitucional"]):
+            return {
+                "endpoint": "/reflexion",
+                "input_json": {"consulta": mensaje},
+                "interpretacion": "Fallback: clasificación básica por palabra clave (doctrina)."
+            }
+        elif any(p in mensaje_lower for p in ["imagen", "documento", "foto"]):
+            return {
+                "endpoint": "/vision",
+                "input_json": {"mensaje": mensaje},
+                "interpretacion": "Fallback: clasificación básica por palabra clave (visual)."
+            }
+        raise HTTPException(status_code=500, detail=f"Error interpretando mensaje: {str(e)}")
