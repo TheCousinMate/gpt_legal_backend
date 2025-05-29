@@ -1,32 +1,22 @@
 openapi: 3.1.0
 info:
   title: Forensic Legal Cognition 4.1
-  description: API chilena de análisis jurídico, doctrinal y forense.
-  version: 4.1.0
-
+  description: API chilena de análisis jurídico automatizado, evaluación doctrinal y verificación forense de alta precisión.
+  version: "4.1.0"
+  contact:
+    name: Kabir K. Hazbún Crovetto
+    url: https://github.com/TheCousinMate/gpt_legal_backend
+    email: khazbun@gmail.com
+  license:
+    name: SafeCreative
+    url: https://www.safecreative.org/work/2405266632445
 servers:
   - url: https://gpt-legal-backend.onrender.com
 paths:
-  /:
-    get:
-      summary: Página principal
-      operationId: getHome
-      responses:
-        '200':
-          description: OK
-
-  /status/json:
-    get:
-      summary: Estado del sistema
-      operationId: getStatus
-      responses:
-        '200':
-          description: Estado del backend
-
-  /predict:
+  /reflexion:
     post:
-      summary: Evaluar riesgo jurídico
-      operationId: postPredict
+      summary: "Reflexionar"
+      operationId: reflexionar
       requestBody:
         required: true
         content:
@@ -34,119 +24,16 @@ paths:
             schema:
               type: object
               properties:
-                contexto:
+                texto:
                   type: string
-                  example: "El trabajador fue despedido sin carta ni cotizaciones pagadas"
+                  example: "¿Cuál es el principio rector en esta jurisprudencia?"
       responses:
         '200':
-          description: Resultado del análisis
-
-  /reflexion/:
-    post:
-      summary: Análisis doctrinal estructurado
-      operationId: postReflexion
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                contexto:
-                  type: string
-      responses:
-        '200':
-          description: Resultado reflexivo
-
-  /vision/:
-    post:
-      summary: Análisis de imagen o evidencia digital
-      operationId: postVision
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                contexto:
-                  type: string
-                  example: "image-id-demo"
-      responses:
-        '200':
-          description: Resultado del análisis visual
-
-  /interpretar/:
-    post:
-      summary: Interpretar mensaje legal para redirección
-      operationId: postInterpretar
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                mensaje:
-                  type: string
-                  example: "Me despidieron sin finiquito ni contrato"
-      responses:
-        '200':
-          description: Endpoint sugerido
-
-  /legislacion/buscar:
-    get:
-      summary: Buscar normas jurídicas
-      operationId: getBuscarNorma
-      parameters:
-        - in: query
-          name: palabra
-          schema:
-            type: string
-          required: true
-          description: Término a buscar en legislación chilena
-      responses:
-        '200':
-          description: Resultados legales
-
-  /api/bcn/norma/{id_norma}:
-    get:
-      summary: Obtener norma desde BCN
-      operationId: getNormaBCN
-      parameters:
-        - in: path
-          name: id_norma
-          schema:
-            type: integer
-          required: true
-      responses:
-        '200':
-          description: Norma legal obtenida
-
-  /text-search:
-    get:
-      summary: Búsqueda textual compleja
-      operationId: getTextSearch
-      parameters:
-        - in: query
-          name: palabra
-          schema:
-            type: string
-          required: true
-      responses:
-        '200':
-          description: Resultado de búsqueda
-
-  /forensics/search:
-    get:
-      summary: Búsqueda forense de documentos o firmas
-      operationId: getForensicsSearch
-      parameters:
-        - in: query
-          name: pregunta
-          schema:
-            type: string
-          required: true
-      responses:
-        '200':
-          description: Resultado forense
+          description: Respuesta del modelo Forensic Legal Cognition 4.1
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultado:
+                    type: string
