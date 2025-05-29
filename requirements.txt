@@ -1,5 +1,5 @@
 fastapi>=0.111.0
-uvicorn[standard]>=0.29.0
+"uvicorn[standard]>=0.29.0"
 openai>=1.23.6
 scikit-learn>=1.4.2
 pandas>=2.2.2
