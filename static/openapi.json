@@ -6,7 +6,7 @@
     "contact": {
       "name": "Kabir K. Hazbún Crovetto",
       "url": "https://github.com/TheCousinMate/gpt_legal_backend",
-      "email": "kharzun@gmail.com"
+      "email": "khazbun@gmail.com"
     },
     "license": {
       "name": "MIT",
@@ -15,336 +15,6 @@
     "version": "4.1.0"
   },
   "paths": {
-    "/reflexion/": {
-      "post": {
-        "summary": "Reflexionar",
-        "operationId": "reflexionar_reflexion__post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ReflexionInput"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/prediccion/": {
-      "post": {
-        "summary": "Predecir Riesgo",
-        "operationId": "predecir_riesgo_api_prediccion__post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PrediccionInput"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/vision/": {
-      "post": {
-        "summary": "Analizar Imagen",
-        "operationId": "analizar_imagen_vision__post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/VisionInput"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/legislacion/buscar": {
-      "get": {
-        "summary": "Buscar Norma",
-        "description": "Busca normas legales en BCN con análisis mejorado",
-        "operationId": "buscar_norma_legislacion_buscar_get",
-        "parameters": [
-          {
-            "name": "palabra",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "minLength": 3,
-              "description": "Palabra clave legal a buscar en Ley Chile",
-              "title": "Palabra"
-            },
-            "description": "Palabra clave legal a buscar en Ley Chile"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/legislacion/norma/{id_norma}": {
-      "get": {
-        "summary": "Obtener Norma",
-        "description": "Obtiene norma específica por ID con análisis detallado",
-        "operationId": "obtener_norma_legislacion_norma__id_norma__get",
-        "parameters": [
-          {
-            "name": "id_norma",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "title": "Id Norma"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/forensics/search": {
-      "get": {
-        "summary": "Buscar Forensics",
-        "operationId": "buscar_forensics_forensics_search_get",
-        "parameters": [
-          {
-            "name": "pregunta",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Pregunta"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/bcn/norma/{id_norma}": {
-      "get": {
-        "summary": "Norma Bcn",
-        "operationId": "norma_bcn_api_bcn_norma__id_norma__get",
-        "parameters": [
-          {
-            "name": "id_norma",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "title": "Id Norma"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/text-search": {
-      "get": {
-        "summary": "Buscar Texto Bcn",
-        "operationId": "buscar_texto_bcn_text_search_get",
-        "parameters": [
-          {
-            "name": "palabra",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "Término a buscar en el texto legal",
-              "title": "Palabra"
-            },
-            "description": "Término a buscar en el texto legal"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/": {
-      "get": {
-        "summary": "Health Check",
-        "operationId": "health_check__get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      },
-      "head": {
-        "summary": "Health Check",
-        "operationId": "health_check__head",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      }
-    },
     "/status/json": {
       "get": {
         "summary": "Status Json",
@@ -354,7 +24,9 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "type": "object"
+                }
               }
             }
           }
@@ -365,12 +37,33 @@
       "post": {
         "summary": "Predict Unified",
         "operationId": "predict_unified_predict_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "texto": {
+                    "type": "string",
+                    "title": "Texto"
+                  }
+                },
+                "required": [
+                  "texto"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "type": "object"
+                }
               }
             }
           }
@@ -392,40 +85,6 @@
         },
         "type": "object",
         "title": "HTTPValidationError"
-      },
-      "PrediccionInput": {
-        "properties": {
-          "contexto": {
-            "type": "string",
-            "title": "Contexto"
-          }
-        },
-        "type": "object",
-        "required": [
-          "contexto"
-        ],
-        "title": "PrediccionInput"
-      },
-      "ReflexionInput": {
-        "properties": {
-          "documento_analizado": {
-            "type": "string",
-            "title": "Documento Analizado"
-          },
-          "criterios": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array",
-            "title": "Criterios"
-          }
-        },
-        "type": "object",
-        "required": [
-          "documento_analizado",
-          "criterios"
-        ],
-        "title": "ReflexionInput"
       },
       "ValidationError": {
         "properties": {
@@ -459,19 +118,6 @@
           "type"
         ],
         "title": "ValidationError"
-      },
-      "VisionInput": {
-        "properties": {
-          "image_id": {
-            "type": "string",
-            "title": "Image Id"
-          }
-        },
-        "type": "object",
-        "required": [
-          "image_id"
-        ],
-        "title": "VisionInput"
       }
     }
   }
