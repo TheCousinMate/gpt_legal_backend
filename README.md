@@ -1,22 +1,23 @@
 # Forensic Legal Cognition 4.1
 
-Desarrollado por: Kabir K. Hazbun Crovetto  
-Contacto: khazbun@gmail.com  
-Repositorio: gpt_legal_backend  
+**Desarrollado por:** Kabir K. Hazbun Crovetto  
+**Contacto:** khazbun@gmail.com  
+**Repositorio:** `gpt_legal_backend`  
 
 ---
 
-## Descripcion
+## 📌 Descripción
 
-API chilena de analisis juridico automatizado con capacidades de:
+API chilena de análisis jurídico automatizado con capacidades de:
 
-- Interpretacion doctrinal
-- Evaluacion forense y predictiva
-- Busqueda normativa y textual
-- Analisis de imagenes legales
+- Interpretación doctrinal  
+- Evaluación forense y predictiva  
+- Búsqueda normativa y textual  
+- Análisis de imágenes legales
 
-Desarrollado y entrenado conversacionalmente con mas de 50 millones de palabras en escenarios de litigacion, cumplimiento normativo y control de legalidad. Entrenado con 95% de razonamiento natural sin configuraciones ni estructuras previas.
+Este sistema fue desarrollado y entrenado conversacionalmente con más de **50 millones de palabras**, simulando escenarios reales de litigación, cumplimiento normativo y control de legalidad.  
+No se utilizó entrenamiento previo ni datasets estructurados: el modelo alcanzó un **95% de razonamiento natural autónomo**.
 
 ---
 
-
+## 📁 Estructura del Proyecto
