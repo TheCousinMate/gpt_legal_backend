@@ -7,7 +7,7 @@ beautifulsoup4
 python-multipart
 httpx
 python-docx
-pdfplumber>
+pdfplumber
 pytesseract
 Pillow
 pypdf2
