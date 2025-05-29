@@ -1,4 +1,3 @@
-﻿
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -39,6 +38,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Routers registrados
 app.include_router(reflexion_router)
 app.include_router(predict_router)
 app.include_router(vision_router)
