@@ -101,7 +101,7 @@ paths:
       operationId: getBuscarNorma
       parameters:
         - in: query
-          name: q
+          name: palabra
           schema:
             type: string
           required: true
@@ -118,42 +118,36 @@ paths:
         - in: path
           name: id_norma
           schema:
-            type: string
+            type: integer
           required: true
       responses:
         '200':
           description: Norma legal obtenida
 
   /text-search:
-    post:
+    get:
       summary: Búsqueda textual compleja
-      operationId: postTextSearch
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                texto:
-                  type: string
+      operationId: getTextSearch
+      parameters:
+        - in: query
+          name: palabra
+          schema:
+            type: string
+          required: true
       responses:
         '200':
           description: Resultado de búsqueda
 
   /forensics/search:
-    post:
+    get:
       summary: Búsqueda forense de documentos o firmas
-      operationId: postForensicsSearch
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                evidencia:
-                  type: string
+      operationId: getForensicsSearch
+      parameters:
+        - in: query
+          name: pregunta
+          schema:
+            type: string
+          required: true
       responses:
         '200':
           description: Resultado forense
