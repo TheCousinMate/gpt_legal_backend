@@ -1,4 +1,3 @@
-# Usar imagen base oficial de Python 3.11 slim para mejor performance
 FROM python:3.11-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -27,6 +26,6 @@ RUN useradd --create-home --shell /bin/bash app && \
     chown -R app:app /app
 USER app
 
-EXPOSE 10000
+EXPOSE 8000
 
 CMD ["python", "launch_backend_render.py"]
