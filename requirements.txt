@@ -1,1 +1,22 @@
-# FastAPI y servidorfastapi==0.111.0uvicorn[standard]==0.29.0gunicorn==21.2.0# Validación y serializaciónpydantic==2.7.1pydantic-settings==2.2.1# Requests y HTTPhttpx==0.27.0requests==2.31.0python-multipart==0.0.9# Parsing y scrapingbeautifulsoup4==4.12.3lxml==5.2.1# Análisis de datosnumpy==1.26.4pandas==2.2.2# Machine Learning (opcional para predicción)scikit-learn==1.4.2# Archivos de configuraciónPyYAML==6.0.1python-dotenv==1.0.1# Utilidades de fecha y tiempopython-dateutil==2.9.0# Logging avanzadostructlog==23.2.0# Testingpytest==8.2.0pytest-asyncio==0.23.6# Validación de esquemasjsonschema==4.21.1
+fastapi>=0.111.0
+uvicorn[standard]>=0.29.0
+openai>=1.23.6
+scikit-learn>=1.4.2
+pandas>=2.2.2
+numpy>=1.26.4
+pydantic>=2.7.1
+pydantic-settings>=2.2.1
+requests>=2.31.0
+python-multipart>=0.0.9
+python-dotenv>=1.0.1
+beautifulsoup4>=4.12.3
+lxml>=5.2.1
+orjson>=3.10.18
+httpx>=0.27.0
+gunicorn>=21.2.0
+jinja2>=3.1.6
+email_validator>=2.2.0
+typer>=0.16.0
+rich>=14.0.0
+markdown-it-py>=3.0.0
+mdurl>=0.1.2
