@@ -1,23 +1,40 @@
-﻿# ✅ PARCHE DIRECTO PARA forensics_proxy.py SI /search NO FUNCIONA
-
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Query, HTTPException
 from fastapi.responses import JSONResponse
-from utils_output import output_dual
+import openai
+import os
 
 router = APIRouter(prefix="/forensics")
 
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
 @router.get("/search")
-def buscar_forensics(pregunta: str = Query(...)):
+async def buscar_forensics(pregunta: str = Query(...)):
     try:
-        # Simulación de lógica (puede integrarse llamada real aquí si se desea)
-        resultado = {
-            "respuesta": f"Simulación de búsqueda jurídica sobre: {pregunta}",
-            "clasificacion": "Moderada",
-            "justificacion": "Este es un resultado de prueba para confirmar la funcionalidad del endpoint.",
-            "logs": {"input": pregunta, "output": "simulado"},
-            "fuentes": []
-        }
-        dual = output_dual(resultado)
-        return JSONResponse(content={"json": dual["json"], "markdown": dual["markdown"]})
+        if not pregunta or len(pregunta.strip()) < 10:
+            raise HTTPException(status_code=400, detail="La pregunta es demasiado corta.")
+
+        prompt = (
+            "Eres un jurista chileno con especialidad en análisis forense legal. "
+            "Responde de forma estructurada, considerando normas chilenas, contradicciones legales, jurisprudencia y estándares internacionales si aplican."
+        )
+
+        completion = openai.ChatCompletion.create(
+            model="gpt-4o",
+            messages=[
+                {"role": "system", "content": prompt},
+                {"role": "user", "content": pregunta}
+            ],
+            temperature=0.2,
+            max_tokens=900
+        )
+
+        contenido = completion.choices[0].message["content"]
+
+        return JSONResponse(content={
+            "respuesta": contenido.strip(),
+            "fuente": "GPT-4o (IA jurídica forense real)",
+            "pregunta": pregunta
+        })
+
     except Exception as e:
-        return JSONResponse(status_code=500, content={"error": str(e)})
+        raise HTTPException(status_code=500, detail=f"Error en análisis forense: {str(e)}")
