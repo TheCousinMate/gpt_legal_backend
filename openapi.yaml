@@ -2,7 +2,7 @@ openapi: 3.1.0
 info:
   title: Forensic Legal Cognition 4.1
   description: API chilena de análisis jurídico automatizado, evaluación doctrinal y verificación forense de alta precisión.
-  version: 4.1.0
+  version: "4.1.0"
   contact:
     name: Kabir K. Hazbún Crovetto
     email: khazbun@gmail.com
@@ -16,46 +16,38 @@ paths:
   /reflexion:
     post:
       summary: Reflexionar
-      description: Analiza jurídicamente un texto en lenguaje natural.
-      operationId: reflexionar
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TextoEntrada'
+              type: object
+              properties:
+                mensaje:
+                  type: string
       responses:
         '200':
-          description: Resultado del análisis
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Resultado'
+          description: Resultado reflexivo
 
   /predict:
     post:
-      summary: Predicción
-      description: Realiza una predicción basada en datos legales o fácticos.
-      operationId: predecir
+      summary: Predecir
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TextoEntrada'
+              type: object
+              properties:
+                entrada:
+                  type: string
       responses:
         '200':
-          description: Resultado de la predicción
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Resultado'
+          description: Predicción generada
 
   /vision:
     post:
-      summary: Análisis de Imagen Forense
-      description: Extrae y analiza texto desde una imagen subida.
-      operationId: analizarImagen
+      summary: Análisis de imagen forense (OCR)
       requestBody:
         required: true
         content:
@@ -66,105 +58,59 @@ paths:
                 file:
                   type: string
                   format: binary
-              required:
-                - file
       responses:
         '200':
-          description: Texto extraído de la imagen
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Resultado'
-
-  /legislacion:
-    post:
-      summary: Consulta Legislación Chilena
-      description: Busca normas en la base de datos del Congreso Nacional.
-      operationId: consultarLegislacion
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/TextoEntrada'
-      responses:
-        '200':
-          description: Normas legales encontradas
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Resultado'
-
-  /forensics:
-    post:
-      summary: Análisis Forense de Datos
-      description: Evalúa e interpreta contenido de entrada con enfoque forense.
-      operationId: analizarForense
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/TextoEntrada'
-      responses:
-        '200':
-          description: Resultado del análisis forense
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Resultado'
-
-  /bcn:
-    post:
-      summary: Parser BCN
-      description: Analiza o extrae estructura semántica desde documentos legales del sitio del Congreso.
-      operationId: analizarBCN
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/TextoEntrada'
-      responses:
-        '200':
-          description: Resultado de la extracción
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Resultado'
+          description: Resultado OCR
 
   /interpretar:
     post:
-      summary: Interpretación del mensaje
-      description: Procesa y devuelve una interpretación del mensaje de entrada.
-      operationId: interpretar
+      summary: Interpretación conversacional de texto legal
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TextoEntrada'
+              type: object
+              properties:
+                mensaje:
+                  type: string
       responses:
         '200':
-          description: Respuesta interpretada
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Resultado'
+          description: Resultado interpretado
 
-components:
-  schemas:
-    TextoEntrada:
-      type: object
-      properties:
-        texto:
-          type: string
-          example: ¿Cuál es el enfoque más sólido según la doctrina civil chilena?
-      required:
-        - texto
-    Resultado:
-      type: object
-      properties:
-        resultado:
-          type: string
-          example: Según la doctrina predominante...
+  /bcn:
+    get:
+      summary: Consulta de artículos jurídicos estructurados desde BCN
+      responses:
+        '200':
+          description: Artículos y normas obtenidas
+
+  /leyes:
+    get:
+      summary: Listado o corpus legal aplicado
+      responses:
+        '200':
+          description: Corpus legislativo completo
+
+  /proxy:
+    post:
+      summary: Proxy legal o analizador externo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                input:
+                  type: string
+      responses:
+        '200':
+          description: Resultado del análisis
+
+  /status/json:
+    get:
+      summary: Estado del backend y total de endpoints
+      responses:
+        '200':
+          description: Información de estado del servicio
