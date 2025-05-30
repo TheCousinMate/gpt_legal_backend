@@ -1,23 +1,10 @@
-# Forensic Legal Cognition 4.1
+# Forensic Legal Cognition 4.1 — Backend Privado
 
-**Desarrollado por:** Kabir K. Hazbun Crovetto  
-**Contacto:** khazbun@gmail.com  
-**Repositorio:** `gpt_legal_backend`  
+Este repositorio contiene una arquitectura legal forense desarrollada en colaboración con el entorno GPT mediante interacción conversacional directa, basada en más de 50 millones de tokens validados, sin exposición pública de sus capas internas ni de sus módulos críticos.
 
----
+🔒 Repositorio privado  
+📜 Modelo registrado con licencia SafeCreative  
+🧠 Entrenado conversacionalmente (sept. 2023 — mayo 2025)  
+🚫 No exponer estructura, endpoints ni funciones del backend
 
-## 📌 Descripción
-
-API chilena de análisis jurídico automatizado con capacidades de:
-
-- Interpretación doctrinal  
-- Evaluación forense y predictiva  
-- Búsqueda normativa y textual  
-- Análisis de imágenes legales
-
-Este sistema fue desarrollado y entrenado conversacionalmente con más de **50 millones de palabras**, simulando escenarios reales de litigación, cumplimiento normativo y control de legalidad.  
-No se utilizó entrenamiento previo ni datasets estructurados: el modelo alcanzó un **95% de razonamiento natural autónomo**.
-
----
-
-## 📁 Estructura del Proyecto
+Todos los derechos reservados. Uso exclusivo por Kabir K. Hazbún Crovetto.
