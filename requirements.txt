@@ -7,3 +7,5 @@ pyyaml
 aiohttp
 httpx
 python-multipart
+requests
+python-dotenv
