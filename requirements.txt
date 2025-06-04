@@ -1,11 +1,13 @@
 fastapi
 uvicorn
 pydantic
-openai
+openai<1
 pytesseract
 pyyaml
 aiohttp
-httpx
+httpx<0.28
 python-multipart
 requests
 python-dotenv
+beautifulsoup4
+pillow
