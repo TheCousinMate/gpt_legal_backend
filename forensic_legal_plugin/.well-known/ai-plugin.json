@@ -1,0 +1,19 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "Forensic Legal Cognition 4.1",
+  "name_for_model": "forensic_legal_backend",
+  "description_for_human": "Consulta doctrinal y legal usando IA con respaldo normativo y jurisprudencial. Funciona en tiempo real.",
+  "description_for_model": "Plataforma para análisis jurídico, interpretación legal, predicción de riesgos y análisis forense con estándares internacionales.",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "https://gpt-legal-backend.onrender.com/static/openapi.yaml",
+    "is_user_authenticated": false
+  },
+  "logo_url": "https://gpt-legal-backend.onrender.com/logo.png",
+  "contact_email": "khazbun@gmail.com",
+  "legal_info_url": "https://github.com/TheCousinMate/gpt_legal_backend#terms",
+  "privacy_policy_url": "https://github.com/TheCousinMate/gpt_legal_backend/blob/main/PRIVACY.md"
+}

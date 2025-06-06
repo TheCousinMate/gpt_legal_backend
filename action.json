@@ -1,0 +1,19 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "Forensic Legal Cognition",
+  "name_for_model": "forensicLegalCognition",
+  "description_for_human": "Sistema jurídico predictivo chileno. Evalúa doctrinas, normas y riesgos legales.",
+  "description_for_model": "API especializada en análisis jurídico chileno. Procesa input doctrinal, predice riesgos legales, evalúa normas BCN, analiza imágenes forenses y aplica estándares internacionales.",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "https://gpt-legal-backend.onrender.com/static/openapi.yaml",
+    "is_user_authenticated": false
+  },
+  "logo_url": "https://gpt-legal-backend.onrender.com/static/logo.png",
+  "contact_email": "khazbun@gmail.com",
+  "legal_info_url": "https://gpt-legal-backend.onrender.com/static/TERMS.md",
+  "privacy_policy_url": "https://gpt-legal-backend.onrender.com/static/PRIVACY.md"
+}

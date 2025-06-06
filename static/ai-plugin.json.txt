@@ -1,0 +1,19 @@
+{
+  schema_version v1,
+  name_for_human Forensic Legal Cognition 4.1,
+  name_for_model forensic_legal_backend,
+  description_for_human Consulta doctrinal y legal usando IA con respaldo normativo y jurisprudencial. Funciona en tiempo real.,
+  description_for_model Plataforma para análisis jurídico, interpretación legal, predicción de riesgos y análisis forense con estándares internacionales.,
+  auth {
+    type none
+  },
+  api {
+    type openapi,
+    url httpsgpt-legal-backend.onrender.comstaticopenapi.yaml,
+    is_user_authenticated false
+  },
+  logo_url httpsgpt-legal-backend.onrender.comlogo.png,
+  contact_email khazbun@gmail.com,
+  legal_info_url httpsgithub.comTheCousinMategpt_legal_backend#terms,
+  privacy_policy_url httpsgithub.comTheCousinMategpt_legal_backendblobmainPRIVACY.md
+}

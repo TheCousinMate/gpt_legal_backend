@@ -1,0 +1,200 @@
+﻿openapi: 3.1.0
+info:
+  title: Forensic Legal Cognition 4.1
+  description: >
+    API chilena de análisis jurídico automatizado, evaluación doctrinal y
+    verificación forense de alta precisión.
+  version: "4.1.0"
+  contact:
+    name: Kabir K. Hazbún Crovetto
+    email: khazbun@gmail.com
+    url: https://github.com/TheCousinMate/gpt_legal_backend
+  license:
+    name: SafeCreative
+    url: https://www.safecreative.org/work/2405266632445
+
+servers:
+  - url: https://gpt-legal-backend.onrender.com
+
+paths:
+  /reflexion:
+    post:
+      summary: Reflexiona sobre un mensaje dado
+      operationId: reflexionar
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - mensaje
+              properties:
+                mensaje:
+                  type: string
+      responses:
+        "200":
+          description: Resultado reflexivo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  respuesta:
+                    type: string
+
+  /predict:
+    post:
+      summary: Genera una predicción a partir de un texto de entrada
+      operationId: predecir
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - entrada
+              properties:
+                entrada:
+                  type: string
+      responses:
+        "200":
+          description: Predicción generada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  prediccion:
+                    type: string
+
+  /vision:
+    post:
+      summary: Análisis de imagen forense (OCR)
+      operationId: analizarOCR
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: Resultado OCR
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  textoExtraido:
+                    type: string
+
+  /interpretar:
+    post:
+      summary: Interpretación conversacional de texto legal
+      operationId: interpretarLegal
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - mensaje
+              properties:
+                mensaje:
+                  type: string
+      responses:
+        "200":
+          description: Resultado interpretado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  interpretacion:
+                    type: string
+
+  /bcn:
+    get:
+      summary: Artículos jurídicos estructurados desde BCN
+      operationId: obtenerBCN
+      responses:
+        "200":
+          description: Artículos y normas obtenidas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultados:
+                    type: array
+                    items:
+                      type: object
+
+  /leyes:
+    get:
+      summary: Listado / corpus legal aplicado
+      operationId: obtenerCorpus
+      responses:
+        "200":
+          description: Corpus legislativo completo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  corpus:
+                    type: array
+                    items:
+                      type: string
+
+  /proxy:
+    post:
+      summary: Proxy legal o analizador externo
+      operationId: analizarProxy
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - input
+              properties:
+                input:
+                  type: string
+      responses:
+        "200":
+          description: Resultado del análisis proxy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultado:
+                    type: string
+
+  /status/json:
+    get:
+      summary: Estado del backend y total de endpoints
+      operationId: estadoBackend
+      responses:
+        "200":
+          description: Información de estado del servicio
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  endpoints:
+                    type: integer

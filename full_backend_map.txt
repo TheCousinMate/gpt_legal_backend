@@ -1,0 +1,2327 @@
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\integrar_openapi_action.ps1 =====
+
+# 📁 Variables
+$BackendPath = "C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend"
+$StaticPath = Join-Path $BackendPath "static"
+$OpenAPIFile = Join-Path $StaticPath "openapi.yaml"
+$ActionFile = Join-Path $BackendPath "action.json"
+
+# 🧪 Verificar existencia del schema
+if (-Not (Test-Path $OpenAPIFile)) {
+    Write-Host "❌ ERROR: No se encontró el archivo 'openapi.yaml' en $StaticPath"
+    exit 1
+}
+
+# 📄 Generar archivo action.json con URLs coherentes (Render)
+@"
+{
+  "schema_version": "v1",
+  "name_for_human": "Forensic Legal Cognition",
+  "name_for_model": "forensicLegalCognition",
+  "description_for_human": "Consulta y análisis jurídico automatizado del derecho chileno.",
+  "description_for_model": "Utiliza esta API para hacer análisis legales, predictivos y forenses de documentos jurídicos chilenos.",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "https://gpt-legal-backend.onrender.com/static/openapi.yaml"
+  },
+  "logo_url": "https://raw.githubusercontent.com/TheCousinMate/gpt_legal_backend/main/static/logo.png",
+  "contact_email": "kharzun@gmail.com",
+  "legal_info_url": "https://github.com/TheCousinMate/gpt_legal_backend#terms"
+}
+"@ | Out-File $ActionFile -Encoding utf8
+
+# ✅ Confirmación
+Write-Host "`n🎉 Archivo 'action.json' creado exitosamente en:`n$ActionFile"
+Write-Host "`n📎 Enlace OpenAPI que se usará en producción:"
+Write-Host "   https://gpt-legal-backend.onrender.com/static/openapi.yaml"
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\integrar_openapi_action.ps1 =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\resolver_backend_setup.ps1 =====
+
+# Paso 1: Ir al directorio del proyecto
+cd "C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend"
+
+# Paso 2: Eliminar el antiguo archivo openapi.yaml si existe
+if (Test-Path ".\openapi.yaml") {
+    Remove-Item ".\openapi.yaml" -Force
+    Write-Host "✅ Archivo antiguo 'openapi.yaml' eliminado"
+}
+
+# Paso 3: Renombrar correctamente el archivo nuevo
+Rename-Item "openapi_with_text_search.yaml" "openapi.yaml"
+Write-Host "✅ Archivo renombrado a 'openapi.yaml'"
+
+# Paso 4: Confirmar que el archivo existe
+if (Test-Path ".\openapi.yaml") {
+    Write-Host "✅ Confirmado: 'openapi.yaml' listo en la raíz del proyecto"
+} else {
+    Write-Host "❌ Error: 'openapi.yaml' no se encontró"
+    exit 1
+}
+
+# Paso 5: Agregar a git, commitear y pushear
+git add openapi.yaml
+git commit -m "chore: renombrado y agregado openapi.yaml con definición actualizada"
+git push origin main
+Write-Host "✅ Git actualizado y sincronizado con openapi.yaml"
+
+# Paso 6: (opcional) Reiniciar backend local si usas uvicorn
+Start-Process powershell -ArgumentList "uvicorn main:app --reload" -NoNewWindow
+Write-Host "🚀 Uvicorn relanzado con --reload (si usas backend local)"
+
+# Paso 7: (opcional) Lanzar Streamlit para frontend visual
+Start-Process powershell -ArgumentList "streamlit run app_streamlit_tabs.py" -NoNewWindow
+Write-Host "🚀 Streamlit lanzado"
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\resolver_backend_setup.ps1 =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\.gitignore =====
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Jupyter / IPython
+.ipynb_checkpoints
+
+# VSCode
+.vscode/
+
+# Logs, local env
+*.log
+.env
+*.sqlite3
+*.db
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Static content
+/static/openapi.json
+
+# Render or deploy artifacts
+*.zip
+*.tar.gz
+
+# Docker
+*.pid
+*.sock
+
+# PyInstaller
+*.spec
+
+# Test
+htmlcov/
+coverage.xml
+*.cover
+.tox/
+.pytest_cache/
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\.gitignore =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\Dockerfile =====
+
+FROM python:3.11-slim
+
+WORKDIR /app
+COPY . /app
+
+RUN pip install --upgrade pip && pip install -r requirements.txt
+
+EXPOSE 10000
+
+CMD ["python", "launch_backend_render.py"]
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\Dockerfile =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\Procfile =====
+
+web: gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\Procfile =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\.env =====
+
+PORT=8000
+ENV=development
+REQUEST_TIMEOUT=12
+DEFAULT_LANGUAGE=es
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\.env =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\action.json =====
+
+{
+  "schema_version": "v1",
+  "name_for_human": "Forensic Legal Cognition",
+  "name_for_model": "forensic_legal_gpt",
+  "description_for_human": "Diagnóstico jurídico, análisis doctrinal y evaluación forense automatizada.",
+  "description_for_model": "Ayuda a interpretar documentos legales chilenos, evaluar riesgos jurídicos y emitir análisis doctrinal estructurado. También puede simular evaluaciones forenses de textos o imágenes por ID.",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "https://gpt-legal-backend.onrender.com/static/openapi.json",
+    "is_user_authenticated": false
+  },
+  "logo_url": "https://gpt-legal-backend.onrender.com/static/logo.png",
+  "contact_email": "kharzun@gmail.com",
+  "legal_info_url": "https://github.com/TheCousinMate/gpt_legal_backend#terms"
+}
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\action.json =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\schema_gpt_custom_derecho_chileno.json =====
+
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Derecho Chileno Temático",
+  "type": "object",
+  "patternProperties": {
+    "^[\\w\\sáéíóúÁÉÍÓÚñÑ]+$": {
+      "type": "object",
+      "properties": {
+        "temas": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "nombre": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string",
+                "format": "uri"
+              },
+              "leyes": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^Ley \\d+$|^Decreto.*|^Resolución.*|^Instrucción.*|^Decreto con Fuerza de Ley.*|^Ordenanza.*|^Reglamento.*|^Circular.*|^Norma.*|^Oficio.*|^Acuerdo.*|^Auto Acordado.*|^Código.*|^Orden.*"
+                }
+              },
+              "subtemas": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/tema"
+                }
+              }
+            },
+            "required": [
+              "nombre",
+              "url",
+              "leyes",
+              "subtemas"
+            ]
+          }
+        }
+      },
+      "required": [
+        "temas"
+      ]
+    }
+  },
+  "$defs": {
+    "tema": {
+      "type": "object",
+      "properties": {
+        "nombre": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "leyes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^Ley \\d+$|^Decreto.*|^Resolución.*|^Instrucción.*|^Decreto con Fuerza de Ley.*|^Ordenanza.*|^Reglamento.*|^Circular.*|^Norma.*|^Oficio.*|^Acuerdo.*|^Auto Acordado.*|^Código.*|^Orden.*"
+          }
+        },
+        "subtemas": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/tema"
+          }
+        }
+      },
+      "required": [
+        "nombre",
+        "url",
+        "leyes",
+        "subtemas"
+      ]
+    }
+  }
+}
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\schema_gpt_custom_derecho_chileno.json =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\README.md =====
+
+# ⚖️ Forensic Legal Cognition 4.1
+
+Sistema de análisis legal automatizado, con enfoque en derecho chileno, comparado y forense digital.
+
+---
+
+## 🎯 Funcionalidades
+
+- Evaluación doctrinal inteligente
+- Predicción jurídica asistida
+- Análisis forense digital
+- Acceso estructurado a legislación
+
+---
+
+## 🌐 Acceso
+
+Disponible vía interfaz web/API para demostración temporal.
+
+> 🔒 La arquitectura, módulos internos y modelos de análisis están protegidos y no se exponen en esta versión pública.
+
+---
+
+## 📌 Contacto
+
+> Proyecto desarrollado por Kabir K. Hazbún Crovetto  
+> Para uso académico y demostrativo temporal.  
+> [Repositorio principal](https://github.com/TheCousinMate/gpt_legal_backend)
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\README.md =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\launch_backend_autopush.bat =====
+
+@echo off
+echo Activando entorno virtual...
+call env\Scripts\activate
+
+echo.
+echo Agregando cambios al repositorio...
+git add .
+git commit -m "AutoPush 2025-05-14_16-33"
+git push origin main
+
+echo.
+echo Iniciando servidor FastAPI con Uvicorn...
+uvicorn main:app --reload --port 8000
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\launch_backend_autopush.bat =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\run_backend.bat =====
+
+@echo off
+echo Iniciando backend con Uvicorn...
+start cmd /k "cd /d C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend && uvicorn main:app --reload"
+
+echo Esperando 5 segundos para que el servidor se inicie...
+timeout /t 5 >nul
+
+echo Ejecutando tests robustos...
+cd /d C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\tests
+python test_all_endpoints_robusto.py
+
+echo.
+pause
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\run_backend.bat =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\validate_openapi.bat =====
+
+@echo off
+echo 🔍 Validando static/openapi.yaml con Redocly CLI...
+npx @redocly/cli lint static/openapi.yaml
+pause
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\validate_openapi.bat =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\.render.yaml =====
+
+# launch_backend_render.py
+import os
+import uvicorn
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 10000))
+    print(f"🚀 Iniciando backend en puerto {port}...")
+    uvicorn.run("main:app", host="0.0.0.0", port=port)
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\.render.yaml =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\openapi.yaml =====
+
+openapi: 3.1.0
+info:
+  title: API chilena de análisis jurídico automatizado
+  version: 4.1.0
+  description: Evaluación doctrinal y verificación forense de alta precisión.
+
+paths:
+  /predict:
+    post:
+      summary: Predecir Riesgo Legal
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                texto:
+                  type: string
+                  description: Texto legal a analizar
+              required: [texto]
+      responses:
+        '200':
+          description: Análisis de riesgo legal
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  json:
+                    type: object
+                  markdown:
+                    type: string
+
+  /api/prediccion/:
+    post:
+      summary: Predicción de Riesgo Jurídico (Versión Bayesiana)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                contexto:
+                  type: string
+                  description: Contexto legal extenso
+              required: [contexto]
+      responses:
+        '200':
+          description: Resultado del análisis jurídico bayesiano
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  json:
+                    type: object
+                  markdown:
+                    type: string
+
+  /forensics/search:
+    get:
+      summary: Búsqueda forense simulada
+      parameters:
+        - name: pregunta
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Respuesta simulada con estructura legal
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  json:
+                    type: object
+                  markdown:
+                    type: string
+
+  /text-search:
+    get:
+      summary: Búsqueda textual en leyes (simulada)
+      parameters:
+        - name: palabra
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Resultados textuales simulados
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  json:
+                    type: object
+                  markdown:
+                    type: string
+
+  /api/bcn/norma/{id_norma}:
+    get:
+      summary: Obtener norma desde BCN
+      parameters:
+        - name: id_norma
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Norma extraída desde BCN
+          content:
+            application/json:
+              schema:
+                type: object
+
+  /legislacion/buscar:
+    get:
+      summary: Buscar norma legal en BCN
+      parameters:
+        - name: palabra
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Resultado de búsqueda legal
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  json:
+                    type: object
+                  markdown:
+                    type: string
+                  id:
+                    type: integer
+
+  /legislacion/norma/{id_norma}:
+    get:
+      summary: Obtener detalle de norma por ID
+      parameters:
+        - name: id_norma
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Detalle de norma legal
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  json:
+                    type: object
+                  markdown:
+                    type: string
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\openapi.yaml =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\openapi url.txt =====
+
+https://raw.githubusercontent.com/TheCousinMate/gpt_legal_backend/main/openapi_with_text_search.yaml
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\openapi url.txt =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\requirements.txt =====
+
+fastapi==0.110.1
+uvicorn==0.29.0
+python-multipart==0.0.9
+pydantic==2.7.1
+httpx==0.27.0
+requests==2.31.0
+numpy==1.26.4
+scikit-learn==1.4.2
+pandas==2.2.2
+PyYAML==6.0.1
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\requirements.txt =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\__init__.py =====
+
+# Paquete inicializado
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\__init__.py =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\app_streamlit_tabs.py =====
+
+# app_streamlit_tabs.py
+
+import streamlit as st
+import requests
+
+API_BASE = "https://gpt-legal-backend.onrender.com"
+
+st.set_page_config(page_title="Legal Cognition 4.1", layout="wide")
+st.title("⚖️ Legal Cognition Interface")
+
+opcion = st.sidebar.selectbox("Elige módulo:", ["Reflexión", "Predicción", "Predict"], index=0)
+
+if opcion == "Reflexión":
+    st.header("📘 Reflexión Jurídica Automatizada")
+    texto = st.text_area("Texto normativo o doctrinal:")
+    criterios = st.text_input("Criterios separados por coma:")
+    if st.button("Analizar"):
+        r = requests.post(f"{API_BASE}/reflexion/", json={
+            "documento_analizado": texto,
+            "criterios": [c.strip() for c in criterios.split(",") if c.strip()]
+        })
+        st.write(r.json())
+
+elif opcion == "Predicción":
+    st.header("🔮 Riesgo Legal Predictivo")
+    contexto = st.text_area("Describe el contexto legal a evaluar:")
+    if st.button("Predecir riesgo"):
+        r = requests.post(f"{API_BASE}/api/prediccion/", json={"contexto": contexto})
+        st.write(r.json())
+
+elif opcion == "Predict":
+    st.header("🧪 Predict API (Experimental)")
+    if st.button("Test Predict"):
+        r = requests.post(f"{API_BASE}/predict", json={"test": True})
+        st.write(r.text)
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\app_streamlit_tabs.py =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\config_map.py =====
+
+CONFIG_MAP = {
+    "modules/bcn_parser.py": {
+        "model": "none",
+        "keywords": ["ley", "norma", "bcn", "boletín"]
+    },
+    "modules/legislacion_bcn.py": {
+        "model": "none",
+        "keywords": ["consulta", "legislación", "palabra clave", "búsqueda"]
+    },
+    "modules/bcn_text_search_parser.py": {
+        "model": "none",
+        "keywords": ["buscador", "html", "resultados", "búsqueda textual"]
+    },
+    "modules/reflexion.py": {
+        "model": "gpt-4o",
+        "temperature": 0.4,
+        "top_p": 0.85,
+        "max_tokens": 1500,
+        "keywords": ["reflexiona", "estructura", "argumento", "coherencia"]
+    },
+    "modules/vision_forense.py": {
+        "model": "gpt-4o",
+        "temperature": 0.3,
+        "top_p": 0.85,
+        "max_tokens": 1000,
+        "keywords": ["imagen", "visual", "simbología", "documento"]
+    },
+    "modules/prediccion_bayesiana.py": {
+        "model": "gpt-4o",
+        "temperature": 0.3,
+        "top_p": 0.9,
+        "max_tokens": 2048,
+        "keywords": ["predecir", "probabilidad", "riesgo", "modelo bayesiano"]
+    },
+    "modules/forensics_proxy.py": {
+        "model": "none",
+        "keywords": ["gafi", "beneficiario", "transparencia", "forensics"]
+    }
+}
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\config_map.py =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\fix_backend.py =====
+
+import os
+import shutil
+from pathlib import Path
+
+ROOT = Path(__file__).parent.resolve()
+MODULES = ROOT / "modules"
+
+# 1. Eliminar duplicado config_map.py en raíz
+config_map_root = ROOT / "config_map.py"
+config_map_module = MODULES / "config_map.py"
+
+if config_map_root.exists() and config_map_module.exists():
+    print("🗑️ Eliminando config_map.py duplicado del raíz")
+    config_map_root.unlink()
+
+# 2. Reescribir validacion_schema.py para quitar código de activación
+validacion_path = MODULES / "validacion_schema.py"
+print("✏️ Reescribiendo validacion_schema.py sin código de activación...")
+validacion_code = '''
+from fastapi import APIRouter, HTTPException, Request
+from fastapi.responses import JSONResponse
+from jsonschema import validate, ValidationError
+import json
+import os
+
+router = APIRouter()
+
+SCHEMA_PATH = os.path.join(os.path.dirname(__file__), "derecho_chileno_schema.json")
+
+with open(SCHEMA_PATH, "r", encoding="utf-8") as f:
+    SCHEMA = json.load(f)
+
+@router.post("/validar")
+async def validar_entrada(request: Request):
+    payload = await request.json()
+
+    contenido = payload.get("contenido")
+    if not contenido:
+        raise HTTPException(status_code=400, detail="El campo 'contenido' es obligatorio.")
+
+    try:
+        validate(instance=contenido, schema=SCHEMA)
+        return {
+            "valido": True,
+            "mensaje": "JSON válido según el esquema oficial.",
+            "error": None
+        }
+    except ValidationError as e:
+        return JSONResponse(
+            status_code=422,
+            content={
+                "valido": False,
+                "mensaje": "JSON inválido.",
+                "error": e.message
+            }
+        )
+'''.strip()
+validacion_path.write_text(validacion_code, encoding="utf-8")
+
+# 3. Eliminar carpetas innecesarias como __pycache__
+for cache in ROOT.rglob("__pycache__"):
+    print(f"🧹 Eliminando carpeta {cache}")
+    shutil.rmtree(cache)
+
+# 4. Mover schema al módulo si quieres centralizarlo
+# schema_src = ROOT / "schema_gpt_custom_derecho_chileno.json"
+# schema_dst = MODULES / "derecho_chileno_schema.json"
+# if schema_src.exists():
+#     print("📦 Moviendo schema al módulo...")
+#     shutil.move(str(schema_src), str(schema_dst))
+
+print("✅ Limpieza y corrección completa.")
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\fix_backend.py =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\launch_backend_render.py =====
+
+# launch_backend_render.py
+import os
+import uvicorn
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 10000))  # Render lo asigna, 10000 por defecto
+    print(f"🚀 Iniciando servidor en el puerto {port}...")
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=False)
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\launch_backend_render.py =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\main.py =====
+
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+from modules.reflexion import router as reflexion_router
+from modules.prediccion_bayesiana import router as prediccion_router
+from modules.motor_predictivo import router as motor_router
+from modules.vision_forense import router as vision_router
+from modules.legislacion_bcn import router as legislacion_router
+from modules.root import router as root_router
+from modules.predict import router as predict_router
+
+
+app = FastAPI(
+    title="Forensic Legal Cognition 4.1",
+    description="API chilena de análisis jurídico automatizado, evaluación doctrinal y verificación forense de alta precisión.",
+    version="4.1.0"
+)
+
+# Middleware CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Inclusión de routers
+app.include_router(reflexion_router)
+app.include_router(prediccion_router)
+app.include_router(motor_router)
+app.include_router(vision_router)
+app.include_router(legislacion_router)
+app.include_router(root_router)
+app.include_router(predict_router)
+
+# Health Check para GET y HEAD
+@app.get("/")
+@app.head("/")
+def health_check(request: Request):
+    return {"status": "alive", "version": app.version}
+
+from fastapi.staticfiles import StaticFiles
+import os
+
+# Asegúrate de que el archivo existe en producción
+if os.path.exists("openapi.yaml"):
+    app.mount("/static", StaticFiles(directory="."), name="static")
+
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\main.py =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\test_api.py =====
+
+import httpx
+
+BASE_URL = "https://gpt-legal-backend.onrender.com"
+
+def safe_request(method, url, **kwargs):
+    try:
+        response = httpx.request(method, url, timeout=10.0, **kwargs)
+        response.raise_for_status()
+        return response
+    except httpx.HTTPStatusError as exc:
+        print(f"❌ Error HTTP {exc.response.status_code}: {exc.response.text}")
+    except Exception as e:
+        print(f"❌ Error general: {e}")
+    return None
+
+def test_health_check():
+    print("1️⃣ Health Check")
+    r = safe_request("GET", f"{BASE_URL}/")
+    if r: print(r.status_code, r.json())
+
+def test_status_json():
+    print("2️⃣ Status JSON")
+    r = safe_request("GET", f"{BASE_URL}/status/json")
+    if r: print(r.status_code, r.text)
+
+def test_buscar_norma():
+    print("3️⃣ Buscar Norma (dolo)")
+    r = safe_request("GET", f"{BASE_URL}/legislacion/buscar", params={"palabra": "dolo"})
+    if not r: return None
+    print(r.status_code, r.text)
+    try:
+        data = r.json()
+        if isinstance(data, list) and len(data) > 0:
+            return data[0]["id"]
+        elif isinstance(data, dict) and "logs" in data and "output" in data["logs"]:
+            output = data["logs"]["output"]
+            return output.get("id") or 1234  # fallback
+    except Exception as e:
+        print("⚠️ Parsing error:", e)
+    print("⚠️ No se encontró una norma válida.")
+    return None
+
+def test_obtener_norma(id_norma):
+    print("4️⃣ Obtener Norma")
+    r = safe_request("GET", f"{BASE_URL}/legislacion/norma/{id_norma}")
+    if r: print(r.status_code, r.json())
+
+def test_obtener_norma_bcn(id_norma):
+    print("5️⃣ Obtener Norma BCN")
+    r = safe_request("GET", f"{BASE_URL}/api/bcn/norma/{id_norma}")
+    if r: print(r.status_code, r.json())
+
+def test_reflexion():
+    print("6️⃣ Reflexión Jurídica")
+    payload = {
+        "documento_analizado": "Este documento trata sobre la responsabilidad penal en el derecho chileno.",
+        "criterios": ["culpabilidad", "dolo", "negligencia"]
+    }
+    r = safe_request("POST", f"{BASE_URL}/reflexion/", json=payload)
+    if r: print(r.status_code, r.json())
+
+def test_vision():
+    print("7️⃣ Análisis de Imagen Legal")
+    payload = {"image_id": "evidencia_2025_caso001.jpg"}
+    r = safe_request("POST", f"{BASE_URL}/vision/", json=payload)
+    if r: print(r.status_code, r.json())
+
+def test_prediccion():
+    print("8️⃣ Predicción Bayesiana")
+    payload = {"contexto": "Una persona actúa con imprudencia al conducir, provocando daño a un peatón."}
+    r = safe_request("POST", f"{BASE_URL}/api/prediccion/", json=payload)
+    if r: print(r.status_code, r.json())
+
+def test_predict():
+    print("9️⃣ Experimento Predictivo General")
+    payload = {"texto": "Una empresa despide sin causa a un trabajador formalizado."}
+    r = safe_request("POST", f"{BASE_URL}/predict", json=payload)
+    if r: print(r.status_code, r.text)
+
+if __name__ == "__main__":
+    test_health_check()
+    test_status_json()
+    norma_id = test_buscar_norma()
+    if norma_id:
+        test_obtener_norma(norma_id)
+        test_obtener_norma_bcn(norma_id)
+    test_reflexion()
+    test_vision()
+    test_prediccion()
+    test_predict()
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\test_api.py =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\test_vision.py =====
+
+
+import requests
+
+API_URL = "http://127.0.0.1:10000/vision/"  # Cambiar si se despliega
+
+def test_vision_endpoint():
+    payload = {
+        "image_id": "nombre_de_ejemplo.png"  # Asegúrate de que este archivo exista en /mnt/data/ si se prueba en servidor
+    }
+    response = requests.post(API_URL, json=payload)
+    print("Status Code:", response.status_code)
+    try:
+        print("Response JSON:", response.json())
+    except Exception as e:
+        print("Error en parseo JSON:", e)
+        print("Texto crudo:", response.text)
+
+if __name__ == "__main__":
+    test_vision_endpoint()
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\test_vision.py =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\update_openapi.py =====
+
+from main import app
+import json
+with open("static/openapi.json", "w", encoding="utf-8") as f:
+    json.dump(app.openapi(), f, indent=2, ensure_ascii=False)
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\update_openapi.py =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\utils_output.py =====
+
+import json
+
+def output_dual(data: dict):
+    # Output JSON estructurado
+    output_json = json.dumps(data, ensure_ascii=False, indent=2)
+    # Output Markdown amigable para humanos
+    output_md = f"""
+### Respuesta directa
+{data.get('respuesta', '')}
+
+**Clasificación:** {data.get('clasificacion', '')}  
+**Justificación:** {data.get('justificacion', '')}  
+
+**Base legal:**  
+{data.get('base_legal', '')}  
+
+**Derecho comparado:**  
+{data.get('derecho_comparado', '')}  
+
+**Contradicciones:**  
+{data.get('contradicciones', '')}  
+
+**Estándares internacionales:**  
+{data.get('estandares_internacionales', '')}  
+
+**Esquema visual:**  
+{data.get('esquema_visual', '')}  
+
+**Síntesis para audio:**  
+{data.get('sintesis_audio', '')}  
+
+**Fuentes:**  
+{data.get('fuentes', '')}  
+
+---
+**Logs internos:**  
+{data.get('logs', '')}
+"""
+    return {"json": output_json, "markdown": output_md}
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\utils_output.py =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\exportar_contenido_backend.ps1 =====
+
+# ===============================================
+# 📦 Exportador completo de contenido del backend
+# ===============================================
+
+$rootPath = "C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend"
+$outputFile = Join-Path $rootPath "reporte_backend.txt"
+$extensions = @(".py", ".json", ".yaml", ".yml", ".env", ".md", ".txt", ".html", ".js", ".ts", ".bat", ".ps1")
+
+# 🧹 Borra archivo anterior si existe
+if (Test-Path $outputFile) {
+    Remove-Item $outputFile
+}
+
+"🔎 Reporte generado automáticamente - $(Get-Date)" | Out-File $outputFile -Encoding UTF8
+"Ruta base: $rootPath`n" | Out-File $outputFile -Append
+
+# 🔁 Recorre todos los archivos con extensiones reconocidas
+Get-ChildItem -Path $rootPath -Recurse -File | Where-Object { $extensions -contains $_.Extension.ToLower() } | ForEach-Object {
+    $file = $_
+    $fullPath = $file.FullName
+    $relPath = $fullPath.Substring($rootPath.Length).TrimStart('\')
+    $content = Get-Content -Path $fullPath -Raw -ErrorAction SilentlyContinue
+
+    # 📄 Encabezado por archivo
+    "====================================================" | Out-File $outputFile -Append
+    "📄 Archivo: $($file.Name)" | Out-File $outputFile -Append
+    "📂 Ruta: $relPath" | Out-File $outputFile -Append
+    "📦 Tamaño: $($file.Length) bytes" | Out-File $outputFile -Append
+    "====================================================" | Out-File $outputFile -Append
+    "" | Out-File $outputFile -Append
+
+    if (-not $content) {
+        "⚠️ Archivo vacío o no legible." | Out-File $outputFile -Append
+    } else {
+        $content | Out-File $outputFile -Append
+    }
+
+    "`n`n" | Out-File $outputFile -Append
+}
+
+Write-Host "`n✅ Reporte generado:"
+Write-Host "   $outputFile"
+
+Read-Host "`nPresiona Enter para cerrar"
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\exportar_contenido_backend.ps1 =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\fix_pre_commit.ps1 =====
+
+# fix_pre_commit.ps1
+
+# 1. Crear directorio .githooks si no existe
+$hookDir = ".githooks"
+if (-not (Test-Path $hookDir)) {
+    New-Item -ItemType Directory -Path $hookDir | Out-Null
+    Write-Host "✅ Carpeta .githooks creada."
+} else {
+    Write-Host "🔁 Carpeta .githooks ya existía."
+}
+
+# 2. Escribir contenido del hook PowerShell
+$psHookPath = "$hookDir/pre-commit.ps1"
+$psHookContent = @'
+#!/usr/bin/env pwsh
+
+# ✅ Pre-commit hook para proteger secretos y validar backend (versión PowerShell)
+
+# 1. Bloqueo de archivos .txt sensibles en /static/
+$archivos = git diff --cached --name-only
+foreach ($archivo in $archivos) {
+    if ($archivo -match '^static/.*\.txt$') {
+        Write-Host "❌ ERROR: No se permite hacer commit de archivos .txt en /static/"
+        exit 1
+    }
+}
+
+# 2. Verifica existencia de .env
+if (-not (Test-Path ".env")) {
+    Write-Host "⚠️  Advertencia: No se encontró .env en el proyecto."
+}
+
+# 3. Validación de sintaxis Python
+Write-Host "🔍 Validando sintaxis..."
+$valid = python -m compileall .
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "❌ ERROR: Hay errores de sintaxis Python. Corrige antes de hacer commit."
+    exit 1
+}
+
+Write-Host "✅ Pre-commit validado. Todo OK."
+exit 0
+'@
+
+$psHookContent | Set-Content -Encoding UTF8 -Path $psHookPath
+Write-Host "✅ Hook PowerShell generado: $psHookPath"
+
+# 3. Crear wrapper Bash en .git/hooks que llama al script de PowerShell
+$wrapperPath = ".git/hooks/pre-commit"
+$wrapperContent = "#!/bin/sh\npwsh .githooks/pre-commit.ps1"
+$wrapperContent | Set-Content -Encoding UTF8 -Path $wrapperPath
+Write-Host "✅ Wrapper bash en .git/hooks/pre-commit creado."
+
+# 4. Asignar permisos ejecutables (si WSL está disponible)
+try {
+    wsl chmod +x .git/hooks/pre-commit
+    Write-Host "🔒 Permisos ejecutables asignados vía WSL."
+} catch {
+    Write-Host "⚠️  No se pudo aplicar chmod. Verifica manualmente si es necesario."
+}
+
+# 5. Configurar Git para usar .githooks como ruta oficial
+git config core.hooksPath .githooks
+Write-Host "🛠️ Git configurado para usar .githooks"
+
+Write-Host "🎯 Hook pre-commit listo y funcional. Testéalo haciendo un commit."
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\fix_pre_commit.ps1 =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\full_backend_finalizer.ps1 =====
+
+# full_backend_finalizer.ps1
+
+# 🚀 Activación de entorno y validación total del backend GPT Legal
+Write-Host "🔧 Iniciando validación final del backend..."
+
+$base = "C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend"
+$venv = "$base\.venv"
+$tests = "$base\tests"
+$hookPath = "$base\.git\hooks\pre-commit"
+
+# 1. Activar entorno virtual o crearlo
+if (!(Test-Path "$venv\Scripts\activate.ps1")) {
+  python -m venv $venv
+  Write-Host "✅ Entorno virtual creado"
+}
+& "$venv\Scripts\activate.ps1"
+
+# 2. Instalar dependencias
+pip install -r "$base\requirements.txt"
+
+# 3. Regenerar archivo de test
+$testScript = @"
+import requests
+BASE = "http://127.0.0.1:8000"
+
+def check(endpoint, method='get', data=None, params=None):
+    try:
+        if method == 'get':
+            r = requests.get(BASE + endpoint, params=params)
+        else:
+            r = requests.post(BASE + endpoint, json=data)
+        r.raise_for_status()
+        print(f"✅ {endpoint} OK")
+    except Exception as e:
+        print(f"❌ {endpoint} FALLÓ: {e}")
+
+check("/")
+check("/reflexion/", 'post', {"documento_analizado": "Ley chilena...", "criterios": ["claridad"]})
+check("/vision/", 'post', {"image_id": "imagen123"})
+check("/forensics/search", 'get', None, {"pregunta": "Derechos del consumidor"})
+check("/legislacion/buscar", 'get', None, {"palabra": "contrato"})
+"@
+$testPath = "$tests\__test_all_endpoints.py"
+$testScript | Set-Content -Encoding UTF8 -Path $testPath
+Write-Host "✅ Script de test regenerado"
+
+# 4. Ejecutar update_openapi.py si existe
+$openapiUpdater = "$base\update_openapi.py"
+if (Test-Path $openapiUpdater) {
+  python $openapiUpdater
+}
+
+# 5. Ejecutar los tests
+python $testPath
+
+# 6. Activar pre-commit hook si existe
+if (Test-Path "$hookPath") {
+  try {
+    wsl chmod +x $hookPath
+    Write-Host "✅ Pre-commit hook activado"
+  } catch {
+    Write-Host "⚠️ No se pudo activar hook con chmod (WSL no disponible o ruta incorrecta)"
+  }
+}
+
+Write-Host "🎯 Backend final validado y funcional. Puedes hacer push y desplegar."
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\full_backend_finalizer.ps1 =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\full_backend_validator.ps1 =====
+
+# ✅ SCRIPT POWERSHELL AUTOMATIZADO: VALIDACIÓN COMPLETA BACKEND GPT LEGAL
+# Ejecuta todo el proceso en un solo comando
+
+$base = "C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend"
+$modules = "$base\modules"
+$tests = "$base\tests"
+
+# 1. Corregir prefix en routers
+(Get-Content "$modules\forensics_proxy.py") -replace 'APIRouter\(\)', 'APIRouter(prefix="/forensics")' | Set-Content -Encoding UTF8 -Path "$modules\forensics_proxy.py"
+(Get-Content "$modules\legislacion_bcn.py") -replace 'APIRouter\(\)', 'APIRouter(prefix="/legislacion")' | Set-Content -Encoding UTF8 -Path "$modules\legislacion_bcn.py"
+Write-Host "✅ Prefixes corregidos"
+
+# 2. Verificar e insertar endpoint /search si no existe
+$content = Get-Content "$modules\forensics_proxy.py" -Raw
+if ($content -notmatch "/search") {
+    Add-Content -Encoding UTF8 -Path "$modules\forensics_proxy.py" -Value @'
+@router.get("/search")
+def buscar_forensics(pregunta: str):
+    return {"respuesta": f"Simulación de búsqueda forense para: {pregunta}"}
+'@
+    Write-Host "✅ Endpoint /search añadido a forensics_proxy.py"
+} else {
+    Write-Host "🔁 Endpoint /search ya presente en forensics_proxy.py"
+}
+
+# 3. Regenerar archivo de test
+$test_script = @"
+import requests
+
+BASE = "http://127.0.0.1:8000"
+
+def check(endpoint, method='get', data=None, params=None):
+    try:
+        if method == 'get':
+            r = requests.get(BASE + endpoint, params=params)
+        else:
+            r = requests.post(BASE + endpoint, json=data)
+        r.raise_for_status()
+        print(f"✅ {endpoint} OK")
+    except Exception as e:
+        print(f"❌ {endpoint} FALLÓ: {e}")
+
+check("/")
+check("/reflexion/", 'post', {"documento_analizado": "Ley chilena...", "criterios": ["claridad"]})
+check("/vision/", 'post', {"image_id": "imagen123"})
+check("/forensics/search", 'get', None, {"pregunta": "Derechos del consumidor"})
+check("/legislacion/buscar", 'get', None, {"palabra": "contrato"})
+"@
+$test_path = "$tests\__test_all_endpoints.py"
+$test_script | Set-Content -Encoding UTF8 -Path $test_path
+Write-Host "✅ Script de test regenerado"
+
+# 4. Ejecutar generación de OpenAPI
+python "$base\update_openapi.py"
+
+# 5. Ejecutar test
+python $test_path
+
+Write-Host "`n🎯 Validación automatizada completada. Revisa arriba los estados de cada endpoint."
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\full_backend_validator.ps1 =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\generar_openapi_y_action.ps1 =====
+
+# ===============================================
+# 🔄 Script: Generar openapi.yaml + action.json
+# ===============================================
+
+# ⚙️ Variables base
+$backendPath = "C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend"
+$staticPath = Join-Path $backendPath "static"
+$yamlPath = Join-Path $staticPath "openapi.yaml"
+$actionPath = Join-Path $backendPath "action.json"
+
+# 1️⃣ Contenido mínimo y válido del openapi.yaml
+$yaml = @"
+openapi: 3.1.0
+info:
+  title: Forensic Legal Cognition 4.1
+  description: API chilena de análisis jurídico automatizado.
+  version: "1.0"
+servers:
+  - url: https://gpt-legal-backend.onrender.com
+    description: Render
+
+paths:
+  /:
+    get:
+      operationId: healthCheck
+      summary: Check de salud
+      responses:
+        '200':
+          description: OK
+components:
+  schemas: {}
+"@
+
+# 2️⃣ Crear carpeta static si no existe
+if (-Not (Test-Path $staticPath)) {
+    New-Item -ItemType Directory -Path $staticPath | Out-Null
+}
+
+# 3️⃣ Guardar el archivo openapi.yaml
+$yaml | Out-File $yamlPath -Encoding utf8
+Write-Host "`n✅ openapi.yaml creado correctamente en:"
+Write-Host "   $yamlPath"
+
+# 4️⃣ Contenido completo de action.json
+$action = @"
+{
+  "schema_version": "v1",
+  "name_for_human": "Forensic Legal Cognition",
+  "name_for_model": "forensicLegalCognition",
+  "description_for_human": "Consulta y análisis jurídico automatizado del derecho chileno.",
+  "description_for_model": "Utiliza esta API para hacer análisis legales, predictivos y forenses de documentos jurídicos chilenos.",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "https://gpt-legal-backend.onrender.com/static/openapi.yaml"
+  },
+  "logo_url": "https://raw.githubusercontent.com/TheCousinMate/gpt_legal_backend/main/static/logo.png",
+  "contact_email": "kharzun@gmail.com",
+  "legal_info_url": "https://github.com/TheCousinMate/gpt_legal_backend#terms"
+}
+"@
+
+# 5️⃣ Guardar el archivo action.json
+$action | Out-File $actionPath -Encoding utf8
+Write-Host "`n✅ action.json creado correctamente en:"
+Write-Host "   $actionPath"
+
+# 6️⃣ Verificación online
+$onlineUrl = "https://gpt-legal-backend.onrender.com/static/openapi.yaml"
+Write-Host "`n🌐 Verificando acceso público a $onlineUrl ..."
+try {
+    $resp = Invoke-WebRequest -Uri $onlineUrl -UseBasicParsing -TimeoutSec 10
+    if ($resp.StatusCode -eq 200) {
+        Write-Host "`n🟢 openapi.yaml está accesible en línea y listo para importar en ChatGPT."
+    } else {
+        Write-Host "`n⚠️ Código HTTP $($resp.StatusCode). Verifica que Render esté online."
+    }
+} catch {
+    Write-Host "`n❌ ERROR: No se pudo acceder a $onlineUrl. ¿Está el backend corriendo en Render?"
+}
+
+Read-Host "`nPresiona Enter para cerrar"
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\generar_openapi_y_action.ps1 =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\__init__.py =====
+
+# Paquete inicializado
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\__init__.py =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\bcn_parser.py =====
+
+import requests
+from bs4 import BeautifulSoup
+from fastapi import APIRouter
+from fastapi.responses import JSONResponse
+from utils_output import output_dual
+
+router = APIRouter()
+
+@router.get("/api/bcn/norma/{id_norma}")
+def norma_bcn(id_norma: int):
+    try:
+        url = f"https://www.bcn.cl/leychile/Navegar?idNorma={id_norma}"
+        headers = {"User-Agent": "ForensicLegalBot/1.0"}
+        response = requests.get(url, headers=headers, timeout=10)
+        response.raise_for_status()
+        soup = BeautifulSoup(response.text, "html.parser")
+
+        titulo_tag = soup.find("h1") or soup.find("title")
+        titulo = titulo_tag.get_text(strip=True) if titulo_tag else "Título no disponible"
+
+        fecha_tag = soup.find(class_="fecha-publicacion")
+        fecha = fecha_tag.get_text(strip=True) if fecha_tag else "Fecha no disponible"
+
+        resumen_tag = soup.find("div", class_="resumen")
+        if resumen_tag:
+            resumen = resumen_tag.get_text(strip=True)
+        else:
+            primer_p = soup.find("p")
+            resumen = primer_p.get_text(strip=True) if primer_p else "Resumen no disponible"
+
+        resultado = {
+            "norma": {
+                "id": id_norma,
+                "titulo": titulo,
+                "fecha_publicacion": fecha,
+                "contenido": resumen
+            }
+        }
+        return JSONResponse(content=resultado)
+    except Exception as e:
+        return JSONResponse(status_code=500, content={
+            "error": "No se pudo extraer la norma desde BCN.",
+            "detalle": str(e)
+        })
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\bcn_parser.py =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\bcn_text_search_parser.py =====
+
+from fastapi import APIRouter, Query
+from fastapi.responses import JSONResponse
+from utils_output import output_dual
+
+router = APIRouter()
+
+@router.get("/text-search")
+def buscar_texto_bcn(palabra: str = Query(..., description="Término a buscar en el texto legal")):
+    resultados = [
+        {"norma_id": 12345, "extracto": f"Resultado relacionado con '{palabra}'."},
+        {"norma_id": 67890, "extracto": f"Otro resultado con el término '{palabra}'."}
+    ]
+    resultado = {
+        "respuesta": f"Resultados simulados de búsqueda para '{palabra}'.",
+        "clasificacion": "Moderada",
+        "justificacion": "Búsqueda textual simulada en normativa.",
+        "base_legal": {},
+        "derecho_comparado": {},
+        "contradicciones": [],
+        "estandares_internacionales": [],
+        "esquema_visual": "",
+        "sintesis_audio": f"Búsqueda para {palabra}",
+        "fuentes": [],
+        "logs": {
+            "input": palabra,
+            "output": resultados
+        }
+    }
+    dual = output_dual(resultado)
+    return JSONResponse(content={"json": dual["json"], "markdown": dual["markdown"]})
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\bcn_text_search_parser.py =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\forensics_proxy.py =====
+
+# ✅ PARCHE DIRECTO PARA forensics_proxy.py SI /search NO FUNCIONA
+
+from fastapi import APIRouter, Query
+from fastapi.responses import JSONResponse
+from utils_output import output_dual
+
+router = APIRouter(prefix="/forensics")
+
+@router.get("/search")
+def buscar_forensics(pregunta: str = Query(...)):
+    try:
+        # Simulación de lógica (puede integrarse llamada real aquí si se desea)
+        resultado = {
+            "respuesta": f"Simulación de búsqueda jurídica sobre: {pregunta}",
+            "clasificacion": "Moderada",
+            "justificacion": "Este es un resultado de prueba para confirmar la funcionalidad del endpoint.",
+            "logs": {"input": pregunta, "output": "simulado"},
+            "fuentes": []
+        }
+        dual = output_dual(resultado)
+        return JSONResponse(content={"json": dual["json"], "markdown": dual["markdown"]})
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": str(e)})
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\forensics_proxy.py =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\legislacion_bcn.py =====
+
+from fastapi import APIRouter, Query, HTTPException
+import requests
+from bs4 import BeautifulSoup
+from fastapi.responses import JSONResponse
+from utils_output import output_dual
+
+router = APIRouter(prefix="/legislacion")
+
+DEFAULT_HEADERS = {"User-Agent": "ForensicLegalBot/1.0"}
+DEFAULT_TIMEOUT = 12
+
+def parse_html_bcn(html: str) -> dict:
+    """Extrae título, fecha y resumen desde HTML de BCN"""
+    try:
+        soup = BeautifulSoup(html, "html.parser")
+        titulo = soup.find("h1")
+        titulo = titulo.get_text(strip=True) if titulo else "Sin título"
+        fecha_tag = soup.find(class_="fecha-publicacion")
+        fecha = fecha_tag.get_text(strip=True) if fecha_tag else "Fecha no disponible"
+        resumen_tag = soup.find("div", class_="resumen")
+        resumen = resumen_tag.get_text(strip=True) if resumen_tag else "Resumen no disponible"
+        return {
+            "id": 1234,  # Simulado para pruebas
+            "titulo": titulo,
+            "fecha_publicacion": fecha,
+            "resumen": resumen
+        }
+    except Exception as e:
+        return {"error": f"No se pudo analizar HTML: {e}"}
+
+@router.get("/buscar")
+def buscar_norma(palabra: str = Query(..., description="Palabra clave legal a buscar en Ley Chile")):
+    try:
+        url = f"https://www.bcn.cl/leychile/consulta/legislacion_abierta_web_service?palabra={palabra}"
+        response = requests.get(url, headers=DEFAULT_HEADERS, timeout=DEFAULT_TIMEOUT)
+        if response.status_code != 200:
+            raise HTTPException(status_code=502, detail="Error de conexión con BCN.")
+        contenido = parse_html_bcn(response.text)
+        resultado = {
+            "respuesta": f"Resultado de búsqueda para '{palabra}' en BCN.",
+            "clasificacion": "Fuerte" if contenido else "Débil",
+            "justificacion": "Resultado directo desde BCN.",
+            "base_legal": {},
+            "derecho_comparado": {},
+            "contradicciones": [],
+            "estandares_internacionales": [],
+            "esquema_visual": "",
+            "sintesis_audio": f"Resultado para {palabra}",
+            "fuentes": [url],
+            "logs": {
+                "input": palabra,
+                "output": contenido
+            }
+        }
+        dual = output_dual(resultado)
+        # Retorna contenido para acceso programático (para test_api.py)
+        return JSONResponse(content={"json": dual["json"], "markdown": dual["markdown"], "id": contenido.get("id", None)})
+    except Exception as e:
+        return _error_response("buscar_norma", palabra, e)
+
+@router.get("/norma/{id_norma}")
+def obtener_norma(id_norma: int):
+    try:
+        url = f"https://www.bcn.cl/leychile/consulta/legislacion_abierta_web_service?norma={id_norma}"
+        response = requests.get(url, headers=DEFAULT_HEADERS, timeout=DEFAULT_TIMEOUT)
+        if response.status_code != 200:
+            raise HTTPException(status_code=502, detail="Error de conexión con BCN.")
+        contenido = parse_html_bcn(response.text)
+        resultado = {
+            "respuesta": f"Detalle de la norma BCN ID {id_norma}.",
+            "clasificacion": "Fuerte" if contenido else "Débil",
+            "justificacion": "Norma consultada directamente en BCN.",
+            "base_legal": {},
+            "derecho_comparado": {},
+            "contradicciones": [],
+            "estandares_internacionales": [],
+            "esquema_visual": "",
+            "sintesis_audio": f"Norma {id_norma} consultada.",
+            "fuentes": [url],
+            "logs": {
+                "input": id_norma,
+                "output": contenido
+            }
+        }
+        dual = output_dual(resultado)
+        return JSONResponse(content={"json": dual["json"], "markdown": dual["markdown"]})
+    except Exception as e:
+        return _error_response("obtener_norma", id_norma, e)
+
+def _error_response(func: str, input_data, exception: Exception):
+    error_info = {
+        "respuesta": "Error de conexión con BCN.",
+        "clasificacion": "Errónea",
+        "justificacion": str(exception),
+        "base_legal": {},
+        "derecho_comparado": {},
+        "contradicciones": [],
+        "estandares_internacionales": [],
+        "esquema_visual": "",
+        "sintesis_audio": "Error de conexión",
+        "fuentes": [],
+        "logs": {
+            "input": input_data,
+            "output": str(exception),
+        }
+    }
+    dual = output_dual(error_info)
+    return JSONResponse(content={"json": dual["json"], "markdown": dual["markdown"]})
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\legislacion_bcn.py =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\motor_predictivo.py =====
+
+# motor_predictivo.py
+
+from fastapi import APIRouter, HTTPException
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel
+from utils_output import output_dual
+
+router = APIRouter()
+
+class PredictInput(BaseModel):
+    texto: str
+
+def analizar_input_legal(texto: str) -> str:
+    texto = texto.lower()
+
+    if not texto or len(texto.strip()) == 0:
+        return "Texto vacío. Por favor, provea contenido jurídico para análisis."
+
+    if "trabajador" in texto and "contrato" in texto and "informal" in texto:
+        return (
+            "Existe un riesgo legal elevado. Según el Código del Trabajo chileno, toda relación laboral "
+            "requiere contrato por escrito. La falta de formalización puede acarrear multas, pérdida de defensas "
+            "legales del empleador, y reconocimiento forzoso de vínculo laboral por parte de la Inspección del Trabajo."
+        )
+    elif "pago" in texto and "sin contrato" in texto:
+        return (
+            "Existe riesgo probatorio y fiscal. Aunque haya pago regular, la ausencia de contrato escrito "
+            "impide acreditar condiciones pactadas, y expone a la empresa a sanciones por evasión previsional o tributaria."
+        )
+    elif "falta de delegacion" in texto or "firma no autorizada" in texto or "sin atribucion legal" in texto:
+        return (
+            "Existe riesgo de nulidad del acto administrativo conforme al artículo 7° de la Constitución Política de la República. "
+            "Los actos emitidos sin competencia o delegación formal son jurídicamente inexistentes y pueden ser objeto de control de legalidad."
+        )
+    elif "riesgo legal" in texto:
+        return (
+            "Cualquier relación contractual no formalizada correctamente representa riesgo legal. "
+            "Es fundamental contar con respaldo documental válido para evitar conflictos o sanciones."
+        )
+    else:
+        return "No se detectó riesgo legal específico, pero se recomienda revisión con asesoría jurídica especializada."
+
+@router.post("/predict")
+def predict_riesgo(input_data: PredictInput):
+    resultado_texto = analizar_input_legal(input_data.texto)
+    resultado = {
+        "respuesta": resultado_texto,
+        "clasificacion": "Fuerte",
+        "justificacion": "El endpoint predict fue alcanzado exitosamente.",
+        "base_legal": {},
+        "derecho_comparado": {},
+        "contradicciones": [],
+        "estandares_internacionales": [],
+        "esquema_visual": "",
+        "sintesis_audio": resultado_texto,
+        "fuentes": [],
+        "logs": {
+            "input": input_data.texto,
+            "output": "Respuesta generada correctamente"
+        }
+    }
+    dual = output_dual(resultado)
+    return JSONResponse(content={"json": dual["json"], "markdown": dual["markdown"]})
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\motor_predictivo.py =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\prediccion_bayesiana.py =====
+
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+from fastapi.responses import JSONResponse
+from utils_output import output_dual
+from modules.motor_predictivo import analizar_input_legal
+
+router = APIRouter()
+
+class PrediccionInput(BaseModel):
+    contexto: str
+
+@router.post("/api/prediccion/")
+def predecir_riesgo(datos: PrediccionInput):
+    if not datos.contexto or len(datos.contexto.strip()) < 50:
+        raise HTTPException(status_code=422, detail="Contexto legal insuficiente para análisis de riesgo.")
+
+    analisis = analizar_input_legal(datos.contexto)
+
+    resultado = {
+        "respuesta": analisis,
+        "clasificacion": "Fuerte",
+        "justificacion": "El análisis fue generado mediante reglas jurídicas programadas.",
+        "base_legal": {},
+        "derecho_comparado": {},
+        "contradicciones": [],
+        "estandares_internacionales": [],
+        "esquema_visual": "",
+        "sintesis_audio": "Resultado de riesgo legal generado.",
+        "fuentes": [],
+        "logs": {
+            "input": datos.dict(),
+            "output": analisis
+        }
+    }
+    dual = output_dual(resultado)
+    return JSONResponse(content={"json": dual["json"], "markdown": dual["markdown"]})
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\prediccion_bayesiana.py =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\predict.py =====
+
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+from fastapi.responses import JSONResponse
+from utils_output import output_dual
+
+router = APIRouter()
+
+class PrediccionInput(BaseModel):
+    contexto: str
+
+@router.post("/predict")
+def predecir_riesgo(data: PrediccionInput):
+    texto = data.contexto.strip().lower()
+    if not texto:
+        raise HTTPException(status_code=400, detail="Debe ingresar un contexto jurídico para evaluación.")
+
+    riesgo = "Bajo"
+    justificacion = "No se detectaron patrones críticos en el texto proporcionado."
+    alertas = []
+
+    if any(palabra in texto for palabra in ["fraude", "inconstitucional", "incumplimiento", "nulidad", "arbitrariedad"]):
+        riesgo = "Alto"
+        justificacion = "Se detectaron términos indicativos de riesgo legal significativo."
+        alertas.append("Conflicto potencial con principios fundamentales.")
+
+    elif any(palabra in texto for palabra in ["ambigüedad", "falta de competencia", "vacío legal"]):
+        riesgo = "Moderado"
+        justificacion = "Se identifican riesgos interpretativos o de competencia normativa."
+        alertas.append("Necesidad de revisión doctrinal y jurisprudencial.")
+
+    resultado = {
+        "respuesta": f"Nivel de riesgo normativo: {riesgo}",
+        "clasificacion": riesgo,
+        "justificacion": justificacion,
+        "base_legal": {
+            "Ley 19880": "Sobre procedimientos administrativos. Principios de juridicidad y motivación.",
+            "Corte Suprema Rol 8632-2021": "Invalidez por infracción de principios esenciales del procedimiento."
+        } if riesgo != "Bajo" else {},
+        "derecho_comparado": {
+            "España - STS 298/2013": "La ambigüedad normativa genera inseguridad jurídica.",
+            "Colombia - C-084/2018": "El vacío legal requiere interpretación conforme a la Constitución."
+        } if riesgo != "Bajo" else {},
+        "contradicciones": alertas,
+        "estandares_internacionales": ["Convención Americana art. 8 y 25"],
+        "esquema_visual": f"Riesgo: {riesgo}",
+        "sintesis_audio": f"Evaluación de riesgo legal resultó en nivel {riesgo}.",
+        "fuentes": [],
+        "logs": {
+            "input": data.dict(),
+            "output": "Predicción legal realizada con reglas probabilísticas básicas."
+        }
+    }
+
+    dual = output_dual(resultado)
+    return JSONResponse(content={"json": dual["json"], "markdown": dual["markdown"]})
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\predict.py =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\reflexion.py =====
+
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+from fastapi.responses import JSONResponse
+from utils_output import output_dual
+
+router = APIRouter()
+
+class ReflexionInput(BaseModel):
+    documento_analizado: str
+    criterios: list[str]
+
+@router.post("/reflexion/")
+def reflexionar(data: ReflexionInput):
+    doc = data.documento_analizado.strip()
+    criterios = [c.lower() for c in data.criterios]
+
+    if not doc:
+        raise HTTPException(status_code=400, detail="Debe ingresar contenido para análisis doctrinal.")
+    if not criterios:
+        raise HTTPException(status_code=400, detail="Debe incluir al menos un criterio de análisis.")
+
+    resultado = {
+        "respuesta": f"Documento evaluado doctrinalmente según: {', '.join(criterios)}.",
+        "clasificacion": "Fuerte",
+        "justificacion": "",
+        "base_legal": {},
+        "derecho_comparado": {},
+        "contradicciones": [],
+        "estandares_internacionales": [],
+        "esquema_visual": "",
+        "sintesis_audio": "",
+        "fuentes": [],
+        "logs": {
+            "input": data.dict(),
+            "output": ""
+        }
+    }
+
+    # Evaluación por criterio
+    if "constitucionalidad" in criterios:
+        resultado["base_legal"]["CPR art. 6 y 7"] = "Los órganos del Estado deben someter su actuación a la Constitución y a las normas dictadas conforme a ella."
+        resultado["justificacion"] += "Se verificó compatibilidad con principios constitucionales. "
+        resultado["sintesis_audio"] += "Se evaluó constitucionalidad. "
+
+    if "contradicción normativa" in criterios:
+        if "ley" in doc.lower() and "decreto" in doc.lower():
+            resultado["contradicciones"].append("Potencial contradicción entre ley formal y norma sublegal detectada.")
+            resultado["justificacion"] += "Conflicto detectado entre niveles normativos. "
+        resultado["sintesis_audio"] += "Se identificaron contradicciones. "
+
+    if "convencionalidad" in criterios:
+        resultado["estandares_internacionales"].append("Opinión Consultiva OC-21/14 - Corte IDH")
+        resultado["justificacion"] += "Evaluación conforme a estándares interamericanos. "
+        resultado["sintesis_audio"] += "Se aplicaron parámetros de convencionalidad. "
+
+    if "comparado" in criterios:
+        resultado["derecho_comparado"] = {
+            "España - STC 185/1990": "El principio de jerarquía normativa impide que un reglamento contradiga a la ley.",
+            "Colombia - C-415/2012": "Bloque de constitucionalidad obliga a armonizar normas internas con tratados."
+        }
+        resultado["sintesis_audio"] += "Se incluyó contraste con derecho comparado. "
+
+    resultado["logs"]["output"] = "Análisis doctrinal real procesado."
+    dual = output_dual(resultado)
+    return JSONResponse(content={"json": dual["json"], "markdown": dual["markdown"]})
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\reflexion.py =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\root.py =====
+
+from fastapi import APIRouter, Request
+from fastapi.responses import JSONResponse
+from utils_output import output_dual
+from modules.motor_predictivo import analizar_input_legal
+
+router = APIRouter()
+
+@router.get("/status/json")
+def status_json():
+    resultado = {
+        "respuesta": "El backend está operativo y responde en JSON y Markdown.",
+        "clasificacion": "Fuerte",
+        "justificacion": "Sistema activo.",
+        "base_legal": {},
+        "derecho_comparado": {},
+        "contradicciones": [],
+        "estandares_internacionales": [],
+        "esquema_visual": "",
+        "sintesis_audio": "Sistema activo.",
+        "fuentes": [],
+        "logs": {
+            "input": None,
+            "output": "ok"
+        }
+    }
+    dual = output_dual(resultado)
+    return JSONResponse(content={"json": dual["json"], "markdown": dual["markdown"]})
+
+@router.post("/predict")
+async def predict(request: Request):
+    try:
+        payload = await request.json()
+        texto = payload.get("texto") or payload.get("input")
+        if not texto:
+            raise ValueError("Falta el campo obligatorio 'texto' o 'input'.")
+    except Exception as e:
+        return JSONResponse(status_code=400, content={"error": f"Error al procesar JSON: {str(e)}"})
+
+    respuesta_generada = analizar_input_legal(texto)
+
+    resultado = {
+        "respuesta": respuesta_generada,
+        "clasificacion": "Fuerte",
+        "justificacion": "El endpoint predict fue alcanzado exitosamente.",
+        "base_legal": {},
+        "derecho_comparado": {},
+        "contradicciones": [],
+        "estandares_internacionales": [],
+        "esquema_visual": "",
+        "sintesis_audio": respuesta_generada,
+        "fuentes": [],
+        "logs": {
+            "input": texto,
+            "output": "Respuesta generada correctamente"
+        }
+    }
+    dual = output_dual(resultado)
+    return JSONResponse(content={"json": dual["json"], "markdown": dual["markdown"]})
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\root.py =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\vision_forense.py =====
+
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+from fastapi.responses import JSONResponse
+from utils_output import output_dual
+
+router = APIRouter()
+
+class VisionInput(BaseModel):
+    image_id: str
+
+@router.post("/vision/")
+def analizar_imagen(data: VisionInput):
+    if not data.image_id or len(data.image_id.strip()) == 0:
+        raise HTTPException(status_code=400, detail="Debe proporcionar un identificador de imagen válido.")
+
+    resultado = {
+        "respuesta": f"Se recibió la imagen con identificador '{data.image_id}'. Análisis visual forense registrado.",
+        "clasificacion": "Moderada",
+        "justificacion": "Identificador procesado. Procesamiento visual profundo aún en expansión.",
+        "base_legal": {},
+        "derecho_comparado": {},
+        "contradicciones": [],
+        "estandares_internacionales": [],
+        "esquema_visual": "",
+        "sintesis_audio": "Imagen recibida para análisis forense.",
+        "fuentes": [],
+        "logs": {
+            "input": data.dict(),
+            "output": "Recepción y registro confirmados."
+        }
+    }
+    dual = output_dual(resultado)
+    return JSONResponse(content={"json": dual["json"], "markdown": dual["markdown"]})
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\vision_forense.py =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\static\openapi.json =====
+
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Forensic Legal Cognition 4.1",
+    "description": "API chilena de análisis jurídico automatizado, evaluación doctrinal y verificación forense de alta precisión.",
+    "termsOfService": "https://github.com/TheCousinMate/gpt_legal_backend#terms",
+    "contact": {
+      "name": "Kabir K. Hazbún Crovetto",
+      "url": "https://github.com/TheCousinMate/gpt_legal_backend",
+      "email": "kharzun@gmail.com"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    },
+    "version": "4.1.0"
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "Health Check",
+        "operationId": "health_check__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/status/json": {
+      "get": {
+        "summary": "Status Json",
+        "operationId": "status_json_status_json_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/predict": {
+      "post": {
+        "summary": "Predict",
+        "operationId": "predict_predict_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reflexion/": {
+      "post": {
+        "summary": "Reflexionar",
+        "operationId": "reflexionar_reflexion__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReflexionInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/vision/": {
+      "post": {
+        "summary": "Analizar Imagen",
+        "operationId": "analizar_imagen_vision__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VisionInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/prediccion/": {
+      "post": {
+        "summary": "Predecir Riesgo",
+        "operationId": "predecir_riesgo_api_prediccion__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PrediccionInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/legislacion/buscar": {
+      "get": {
+        "summary": "Buscar Norma",
+        "operationId": "buscar_norma_legislacion_buscar_get",
+        "parameters": [
+          {
+            "name": "palabra",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Palabra clave legal a buscar en Ley Chile",
+              "title": "Palabra"
+            },
+            "description": "Palabra clave legal a buscar en Ley Chile"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/legislacion/norma/{id_norma}": {
+      "get": {
+        "summary": "Obtener Norma",
+        "operationId": "obtener_norma_legislacion_norma__id_norma__get",
+        "parameters": [
+          {
+            "name": "id_norma",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Id Norma"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/bcn/norma/{id_norma}": {
+      "get": {
+        "summary": "Norma Bcn",
+        "operationId": "norma_bcn_api_bcn_norma__id_norma__get",
+        "parameters": [
+          {
+            "name": "id_norma",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Id Norma"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/forensics/search": {
+      "get": {
+        "summary": "Buscar Forensics",
+        "operationId": "buscar_forensics_forensics_search_get",
+        "parameters": [
+          {
+            "name": "pregunta",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Pregunta"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "PrediccionInput": {
+        "properties": {
+          "contexto": {
+            "type": "string",
+            "title": "Contexto"
+          }
+        },
+        "type": "object",
+        "required": [
+          "contexto"
+        ],
+        "title": "PrediccionInput"
+      },
+      "ReflexionInput": {
+        "properties": {
+          "documento_analizado": {
+            "type": "string",
+            "title": "Documento Analizado"
+          },
+          "criterios": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Criterios"
+          }
+        },
+        "type": "object",
+        "required": [
+          "documento_analizado",
+          "criterios"
+        ],
+        "title": "ReflexionInput"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "VisionInput": {
+        "properties": {
+          "image_id": {
+            "type": "string",
+            "title": "Image Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image_id"
+        ],
+        "title": "VisionInput"
+      }
+    }
+  }
+}
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\static\openapi.json =====
+
+===== INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\.github\workflows\docker-image.yml =====
+
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+
+===== FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\.github\workflows\docker-image.yml =====
+

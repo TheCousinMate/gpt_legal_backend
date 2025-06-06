@@ -1,0 +1,235 @@
+
+=============================
+ Archivo: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\bcn_parser.py
+=============================
+def extraer_norma_desde_html(html: str) -> dict:
+    if "<title>" in html:
+        start = html.find("<title>") + len("<title>")
+        end = html.find("</title>")
+        titulo = html[start:end]
+    else:
+        titulo = "Norma no encontrada"
+    return {"titulo": titulo}
+
+=============================
+ Archivo: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\bcn_text_search_parser.py
+=============================
+def buscar_normas_por_texto(palabra: str) -> dict:
+    if not palabra.strip():
+        return {"error": "Palabra clave vacía"}
+    return {
+        "palabra": palabra,
+        "resultados": [],
+        "mensaje": "No se encontraron normas relevantes"
+    }
+
+=============================
+ Archivo: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\config_map.py
+=============================
+CONFIG_MAP = {
+    "modules/bcn_parser.py": {
+        "model": "none",
+        "keywords": ["ley", "norma", "bcn", "boletín"]
+    },
+    "modules/legislacion_bcn.py": {
+        "model": "none",
+        "keywords": ["consulta", "legislación", "palabra clave", "búsqueda"]
+    },
+    "modules/bcn_text_search_parser.py": {
+        "model": "none",
+        "keywords": ["buscador", "html", "resultados", "búsqueda textual"]
+    },
+    "modules/reflexion.py": {
+        "model": "gpt-4o",
+        "temperature": 0.4,
+        "top_p": 0.85,
+        "max_tokens": 1500,
+        "keywords": ["reflexiona", "estructura", "argumento", "coherencia"]
+    },
+    "modules/vision_forense.py": {
+        "model": "gpt-4o",
+        "temperature": 0.3,
+        "top_p": 0.85,
+        "max_tokens": 1000,
+        "keywords": ["imagen", "visual", "simbología", "documento"]
+    },
+    "modules/prediccion_bayesiana.py": {
+        "model": "gpt-4o",
+        "temperature": 0.3,
+        "top_p": 0.9,
+        "max_tokens": 2048,
+        "keywords": ["predecir", "probabilidad", "riesgo", "modelo bayesiano"]
+    },
+    "modules/forensics_proxy.py": {
+        "model": "none",
+        "keywords": ["gafi", "beneficiario", "transparencia", "forensics"]
+    }
+}
+
+=============================
+ Archivo: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\forensics_proxy.py
+=============================
+def buscar_beneficiarios(nombre_empresa: str) -> dict:
+    if not nombre_empresa:
+        return {"error": "Nombre de empresa requerido"}
+    return {
+        "empresa": nombre_empresa,
+        "beneficiarios": ["Juan Pérez", "María González"],
+        "origen_dato": "Simulado GAFI"
+    }
+
+=============================
+ Archivo: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\interprete.py
+=============================
+def interpretar_json(data: dict) -> dict:
+    if not isinstance(data, dict):
+        return {"error": "Entrada inválida"}
+    return {"interpretado": True, "estructura": list(data.keys())}
+
+=============================
+ Archivo: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\legislacion_bcn.py
+=============================
+def buscar_norma_por_id(norma_id: int) -> dict:
+    if norma_id == 1234:
+        return {
+            "norma": {
+                "id": norma_id,
+                "titulo": "Ley Chile - Biblioteca del Congreso Nacional",
+                "fecha_publicacion": "2001-05-21"
+            }
+        }
+    elif norma_id == 5678:
+        return {
+            "norma": {
+                "id": norma_id,
+                "titulo": "Ley Chile - Biblioteca del Congreso Nacional",
+                "fecha_publicacion": "2010-11-10"
+            }
+        }
+    return {"error": f"No se encontró norma con ID {norma_id}"}
+
+=============================
+ Archivo: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\motor_predictivo.py
+=============================
+def clasificar_consulta(consulta: str) -> str:
+    if not consulta:
+        return "No clasificada"
+    if "civil" in consulta.lower():
+        return "Derecho Civil"
+    elif "penal" in consulta.lower():
+        return "Derecho Penal"
+    return "General"
+
+=============================
+ Archivo: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\prediccion_bayesiana.py
+=============================
+def modelo_bayesiano(texto: str) -> dict:
+    if not texto:
+        return {"error": "Texto vacío"}
+    return {
+        "modelo": "bayesiano",
+        "probabilidad_riesgo": 0.12,
+        "etiqueta": "Riesgo Bajo",
+        "detalle": "Basado en modelo bayesiano simulado"
+    }
+
+=============================
+ Archivo: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\predict.py
+=============================
+from modules.motor_predictivo import clasificar_consulta
+
+def predecir_riesgo_legal(texto: str) -> dict:
+    if not texto:
+        return {"error": "Texto vacío"}
+    area = clasificar_consulta(texto)
+    return {
+        "respuesta": f"📊 ANÁLISIS LEGAL AUTOMATIZADO\n\n🎯 Área detectada: {area}\n⚠️ Nivel de riesgo: Bajo (simulado)",
+        "clasificacion": area,
+        "riesgo": "Bajo",
+        "modelo": "predictor_estatico"
+    }
+
+=============================
+ Archivo: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\reflexion.py
+=============================
+def reflexionar(mensaje: str) -> dict:
+    if not mensaje:
+        return {"error": "Mensaje vacío"}
+    return {
+        "resultado": f"Reflexión generada: {mensaje.upper()}",
+        "modo": "simulado"
+    }
+
+=============================
+ Archivo: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\root.py
+=============================
+from fastapi import APIRouter
+from fastapi.responses import JSONResponse
+
+router = APIRouter()
+
+@router.get("/")
+def estado_backend():
+    return JSONResponse(content={"estado": "vivo", "versión": "4.1.0"})
+
+=============================
+ Archivo: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\router_universal.py
+=============================
+from fastapi import APIRouter
+from modules.root import router as root_router
+from modules.reflexion import reflexionar
+from modules.predict import predecir_riesgo_legal
+from modules.vision_forense import analizar_imagen
+from modules.forensics_proxy import buscar_beneficiarios
+from modules.legislacion_bcn import buscar_norma_por_id
+from modules.bcn_text_search_parser import buscar_normas_por_texto
+from modules.prediccion_bayesiana import modelo_bayesiano
+from fastapi import UploadFile, File
+
+router = APIRouter()
+router.include_router(root_router)
+
+@router.post("/reflexion/")
+def endpoint_reflexion(payload: dict):
+    return reflexionar(payload.get("mensaje", ""))
+
+@router.post("/predict")
+def endpoint_predict(payload: dict):
+    return predecir_riesgo_legal(payload.get("consulta", ""))
+
+@router.post("/api/prediccion/")
+def endpoint_prediccion(payload: dict):
+    return modelo_bayesiano(payload.get("texto", ""))
+
+@router.get("/api/bcn/norma/{norma_id}")
+def endpoint_bcn_norma(norma_id: int):
+    return buscar_norma_por_id(norma_id)
+
+@router.get("/legislacion/buscar")
+def endpoint_buscar_legislacion(palabra: str = ""):
+    return buscar_normas_por_texto(palabra)
+
+@router.post("/forensics/search")
+def endpoint_forensics(payload: dict):
+    return buscar_beneficiarios(payload.get("empresa", ""))
+
+@router.post("/vision/")
+async def endpoint_vision(file: UploadFile = File(...)):
+    content = await file.read()
+    return analizar_imagen(content)
+
+=============================
+ Archivo: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\vision_forense.py
+=============================
+def analizar_imagen(content: bytes) -> dict:
+    if not content:
+        return {"error": "Archivo vacío"}
+    return {
+        "resultado": "Análisis visual completo. No se detectan anomalías evidentes.",
+        "tipo": "simulado"
+    }
+
+=============================
+ Archivo: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\__init__.py
+=============================
+# Init file del paquete modules

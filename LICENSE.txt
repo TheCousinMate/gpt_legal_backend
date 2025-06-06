@@ -1,0 +1,33 @@
+LICENCIA Y DERECHOS DE AUTOR  
+Forensic Legal Cognition 4.1 © 2025 Kabir K. Hazbún Crovetto  
+Todos los derechos reservados.
+
+Esta obra está registrada bajo código 250xxxxxxxxxxx en Safe Creative y se encuentra protegida por la legislación internacional sobre propiedad intelectual como software original, modelo predictivo y diseño de base jurídica.
+
+Se prohíbe expresamente:
+- La reproducción, distribución o comunicación pública total o parcial de esta obra.
+- La ingeniería inversa, descompilación o intento de desensamblaje del código fuente o arquitectura lógica.
+- La utilización con fines de entrenamiento de modelos de inteligencia artificial.
+- La comercialización, sublicencia, o modificación sin autorización escrita del autor.
+
+Cualquier infracción dará lugar a acciones legales según las leyes de Chile, el Convenio de Berna y tratados internacionales aplicables.
+
+Esta licencia no otorga ningún derecho de explotación. Para licencias privadas, arriendos operativos o uso institucional, contactar directamente al autor.
+
+—
+
+LICENSE AND COPYRIGHT NOTICE  
+Forensic Legal Cognition 4.1 © 2025 Kabir K. Hazbún Crovetto  
+All rights reserved.
+
+This work is registered under code 250xxxxxxxxxxx at Safe Creative and is protected by international intellectual property law as an original software system, predictive model, and legal database architecture.
+
+The following is strictly prohibited:
+- Reproduction, distribution, or public communication of any part of this work.
+- Reverse engineering, decompilation, or attempts to disassemble the source code or logical design.
+- Use for the training of AI models.
+- Commercialization, sublicensing, or modification without written authorization from the author.
+
+Any violation will trigger legal actions under Chilean law, the Berne Convention, and applicable international treaties.
+
+This license does not grant any exploitation rights. For private licenses, operational rentals, or institutional use, contact the author directly.

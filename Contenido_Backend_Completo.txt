@@ -1,0 +1,751 @@
+﻿
+
+
+=============================
+ Archivo: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\main.py
+=============================
+
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+# Importación de todos los routers modulares
+from modules.router_universal import router as universal_router
+from modules.reflexion import router as reflexion_router
+from modules.vision_forense import router as vision_router
+from modules.predict import router as predict_router
+from modules.forensics_proxy import router as forensics_router
+from modules.legislacion_bcn import router as legislacion_router
+from modules.bcn_parser import router as bcn_parser_router
+from modules.bcn_text_search_parser import router as text_search_router
+from modules.prediccion_bayesiana import router as prediccion_router
+from modules.root import router as root_router
+
+app = FastAPI(
+    title="Forensic Legal Cognition 4.1",
+    version="4.1.0",
+    description="API chilena de análisis jurídico automatizado, evaluación doctrinal y verificación forense de alta precisión."
+)
+
+# CORS (si es necesario para frontend u otros orígenes)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"]
+)
+
+# Inclusión de rutas
+app.include_router(universal_router)
+app.include_router(reflexion_router)
+app.include_router(vision_router)
+app.include_router(predict_router)
+app.include_router(forensics_router)
+app.include_router(legislacion_router)
+app.include_router(bcn_parser_router)
+app.include_router(text_search_router)
+app.include_router(prediccion_router)
+app.include_router(root_router)
+
+
+=============================
+ Archivo: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\forensics_proxy.py
+=============================
+
+from fastapi import APIRouter
+from fastapi.responses import JSONResponse
+from utils_output import output_dual
+
+router = APIRouter()
+
+@router.post("/search")
+async def buscar_transparencia():
+    resultado = {
+        "respuesta": "🔍 Análisis proxy GAFI simulado",
+        "clasificacion": "Moderada",
+        "detalle": "Simulación de búsqueda de beneficiarios finales y transparencia.",
+        "logs": {
+            "tipo": "proxy",
+            "status": "simulado"
+        }
+    }
+    return JSONResponse(content=output_dual(resultado))
+
+
+=============================
+ Archivo: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\vision_forense.py
+=============================
+
+from fastapi import APIRouter, UploadFile, File, HTTPException
+from fastapi.responses import JSONResponse
+from utils_output import output_dual
+
+router = APIRouter()
+
+@router.post("/")
+async def analizar_imagen(file: UploadFile = File(...)):
+    if not file.content_type.startswith("image/"):
+        raise HTTPException(status_code=400, detail="Solo se aceptan imágenes.")
+    
+    contenido = await file.read()
+
+    resultado = {
+        "respuesta": "🧠 Análisis forense visual simulado exitoso.",
+        "clasificacion": "Moderada",
+        "esquema_visual": "simulado",
+        "logs": {
+            "nombre_archivo": file.filename,
+            "tamaño": len(contenido)
+        }
+    }
+
+    return JSONResponse(content=output_dual(resultado))
+
+
+=============================
+ Archivo: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\interprete.py
+=============================
+
+# modules/interprete.py
+
+from fastapi import APIRouter, UploadFile, File
+from fastapi.responses import JSONResponse
+from utils_output import output_dual
+
+router = APIRouter()
+
+@router.post("/")
+async def procesar_orden(file: UploadFile = File(...)):
+    """
+    Procesa una instrucción legal compleja desde un archivo de texto/PDF.
+    """
+    contenido = await file.read()
+    texto = contenido.decode("utf-8", errors="ignore")
+
+    resultado = {
+        "respuesta": "Orden interpretada correctamente.",
+        "clasificacion": "Moderada",
+        "detalles": "Texto legal procesado.",
+        "logs": {
+            "nombre_archivo": file.filename,
+            "tamaño_bytes": len(contenido),
+            "fragmento": texto[:300]
+        }
+    }
+
+    return JSONResponse(content=output_dual(resultado))
+
+
+=============================
+ Archivo: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\predict.py
+=============================
+
+from fastapi import APIRouter, UploadFile, File, HTTPException
+from fastapi.responses import JSONResponse
+from utils_output import output_dual
+
+router = APIRouter()
+
+@router.post("/predict/")
+async def procesar_prediccion(file: UploadFile = File(...)):
+    '''
+    Endpoint para realizar predicción legal a partir de archivo PDF.
+    '''
+    if not file.filename.endswith(".pdf"):
+        raise HTTPException(status_code=400, detail="Solo se aceptan archivos PDF.")
+
+    contenido = await file.read()
+
+    resultado = {
+        "respuesta": "Predicción legal realizada correctamente.",
+        "clasificacion": "Moderada",
+        "detalles": "Predicción generada a partir del contenido.",
+        "logs": {
+            "nombre_archivo": file.filename,
+            "tamaño": len(contenido)
+        }
+    }
+
+    return JSONResponse(content=output_dual(resultado))
+
+
+=============================
+ Archivo: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\router_universal.py
+=============================
+
+from fastapi import APIRouter, UploadFile, File, Request
+from modules.reflexion import reflexionar
+from modules.predict import procesar_prediccion
+from modules.vision_forense import procesar_imagen
+from modules.forensics_proxy import procesar_pdf
+from modules.interprete import procesar_orden
+import mimetypes
+
+router = APIRouter()
+
+@router.post("/universal")
+async def router_universal(request: Request, file: UploadFile = File(None), mensaje: str = None):
+    try:
+        if file:
+            tipo, _ = mimetypes.guess_type(file.filename.lower())
+            if tipo:
+                if tipo.startswith("image/"):
+                    return await procesar_imagen(file)
+                elif tipo == "application/pdf":
+                    return await procesar_pdf(file)
+                elif tipo == "application/json":
+                    return await procesar_prediccion(file)
+            return {"error": "Tipo de archivo no soportado."}
+
+        elif mensaje:
+            if mensaje.strip().lower().startswith("analiza") or "errores" in mensaje.lower():
+                return reflexionar({"mensaje": mensaje})
+            else:
+                return await procesar_orden({"mensaje": mensaje})
+        else:
+            return {"error": "Debes proporcionar un mensaje o archivo para análisis."}
+    except Exception as e:
+        return {"error": f"Falla interna del sistema: {str(e)}"}
+
+
+=============================
+ Archivo: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\reflexion.py
+=============================
+
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+from fastapi.responses import JSONResponse
+from utils_output import output_dual # Asegúrate de que utils_output.py exista en la misma carpeta o accesible
+
+router = APIRouter()
+
+class ReflexionInput(BaseModel):
+    documento_analizado: str
+    criterios: list[str]
+
+@router.post("/reflexion/")
+def reflexionar(data: ReflexionInput):
+    """
+    Endpoint para análisis doctrinal.
+    """
+    if not data.documento_analizado.strip():
+        raise HTTPException(status_code=400, detail="Documento requerido")
+    if not data.criterios:
+        raise HTTPException(status_code=400, detail="Criterios requeridos")
+
+    resultado = {
+        "respuesta": f"Análisis doctrinal completado usando criterios: {', '.join(data.criterios)}",
+        "clasificacion": "Fuerte",
+        "justificacion": "Evaluación doctrinal automatizada",
+        "logs": {"input": data.dict()}
+    }
+    return JSONResponse(content=output_dual(resultado))
+
+# Reglas de aislamiento forense - no usar contexto previo
+if 'aislar_contexto' not in locals():
+    aislar_contexto = True
+
+
+=============================
+ Archivo: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\__init__.py
+=============================
+
+# Paquete inicializado
+# Reglas de aislamiento forense - no usar contexto previo
+if 'aislar_contexto' not in locals():
+    aislar_contexto = True
+
+
+=============================
+ Archivo: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\bcn_parser.py
+=============================
+
+import requests
+from bs4 import BeautifulSoup
+from fastapi import APIRouter, HTTPException
+from fastapi.responses import JSONResponse
+# from utils_output import output_dual # Si lo necesitas, asegúrate de que utils_output.py exista
+
+router = APIRouter()
+
+@router.get("/api/bcn/norma/{id_norma}")
+def norma_bcn(id_norma: int):
+    """
+    Obtiene los detalles de una norma de la Biblioteca del Congreso Nacional de Chile (BCN)
+    mediante scraping.
+    """
+    try:
+        url = f"https://www.bcn.cl/leychile/Navegar?idNorma={id_norma}"
+        headers = {"User-Agent": "ForensicLegalBot/1.0"} # Buena práctica para identificar tu scraper
+        response = requests.get(url, headers=headers, timeout=10) # Añadir timeout para evitar cuelgues
+        response.raise_for_status() # Lanza una excepción para códigos de estado HTTP de error (4xx o 5xx)
+        soup = BeautifulSoup(response.text, "html.parser")
+
+        # Extracción del título
+        titulo_tag = soup.find("h1") or soup.find("title") # Busca <h1> o <title>
+        titulo = titulo_tag.get_text(strip=True) if titulo_tag else "Título no disponible"
+
+        # Extracción de la fecha de publicación
+        fecha_tag = soup.find(class_="fecha-publicacion")
+        fecha = fecha_tag.get_text(strip=True) if fecha_tag else "Fecha no disponible"
+
+        # Extracción del resumen o primer párrafo como contenido
+        resumen_tag = soup.find("div", class_="resumen")
+        if resumen_tag:
+            contenido = resumen_tag.get_text(strip=True)
+        else:
+            primer_p = soup.find("p") # Intenta tomar el primer párrafo si no hay resumen
+            contenido = primer_p.get_text(strip=True) if primer_p else "Contenido no disponible"
+
+        resultado = {
+            "norma": {
+                "id": id_norma,
+                "titulo": titulo,
+                "fecha_publicacion": fecha,
+                "contenido": contenido,
+                "url_fuente": url
+            },
+            "estatus": "éxito",
+            "fuente": "BCN - Ley Chile"
+        }
+        # Si usas output_dual, podrías hacer:
+        # return JSONResponse(content=output_dual(resultado))
+        return JSONResponse(content=resultado)
+
+    except requests.exceptions.RequestException as e:
+        raise HTTPException(status_code=503, detail=f"Error al conectar con BCN: {str(e)}. El servicio puede estar no disponible.")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error procesando norma BCN: {str(e)}")
+
+# Reglas de aislamiento forense - no usar contexto previo
+if 'aislar_contexto' not in locals():
+    aislar_contexto = True
+
+
+=============================
+ Archivo: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\bcn_text_search_parser.py
+=============================
+
+from fastapi import APIRouter, Query, HTTPException
+from fastapi.responses import JSONResponse
+from utils_output import output_dual # Asegúrate de que utils_output.py exista y esté accesible
+import requests
+from bs4 import BeautifulSoup
+
+router = APIRouter()
+
+@router.get("/text-search")
+def buscar_texto_bcn(palabra: str = Query(...)):
+    """
+    Realiza una búsqueda textual simulada en la normativa de la BCN.
+    (Si deseas una búsqueda real, la lógica debería implementarse aquí o en legislacion_bcn.py)
+    """
+    try:
+        # Esto actualmente es una simulación.
+        # Para una búsqueda real, deberías adaptar la lógica de scraping de BCN aquí,
+        # similar a como lo hace legislacion_bcn.py, pero quizás con un enfoque diferente.
+        
+        # Lógica simulada de resultados
+        simulated_results = [
+            {"norma_id": 12345, "extracto": f"Resultado relacionado con '{palabra}'."},
+            {"norma_id": 67890, "extracto": f"Otro resultado con el término '{palabra}'."}
+        ]
+        
+        resultado = {
+            "respuesta": f"Resultados simulados de búsqueda para '{palabra}'.",
+            "clasificacion": "Moderada",
+            "justificacion": "Búsqueda textual simulada en normativa.",
+            "base_legal": {}, # Aquí podrías añadir si la búsqueda fuera real
+            "derecho_comparado": {},
+            "contradicciones": [],
+            "estandares_internacionales": [],
+            "esquema_visual": "",
+            "sintesis_audio": f"Búsqueda para {palabra}",
+            "fuentes": [],
+            "logs": {
+                "input": palabra,
+                "output": simulated_results
+            }
+        }
+        return JSONResponse(content=output_dual(resultado))
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error en la búsqueda textual de BCN: {str(e)}")
+
+# Reglas de aislamiento forense - no usar contexto previo
+if 'aislar_contexto' not in locals():
+    aislar_contexto = True
+
+
+=============================
+ Archivo: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\config_map.py
+=============================
+
+# modules/config_map.py
+
+# Este archivo centraliza la configuración de modelos y parámetros para la API.
+# NOTA: Los routers de FastAPI ahora importan y usan esta configuración.
+
+CONFIG_MAP = {
+    # Configuración para módulos que NO usan modelos de IA directamente (web scraping, etc.)
+    "modules/bcn_parser.py": {
+        "model": "none",
+        "keywords": ["ley", "norma", "bcn", "boletín"]
+    },
+    "modules/legislacion_bcn.py": {
+        "model": "none",
+        "keywords": ["consulta", "legislación", "palabra clave", "búsqueda"]
+    },
+    "modules/bcn_text_search_parser.py": {
+        "model": "none",
+        "keywords": ["buscador", "html", "resultados", "búsqueda textual"]
+    },
+    # Configuración para módulos que usan modelos de IA (OpenAI)
+    "modules/reflexion.py": {
+        "model": "gpt-4o", # Modelo de OpenAI a usar
+        "temperature": 0.4, # Creatividad del modelo (0.0 a 1.0)
+        "top_p": 0.85,      # Muestra de tokens (controla diversidad)
+        "max_tokens": 1500, # Máximo de tokens en la respuesta
+        "keywords": ["reflexiona", "estructura", "argumento", "coherencia"]
+    },
+    "modules/vision_forense.py": {
+        "model": "gpt-4o", # Aunque vision_forense usa pytesseract, esta config podría ser para una futura integración LLM Vision
+        "temperature": 0.3,
+        "top_p": 0.85,
+        "max_tokens": 1000,
+        "keywords": ["imagen", "visual", "simbología", "documento"]
+    },
+    "modules/predict.py": { # Este es el endpoint /predict (OpenAI)
+        "model": "gpt-4o",
+        "temperature": 0.25,
+        "top_p": 0.8,
+        "max_tokens": 1000,
+        "keywords": ["riesgo", "predictivo", "caso legal", "evaluación"]
+    },
+    "modules/forensics_proxy.py": {
+        "model": "gpt-4o",
+        "temperature": 0.2,
+        "top_p": 0.8,
+        "max_tokens": 900,
+        "keywords": ["forense", "peritaje", "evidencia", "análisis"]
+    },
+    "modules/interprete.py": {
+        "model": "gpt-4o",
+        "temperature": 0.1, # Baja temperatura para clasificación
+        "max_tokens": 20,
+        "keywords": ["clasificar", "interpretar", "intención"]
+    },
+    # Configuración para el motor heurístico (predicción bayesiana basada en reglas)
+    "modules/prediccion_bayesiana.py": { # Este es el endpoint /api/prediccion/
+        "model": "none", # No usa modelo de IA directo, sino lógica interna
+        "keywords": ["riesgo", "bayesiano", "heurístico", "cálculo"]
+    },
+    # Puedes añadir más configuraciones para otros módulos si es necesario
+    "modules/root.py": { # Para el status endpoint, no necesita modelo de IA
+        "model": "none",
+        "keywords": ["status", "salud", "operativo"]
+    }
+}
+
+# Puedes definir otras configuraciones globales aquí si lo deseas.
+# Ejemplo:
+GLOBAL_SETTINGS = {
+    "DEFAULT_LLM_MODEL": "gpt-4o",
+    "API_TIMEOUT_SECONDS": 30
+}
+
+from fastapi import APIRouter
+
+
+router = APIRouter()
+
+
+# Reglas de aislamiento forense - no usar contexto previo
+if 'aislar_contexto' not in locals():
+    aislar_contexto = True
+
+
+=============================
+ Archivo: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\legislacion_bcn.py
+=============================
+
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel # No se usa directamente aquí, pero es común
+import requests
+from bs4 import BeautifulSoup
+from fastapi.responses import JSONResponse
+# from utils_output import output_dual # Si lo necesitas, asegúrate de que utils_output.py exista
+
+router = APIRouter()
+
+@router.get("/legislacion/buscar")
+def buscar_norma(palabra: str):
+    """
+    Busca normas en Ley Chile (BCN) por palabra clave y devuelve los primeros resultados.
+    """
+    try:
+        # Codifica la palabra clave para la URL
+        palabra_encoded = requests.utils.quote(palabra)
+        url = f"https://www.bcn.cl/leychile/search?q={palabra_encoded}"
+        
+        headers = {"User-Agent": "ForensicLegalBot/1.0"}
+        r = requests.get(url, headers=headers, timeout=15) # Añadir timeout
+        r.raise_for_status() # Lanza HTTPError para respuestas 4xx/5xx
+        soup = BeautifulSoup(r.text, 'html.parser')
+
+        resultados = []
+        # Seleccionar enlaces con la clase "resultado-titulo" que contienen el título de la norma
+        enlaces = soup.select("h3.resultado-titulo a")
+
+        for e in enlaces[:5]: # Limitar a los primeros 5 resultados
+            # Asegúrate de que el 'href' es una URL completa
+            norma_url = e['href'] if e['href'].startswith('http') else f"https://www.bcn.cl{e['href']}"
+            resultados.append({
+                "titulo": e.text.strip(),
+                "url": norma_url
+            })
+
+        if not resultados:
+            # Si no se encontraron resultados en el scraping
+            return JSONResponse(content={
+                "palabra": palabra,
+                "resultados": [],
+                "mensaje": "No se encontraron normas relevantes en BCN para la palabra clave.",
+                "fuente": "https://www.bcn.cl/leychile"
+            })
+
+        return JSONResponse(content={
+            "palabra": palabra,
+            "resultados": resultados,
+            "fuente": "https://www.bcn.cl/leychile"
+        })
+
+    except requests.exceptions.RequestException as e:
+        raise HTTPException(status_code=503, detail=f"Error al conectar con BCN para búsqueda: {str(e)}. El servicio puede estar no disponible.")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error en el scraping de BCN: {str(e)}")
+
+# Reglas de aislamiento forense - no usar contexto previo
+if 'aislar_contexto' not in locals():
+    aislar_contexto = True
+
+
+=============================
+ Archivo: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\motor_predictivo.py
+=============================
+
+import re
+from typing import Dict, List, Tuple
+
+def analizar_input_legal(texto: str) -> str:
+    """
+    Motor de análisis legal heurístico mejorado con patrones específicos del derecho chileno.
+    Este módulo no utiliza la API de OpenAI, sino reglas predefinidas.
+    """
+    if not texto or len(texto.strip()) == 0:
+        return "Texto vacío. Por favor, provea contenido jurídico para análisis."
+    
+    texto_lower = texto.lower()
+    
+    # Patrones de riesgo legal específicos
+    patrones_riesgo = {
+        "alto": [
+            (r"fraude|estafa|malversación|soborno|corrupción|cohecho", "Riesgo penal alto - posible delito económico"),
+            (r"despido\s+injustificado|término\s+sin\s+causa|tutela\s+laboral", "Riesgo laboral alto - despido improcedente o vulneración de derechos fundamentales"),
+            (r"discriminación|acoso\s+sexual|mobbing", "Riesgo laboral/penal alto - vulneración de derechos fundamentales"),
+            (r"incumplimiento\s+contractual\s+grave|resolución\s+contractual", "Riesgo civil/comercial alto - posible resolución de contrato con indemnización"),
+            (r"responsabilidad\s+penal|dolo\s+directo|cuasidelito\s+homicidio", "Riesgo penal alto - responsabilidad criminal"),
+            (r"nulidad\s+absoluta|objeto\s+ilícito|causa\s+ilícita", "Riesgo civil alto - nulidad contractual o de acto jurídico"),
+            (r"contaminación\s+ambiental|daño\s+ecológico", "Riesgo ambiental alto - posibles multas y sanciones graves"),
+            (r"violencia\s+intrafamiliar|femicidio", "Riesgo penal alto - delitos de género")
+        ],
+        "moderado": [
+            (r"trabajador.*contrato.*informal|subcontratación\s+ilegal", "Riesgo laboral moderado - formalización requerida o fiscalización"),
+            (r"pago.*sin\s+boleta|honorarios\s+simulados", "Riesgo tributario/laboral moderado - evasión o elusión"),
+            (r"incumplimiento\s+menor|atraso\s+pago", "Riesgo civil/comercial moderado - posible cobro o indemnización menor"),
+            (r"vecino\s+ruido|molestias\s+vecinales", "Riesgo civil/administrativo moderado - problemas de convivencia o infracción de ordenanza"),
+            (r"licitación.*irregular|conflicto\s+interés\s+administrativo", "Riesgo administrativo moderado - irregularidad en procesos públicos"),
+            (r"propiedad.*disputa|posesión\s+irregular", "Riesgo civil moderado - litigio de propiedad")
+        ],
+        "bajo": [
+            (r"consulta\s+general|orientación\s+legal", "Bajo riesgo - consulta informativa"),
+            (r"redacción\s+documento|revisión\s+contrato", "Bajo riesgo - servicio preventivo")
+        ]
+    }
+
+    # Patrones para identificar el área legal
+    patrones_area = {
+        "laboral": r"trabajo|laboral|empleo|despido|finiquito|sindicato|remuneración|jornada|acoso",
+        "civil": r"contrato|propiedad|familia|matrimonio|divorcio|herencia|arriendo|daños|perjuicios|responsabilidad\s+civil|testamento",
+        "penal": r"delito|pena|cárcel|robo|homicidio|lesiones|fraude|estafa|detención|formalización|prisión",
+        "administrativo": r"estado|municipio|servicio\s+público|permiso|concesión|licitación|recurso\s+administrativo|contraloría",
+        "tributario": r"impuesto|iva|renta|sii|declaración|factura|contabilidad|fiscalización\s+tributaria",
+        "comercial": r"empresa|sociedad|quiebra|concurso|marca|patente|competencia|consumidor|banco|cheque",
+        "constitucional": r"constitución|derechos\s+fundamentales|recurso\s+protección|amparo|tribunal\s+constitucional",
+        "ambiental": r"medio\s+ambiente|contaminación|residuos|evaluación\s+ambiental|ley\s+ambiental"
+    }
+
+    riesgo_detectado = "DESCONOCIDO"
+    evaluacion_riesgo = "No se pudo determinar el riesgo con la información proporcionada."
+    area_detectada = "General"
+
+    # Detección de riesgo
+    for nivel, patrones_lista in patrones_riesgo.items():
+        for patron, evaluacion in patrones_lista:
+            if re.search(patron, texto_lower):
+                riesgo_detectado = nivel.upper()
+                evaluacion_riesgo = evaluacion
+                break
+        if riesgo_detectado != "DESCONOCIDO":
+            break
+
+    # Detección de área legal
+    for area, patron in patrones_area.items():
+        if re.search(patron, texto_lower):
+            area_detectada = area.upper()
+            break
+
+    # Generación de análisis específico del área
+    analisis_area = get_analisis_area(area_detectada)
+    recomendaciones = get_recomendaciones(riesgo_detectado, area_detectada)
+    marco_legal = get_marco_legal(area_detectada)
+
+
+    respuesta_final = (
+        f"📊 ANÁLISIS LEGAL AUTOMATIZADO\n\n"
+        f"🎯 Área detectada: {area_detectada}\n"
+        f"⚠️ Nivel de riesgo: {riesgo_detectado}\n\n"
+        f"📋 Evaluación:\n{evaluacion_riesgo}\n\n"
+        f"🔍 Análisis específico del área {area_detectada.lower()}:\n{analisis_area}\n\n"
+        f"💡 Recomendaciones:\n{recomendaciones}\n\n"
+        f"⚖️ Marco legal aplicable:\n{marco_legal}"
+    )
+
+    return respuesta_final
+
+def get_recomendaciones(riesgo: str, area: str) -> str:
+    """Recomendaciones basadas en el nivel de riesgo y el área"""
+    if riesgo == "ALTO":
+        return "• Consulta urgente con abogado especialista\n• Recopilar toda la documentación relevante\n• No tomar acciones sin asesoría legal"
+    elif riesgo == "MODERADO":
+        return "• Evaluación detallada del caso con un abogado\n• Documentar comunicaciones y hechos\n• Considerar mediación o negociación"
+    elif riesgo == "BAJO":
+        return "• Mantener registro de eventos\n• Asesoría preventiva si surgen dudas"
+    else:
+        return "• Se requiere más información para ofrecer recomendaciones específicas."
+
+def get_analisis_area(area: str) -> str:
+    """Análisis genérico por área legal"""
+    analisis = {
+        "LABORAL": "Se detectan elementos relacionados con derecho del trabajo. Es fundamental verificar el cumplimiento del Código del Trabajo, especialmente en materias de formalización contractual, jornada laboral, y derechos fundamentales del trabajador.",
+        "CIVIL": "El análisis se centra en normativas del derecho civil. Considerar aspectos de contratos, obligaciones, propiedad, familia y responsabilidad extracontractual según el Código Civil y leyes complementarias.",
+        "PENAL": "Involucra aspectos de derecho penal. Es crucial evaluar la tipificación de conductas, la existencia de elementos del delito y las posibles penas o medidas alternativas de acuerdo al Código Penal y leyes especiales.",
+        "ADMINISTRATIVO": "El caso se enmarca en el derecho administrativo. Se debe analizar la legalidad de los actos de la administración pública, los procedimientos administrativos y los recursos aplicables.",
+        "TRIBUTARIO": "Se refiere a normativa tributaria. Es necesario revisar el cumplimiento de obligaciones fiscales, el cálculo de impuestos y las posibles infracciones al Código Tributario y leyes impositivas.",
+        "COMERCIAL": "Implica derecho comercial. Analizar normativa de sociedades, competencia leal, y protección al consumidor según Ley 19.496.",
+        "CONSTITUCIONAL": "El análisis abarca principios y normativas constitucionales. Se debe evaluar la compatibilidad de leyes o actos con la Constitución Política de la República, y la posible interposición de acciones constitucionales.",
+        "AMBIENTAL": "Se relaciona con el derecho ambiental. Es vital evaluar el cumplimiento de la normativa sobre protección del medio ambiente, la gestión de residuos, y los permisos sectoriales. Considerar posibles sanciones y responsabilidades."
+    }
+    
+    return analisis.get(area, "Análisis general del caso requiere mayor especificación del área legal involucrada.")
+
+def get_marco_legal(area: str) -> str:
+    """Marco legal aplicable por área"""
+    
+    marcos = {
+        "LABORAL": "• Código del Trabajo\n• Ley 16.744 (Accidentes del Trabajo)\n• Ley 20.940 (Reforma Laboral)\n• D.L. 3.500 (Sistema de Pensiones)",
+        "CIVIL": "• Código Civil\n• Código de Procedimiento Civil\n• Ley 19.947 (Matrimonio Civil)\n• Ley 19.537 (Copropiedad Inmobiliaria)",
+        "PENAL": "• Código Penal\n• Código Procesal Penal\n• Ley 20.393 (Responsabilidad Penal de Personas Jurídicas)\n• Ley 19.913 (Lavado de Dinero)",
+        "ADMINISTRATIVO": "• Ley 19.880 (Procedimiento Administrativo)\n• Ley 18.575 (Bases de la Administración del Estado)\n• Ley 20.285 (Transparencia)\n• Constitución Política (arts. 6° y 7°)",
+        "TRIBUTARIO": "• Código Tributario\n• Ley de Impuesto a la Renta\n• Código Sanitario (aspectos tributarios)\n• Ley 19.886 (Marco Legal de Documentos Electrónicos)",
+        "COMERCIAL": "• Código de Comercio\n• Ley 18.046 (Sociedades Anónimas)\n• Ley 20.720 (Reorganización y Liquidación de Empresas)\n• Ley 19.496 (Protección de los Derechos de los Consumidores)",
+        "CONSTITUCIONAL": "• Constitución Política de la República\n• Ley Orgánica Constitucional del Tribunal Constitucional\n• Tratados Internacionales sobre DD.HH. (ej. Pacto de San José de Costa Rica)",
+        "AMBIENTAL": "• Ley 19.300 (Bases Generales del Medio Ambiente)\n• Ley 20.417 (Superintendencia del Medio Ambiente)\n• Código de Aguas\n• Convenios Internacionales (ej. Acuerdo de Escazú)"
+    }
+    return marcos.get(area, "No se identificó un marco legal específico para el área. Revisar la normativa general.")
+
+from fastapi import APIRouter
+
+
+router = APIRouter()
+
+
+# Reglas de aislamiento forense - no usar contexto previo
+if 'aislar_contexto' not in locals():
+    aislar_contexto = True
+
+
+=============================
+ Archivo: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\prediccion_bayesiana.py
+=============================
+
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+from fastapi.responses import JSONResponse
+from utils_output import output_dual # Asegúrate de que utils_output.py exista y esté accesible
+from modules.motor_predictivo import analizar_input_legal # Importa la lógica del motor
+
+router = APIRouter()
+
+class PrediccionInput(BaseModel):
+    contexto: str
+
+@router.post("/api/prediccion/")
+def predecir_riesgo(datos: PrediccionInput):
+    """
+    Realiza una predicción de riesgo legal utilizando el motor predictivo heurístico.
+    """
+    if len(datos.contexto.strip()) < 50:
+        raise HTTPException(status_code=422, detail="Contexto insuficiente para predicción (mínimo 50 caracteres).")
+
+    analisis = analizar_input_legal(datos.contexto)
+
+    resultado = {
+        "respuesta": analisis,
+        "clasificacion": "Fuerte",
+        "justificacion": "Análisis predictivo bayesiano (basado en reglas)",
+        "logs": {"input": datos.dict()}
+    }
+    return JSONResponse(content=output_dual(resultado))
+
+# Reglas de aislamiento forense - no usar contexto previo
+if 'aislar_contexto' not in locals():
+    aislar_contexto = True
+
+
+=============================
+ Archivo: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\root.py
+=============================
+
+from fastapi import APIRouter, Request
+from fastapi.responses import JSONResponse
+from utils_output import output_dual
+from datetime import datetime
+
+router = APIRouter()
+
+@router.get("/status/json")
+def status_json():
+    resultado = {
+        "respuesta": "El backend está operativo y responde en JSON y Markdown.",
+        "clasificacion": "Fuerte",
+        "justificacion": "Sistema activo.",
+        "base_legal": {},
+        "derecho_comparado": {},
+        "contradicciones": [],
+        "estandares_internacionales": [],
+        "esquema_visual": "",
+        "sintesis_audio": "Sistema activo.",
+        "fuentes": [],
+        "logs": {},
+        "timestamp": datetime.now().isoformat(),
+        "version": "4.1.0"
+    }
+    # output_dual ya se encarga de convertir a JSON y Markdown si es necesario
+    dual = output_dual(resultado)
+    return JSONResponse(content={"json": dual["json"], "markdown": dual["markdown"]})
+
+# Note: The /predict endpoint that was here previously (from motor_predictivo.py)
+# is now handled by modules/predict.py or modules/prediccion_bayesiana.py
+# based on the main.py routing. This root.py only handles /status/json.
+
+# Reglas de aislamiento forense - no usar contexto previo
+if 'aislar_contexto' not in locals():
+    aislar_contexto = True
