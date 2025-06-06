@@ -16,4 +16,5 @@ typing-inspection==0.4.1
 colorama==0.4.6
 soupsieve==2.7
 yarl==1.9.4
+joblib
 aiohttp==3.9.5
