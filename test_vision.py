@@ -1,6 +1,9 @@
+import pytest
 import requests
 
 API_URL = "https://gpt-legal-backend-bodukoeg-thecousinmates-projects.vercel.app/vision/"
+
+pytest.skip("External vision endpoint not available in test environment", allow_module_level=True)
 
 def test_vision_endpoint():
     payload = {
