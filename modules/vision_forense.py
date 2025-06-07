@@ -1,9 +1,21 @@
-from fastapi import APIRouter, File, UploadFile
+from fastapi import APIRouter
+from pydantic import BaseModel
+import openai
 
 router = APIRouter()
 
-@router.post("/")
-async def analizarOCR(file: UploadFile = File(...)):
-    # Lógica OCR aquí
-    contenido = await file.read()
-    return {"textoExtraido": f"Texto extraído (simulado): {len(contenido)} bytes procesados"}
+
+class VisionInput(BaseModel):
+    contexto: str | None = None
+    image_url: str | None = None
+
+
+@router.post("/vision")
+async def analizarOCR(data: VisionInput):
+    """Process an image reference and return a description."""
+    prompt = data.contexto or data.image_url or ""
+    resp = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo", messages=[{"role": "user", "content": prompt}]
+    )
+    content = resp.choices[0].message["content"]
+    return {"descripcion": content}

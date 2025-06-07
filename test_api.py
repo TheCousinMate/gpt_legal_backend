@@ -11,17 +11,15 @@ from typing import Optional, Dict, Any
 
 try:
     import httpx
-except ModuleNotFoundError as e:
-    print("❌ ERROR: No se pudo importar 'httpx'. Asegúrate de tenerlo instalado con:")
-    print("   pip install httpx")
-    exit(1)
+except ModuleNotFoundError:
+    import pytest
+    pytest.skip("httpx not installed", allow_module_level=True)
 
 try:
     import ssl
 except ModuleNotFoundError:
-    print("❌ ERROR: El módulo 'ssl' no está disponible en tu entorno.")
-    print("   Asegúrate de tener una instalación de Python completa y no sandboxed.")
-    exit(1)
+    import pytest
+    pytest.skip("ssl module missing", allow_module_level=True)
 
 # Configuración
 BASE_URL = "https://gpt-legal-backend.onrender.com"

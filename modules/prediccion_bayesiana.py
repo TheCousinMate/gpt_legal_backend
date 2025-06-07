@@ -8,9 +8,12 @@ router = APIRouter()
 
 # Cargar modelo entrenado
 modelo_path = os.path.join("modules", "modelo_bayesiano.joblib")
-if not os.path.isfile(modelo_path):
-    raise FileNotFoundError(f"Modelo no encontrado en {modelo_path}")
-modelo = joblib.load(modelo_path)
+modelo = None
+if os.path.isfile(modelo_path):
+    try:
+        modelo = joblib.load(modelo_path)
+    except Exception:
+        modelo = None
 
 # Clase de entrada
 class TextoEntrada(BaseModel):
@@ -31,6 +34,9 @@ def limpiar_texto(texto: str) -> str:
 def predecir(texto_entrada: TextoEntrada):
     if not texto_entrada.texto.strip():
         raise HTTPException(status_code=400, detail="El texto no puede estar vacío.")
+
+    if modelo is None:
+        raise HTTPException(status_code=503, detail="Modelo no disponible")
 
     texto_limpio = limpiar_texto(texto_entrada.texto)
     prediccion = modelo.predict([texto_limpio])[0]
