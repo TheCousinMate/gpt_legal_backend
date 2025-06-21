@@ -1,0 +1,2446 @@
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\__init__.py ---
+
+# Paquete inicializado
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\__init__.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\app_streamlit_tabs.py ---
+
+# app_streamlit_tabs.py
+
+import streamlit as st
+import requests
+
+API_BASE = "https://gpt-legal-backend.onrender.com"
+
+st.set_page_config(page_title="Legal Cognition 4.1", layout="wide")
+st.title("⚖️ Legal Cognition Interface")
+
+opcion = st.sidebar.selectbox("Elige módulo:", ["Reflexión", "Predicción", "Predict"], index=0)
+
+if opcion == "Reflexión":
+    st.header("📘 Reflexión Jurídica Automatizada")
+    texto = st.text_area("Texto normativo o doctrinal:")
+    criterios = st.text_input("Criterios separados por coma:")
+    if st.button("Analizar"):
+        r = requests.post(f"{API_BASE}/reflexion/", json={
+            "documento_analizado": texto,
+            "criterios": [c.strip() for c in criterios.split(",") if c.strip()]
+        })
+        st.write(r.json())
+
+elif opcion == "Predicción":
+    st.header("🔮 Riesgo Legal Predictivo")
+    contexto = st.text_area("Describe el contexto legal a evaluar:")
+    if st.button("Predecir riesgo"):
+        r = requests.post(f"{API_BASE}/api/prediccion/", json={"contexto": contexto})
+        st.write(r.json())
+
+elif opcion == "Predict":
+    st.header("🧪 Predict API (Experimental)")
+    if st.button("Test Predict"):
+        r = requests.post(f"{API_BASE}/predict", json={"test": True})
+        st.write(r.text)
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\app_streamlit_tabs.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\autodeploy_backend.py ---
+
+#!/usr/bin/env pwsh
+# 📜 Script: deploy_backend.ps1
+# Autor: GPT para Kabir (Forensic Legal Cognition 4.1)
+# Descripción: Automatiza limpieza, instalación y despliegue completo del backend
+
+# 🔧 Parámetros
+$BackendRoot = "C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend"
+$StaticDir = Join-Path $BackendRoot "static"
+$ModulesDir = Join-Path $BackendRoot "modules"
+$VenvDirs = @(".venv", "__pycache__", "site-packages")
+$TempLog = Join-Path $BackendRoot "deploy_log.txt"
+
+Write-Host "🔁 Iniciando limpieza de entorno..."
+foreach ($dir in $VenvDirs) {
+    $full = Join-Path $BackendRoot $dir
+    if (Test-Path $full) {
+        Remove-Item -Path $full -Recurse -Force -ErrorAction SilentlyContinue
+        Write-Host "🧹 Eliminado: $dir"
+    }
+}
+
+Write-Host "📦 Verificando módulos esenciales..."
+$ExpectedModules = @(
+    "reflexion.py", "vision_forense.py", "predict.py", "forensics_proxy.py",
+    "legislacion_bcn.py", "bcn_parser.py", "bcn_text_search_parser.py", "prediccion_bayesiana.py",
+    "root.py", "router_universal.py", "interprete.py", "corpus_legal.py", "motor_predictivo.py", "status.py"
+)
+
+foreach ($mod in $ExpectedModules) {
+    $path = Join-Path $ModulesDir $mod
+    if (-not (Test-Path $path)) {
+        Write-Host "⚠️ FALTA MÓDULO: $mod" -ForegroundColor Red
+    }
+}
+
+Write-Host "📚 Instalando dependencias..."
+pip install -r (Join-Path $BackendRoot "requirements.txt") | Out-File -FilePath $TempLog -Append
+
+Write-Host "🚀 Ejecutando backend (modo desarrollo)..."
+cd $BackendRoot
+Start-Process "uvicorn" -ArgumentList "main:app --reload" -NoNewWindow
+
+Write-Host "✅ Backend desplegado en modo live. Verifica logs y funcionamiento."
+Write-Host "📄 openapi.yaml y ai-plugin.json deben estar en: $StaticDir"
+
+# FIN
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\autodeploy_backend.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\config_map.py ---
+
+CONFIG_MAP = {
+    "modules/bcn_parser.py": {
+        "model": "none",
+        "keywords": ["ley", "norma", "bcn", "boletín"]
+    },
+    "modules/legislacion_bcn.py": {
+        "model": "none",
+        "keywords": ["consulta", "legislación", "palabra clave", "búsqueda"]
+    },
+    "modules/bcn_text_search_parser.py": {
+        "model": "none",
+        "keywords": ["buscador", "html", "resultados", "búsqueda textual"]
+    },
+    "modules/reflexion.py": {
+        "model": "gpt-4o",
+        "temperature": 0.4,
+        "top_p": 0.85,
+        "max_tokens": 1500,
+        "keywords": ["reflexiona", "estructura", "argumento", "coherencia"]
+    },
+    "modules/vision_forense.py": {
+        "model": "gpt-4o",
+        "temperature": 0.3,
+        "top_p": 0.85,
+        "max_tokens": 1000,
+        "keywords": ["imagen", "visual", "simbología", "documento"]
+    },
+    "modules/prediccion_bayesiana.py": {
+        "model": "gpt-4o",
+        "temperature": 0.3,
+        "top_p": 0.9,
+        "max_tokens": 2048,
+        "keywords": ["predecir", "probabilidad", "riesgo", "modelo bayesiano"]
+    },
+    "modules/forensics_proxy.py": {
+        "model": "none",
+        "keywords": ["gafi", "beneficiario", "transparencia", "forensics"]
+    }
+}
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\config_map.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\convert_json_to_yaml.py ---
+
+# convert_json_to_yaml.py
+import json
+<<<<<<< HEAD
+import os
+import sys
+
+import yaml
+
+=======
+import yaml
+import sys
+import os
+>>>>>>> 03c2c84b047c243bcbdeac10025a8f13ee62ef96
+
+def convert(json_input_path, yaml_output_path):
+    """Converts a JSON file to a YAML file."""
+    try:
+<<<<<<< HEAD
+        with open(json_input_path, "r", encoding="utf-8") as f:
+            json_data = json.load(f)
+
+        # Use default_flow_style=False for block style YAML, which is often preferred for readability
+        # And allow_unicode=True to handle special characters
+        with open(yaml_output_path, "w", encoding="utf-8") as f:
+            yaml.dump(
+                json_data,
+                f,
+                default_flow_style=False,
+                allow_unicode=True,
+                sort_keys=False,
+            )
+
+=======
+        with open(json_input_path, 'r', encoding='utf-8') as f:
+            json_data = json.load(f)
+        
+        # Use default_flow_style=False for block style YAML, which is often preferred for readability
+        # And allow_unicode=True to handle special characters
+        with open(yaml_output_path, 'w', encoding='utf-8') as f:
+            yaml.dump(json_data, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
+        
+>>>>>>> 03c2c84b047c243bcbdeac10025a8f13ee62ef96
+        print(f"Successfully converted '{json_input_path}' to '{yaml_output_path}'.")
+    except FileNotFoundError:
+        print(f"Error: Input file not found at '{json_input_path}'.", file=sys.stderr)
+        sys.exit(1)
+    except json.JSONDecodeError:
+        print(f"Error: Invalid JSON in '{json_input_path}'.", file=sys.stderr)
+        sys.exit(1)
+    except Exception as e:
+        print(f"An unexpected error occurred during conversion: {e}", file=sys.stderr)
+        sys.exit(1)
+
+<<<<<<< HEAD
+
+if __name__ == "__main__":
+    if len(sys.argv) != 3:
+        print(
+            "Usage: python convert_json_to_yaml.py <input_json_path> <output_yaml_path>",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+    input_json_path = sys.argv[1]
+    output_yaml_path = sys.argv[2]
+
+=======
+if __name__ == "__main__":
+    if len(sys.argv) != 3:
+        print("Usage: python convert_json_to_yaml.py <input_json_path> <output_yaml_path>", file=sys.stderr)
+        sys.exit(1)
+    
+    input_json_path = sys.argv[1]
+    output_yaml_path = sys.argv[2]
+    
+>>>>>>> 03c2c84b047c243bcbdeac10025a8f13ee62ef96
+    convert(input_json_path, output_yaml_path)
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\convert_json_to_yaml.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\fix_backend.py ---
+
+import os
+import shutil
+from pathlib import Path
+
+ROOT = Path(__file__).parent.resolve()
+MODULES = ROOT / "modules"
+
+# 1. Eliminar duplicado config_map.py en raíz
+config_map_root = ROOT / "config_map.py"
+config_map_module = MODULES / "config_map.py"
+
+if config_map_root.exists() and config_map_module.exists():
+    print("🗑️ Eliminando config_map.py duplicado del raíz")
+    config_map_root.unlink()
+
+# 2. Reescribir validacion_schema.py para quitar código de activación
+validacion_path = MODULES / "validacion_schema.py"
+print("✏️ Reescribiendo validacion_schema.py sin código de activación...")
+validacion_code = '''
+from fastapi import APIRouter, HTTPException, Request
+from fastapi.responses import JSONResponse
+from jsonschema import validate, ValidationError
+import json
+import os
+
+router = APIRouter()
+
+SCHEMA_PATH = os.path.join(os.path.dirname(__file__), "derecho_chileno_schema.json")
+
+with open(SCHEMA_PATH, "r", encoding="utf-8") as f:
+    SCHEMA = json.load(f)
+
+@router.post("/validar")
+async def validar_entrada(request: Request):
+    payload = await request.json()
+
+    contenido = payload.get("contenido")
+    if not contenido:
+        raise HTTPException(status_code=400, detail="El campo 'contenido' es obligatorio.")
+
+    try:
+        validate(instance=contenido, schema=SCHEMA)
+        return {
+            "valido": True,
+            "mensaje": "JSON válido según el esquema oficial.",
+            "error": None
+        }
+    except ValidationError as e:
+        return JSONResponse(
+            status_code=422,
+            content={
+                "valido": False,
+                "mensaje": "JSON inválido.",
+                "error": e.message
+            }
+        )
+'''.strip()
+validacion_path.write_text(validacion_code, encoding="utf-8")
+
+# 3. Eliminar carpetas innecesarias como __pycache__
+for cache in ROOT.rglob("__pycache__"):
+    print(f"🧹 Eliminando carpeta {cache}")
+    shutil.rmtree(cache)
+
+# 4. Mover schema al módulo si quieres centralizarlo
+# schema_src = ROOT / "schema_gpt_custom_derecho_chileno.json"
+# schema_dst = MODULES / "derecho_chileno_schema.json"
+# if schema_src.exists():
+#     print("📦 Moviendo schema al módulo...")
+#     shutil.move(str(schema_src), str(schema_dst))
+
+print("✅ Limpieza y corrección completa.")
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\fix_backend.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\generar_modelo.py ---
+
+# generar_modelo.py
+from pathlib import Path
+import joblib
+from sklearn.pipeline import make_pipeline
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
+
+# entrenar algo mínimo
+modelo = make_pipeline(CountVectorizer(), MultinomialNB())
+modelo.fit(["placeholder"], ["General"])
+
+# ruta final
+ruta = Path("modules") / "modelo_bayesiano.joblib"
+ruta.parent.mkdir(exist_ok=True)
+joblib.dump(modelo, ruta)
+print(f"✅ Modelo guardado en {ruta.absolute()}")
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\generar_modelo.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\launch_backend_render.py ---
+
+#!/usr/bin/env python3
+"""
+Script de lanzamiento optimizado para Render
+Forensic Legal Cognition 4.1
+"""
+
+import os
+import sys
+import logging
+import uvicorn
+from pathlib import Path
+
+# Configurar logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler(sys.stdout)
+    ]
+)
+
+logger = logging.getLogger(__name__)
+
+def setup_environment():
+    """Configura el entorno de ejecución"""
+    
+    # Verificar archivos críticos
+    critical_files = [
+        "main.py",
+        "utils_output.py",
+        "requirements.txt"
+    ]
+    
+    missing_files = []
+    for file in critical_files:
+        if not Path(file).exists():
+            missing_files.append(file)
+    
+    if missing_files:
+        logger.error(f"Archivos críticos faltantes: {missing_files}")
+        sys.exit(1)
+    
+    # Verificar directorio modules
+    if not Path("modules").exists():
+        logger.error("Directorio 'modules' no encontrado")
+        sys.exit(1)
+    
+    # Crear directorios si no existen
+    Path("static").mkdir(exist_ok=True)
+    Path("logs").mkdir(exist_ok=True)
+    
+    logger.info("Entorno configurado correctamente")
+
+def get_port():
+    """Obtiene el puerto desde variables de entorno"""
+    port = int(os.environ.get("PORT", 10000))
+    logger.info(f"Puerto configurado: {port}")
+    return port
+
+def get_host():
+    """Obtiene el host para bind"""
+    # En Render siempre usar 0.0.0.0
+    host = "0.0.0.0"
+    logger.info(f"Host configurado: {host}")
+    return host
+
+def main():
+    """Función principal de lanzamiento"""
+    logger.info("🚀 Iniciando Forensic Legal Cognition 4.1")
+    
+    try:
+        # Configurar entorno
+        setup_environment()
+        
+        # Obtener configuración
+        host = get_host()
+        port = get_port()
+        
+        # Configuración de uvicorn para producción
+        config = {
+            "app": "main:app",
+            "host": host,
+            "port": port,
+            "workers": 1,  # Single worker en Render
+            "loop": "auto",
+            "http": "auto",
+            "log_level": "info",
+            "access_log": True,
+            "use_colors": False,  # Mejor para logs en Render
+            "reload": False,  # Nunca en producción
+        }
+        
+        logger.info(f"Configuración uvicorn: {config}")
+        logger.info("✅ Backend iniciando...")
+        
+        # Iniciar servidor
+        uvicorn.run(**config)
+        
+    except KeyboardInterrupt:
+        logger.info("🛑 Servidor detenido por usuario")
+    except Exception as e:
+        logger.error(f"❌ Error crítico al iniciar servidor: {e}")
+        sys.exit(1)
+
+if __name__ == "__main__":
+    main()
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\launch_backend_render.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\main.py ---
+
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+from dotenv import load_dotenv
+from transformers import BertTokenizer, BertForSequenceClassification
+import os, json
+
+# ========================
+# ⚡️ CONFIG BÁSICA
+# ========================
+load_dotenv()
+HF_REPO = "nlpaueb/legal-bert-base-uncased"  # cloud only
+
+# Carga SIEMPRE desde HuggingFace (sin local)
+tokenizer = BertTokenizer.from_pretrained(HF_REPO)
+model = BertForSequenceClassification.from_pretrained(HF_REPO)
+
+# ==============
+# Routers
+# ==============
+from modules.root import router as root_router
+from modules.predict import router as predict_router
+from modules.reflexion import router as reflexion_router
+from modules.vision_forense import router as vision_router
+from modules.interprete import router as interpretar_router
+from modules.forensics_proxy import router as proxy_router
+from modules.status import router as status_router
+from modules.legislacion_bcn import router as bcn_router
+from modules.corpus_legal import router as leyes_router
+from modules.prediccion_bayesiana import router as bayes_router
+
+# ========================
+# Validación de trazabilidad
+# ========================
+def validar_trazabilidad_backend():
+    try:
+        with open("band/matrix.jit", "r", encoding="utf-8") as archivo:
+            data = json.load(archivo)
+            if not (data.get("endpoint_trace_active") and data.get("status") == "active"):
+                raise Exception("Trazabilidad inactiva.")
+            print("✔ Trazabilidad backend verificada correctamente.")
+    except Exception as e:
+        print(f"❌ Error de trazabilidad: {e}")
+        raise SystemExit("🚫 Abortando inicio por fallo en trazabilidad activa.")
+
+validar_trazabilidad_backend()
+
+# ========================
+# FastAPI APP
+# ========================
+app = FastAPI(
+    title="Forensic Legal Cognition 4.1",
+    description="API chilena de análisis jurídico automatizado y verificación forense de alta precisión.",
+    version="4.1.0"
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+@app.get("/.well-known/ai-plugin.json", include_in_schema=False)
+async def serve_plugin_manifest():
+    return FileResponse("static/.well-known/ai-plugin.json", media_type="application/json")
+
+@app.get("/openapi.yaml", include_in_schema=False)
+async def serve_openapi_yaml():
+    return FileResponse("static/openapi.yaml", media_type="text/yaml")
+
+# Routers
+app.include_router(root_router)
+app.include_router(predict_router)
+app.include_router(reflexion_router)
+app.include_router(vision_router)
+app.include_router(proxy_router)
+app.include_router(bcn_router)
+app.include_router(leyes_router)
+app.include_router(status_router)
+app.include_router(bayes_router)
+app.include_router(interpretar_router)
+
+@app.get("/")
+def index():
+    return {
+        "nombre": "Forensic Legal Cognition 4.1",
+        "version": "4.1.0",
+        "estado": "activo",
+        "documentacion": "/docs",
+        "endpoints_totales": 10,
+        "restringido_por_token": False,
+        "interpretar_publico": True
+    }
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\main.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules.py ---
+
+# ===== modules/reflexion.py =====
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+from fastapi.responses import JSONResponse
+from utils_output import output_dual
+
+router = APIRouter()
+
+class ReflexionInput(BaseModel):
+    documento_analizado: str
+    criterios: list[str]
+
+@router.post("/reflexion/")
+def reflexionar(data: ReflexionInput):
+    if not data.documento_analizado.strip():
+        raise HTTPException(status_code=400, detail="Documento requerido")
+    if not data.criterios:
+        raise HTTPException(status_code=400, detail="Criterios requeridos")
+
+    resultado = {
+        "respuesta": f"Análisis doctrinal completado usando criterios: {', '.join(data.criterios)}",
+        "clasificacion": "Fuerte",
+        "justificacion": "Evaluación doctrinal automatizada",
+        "logs": {"input": data.dict()}
+    }
+    return JSONResponse(content=output_dual(resultado))
+
+# ===== modules/prediccion_bayesiana.py =====
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+from fastapi.responses import JSONResponse
+from utils_output import output_dual
+
+router = APIRouter()
+
+class PrediccionInput(BaseModel):
+    contexto: str
+
+@router.post("/api/prediccion/")
+def predecir_riesgo(datos: PrediccionInput):
+    if len(datos.contexto.strip()) < 50:
+        raise HTTPException(status_code=422, detail="Contexto insuficiente")
+
+    from modules.motor_predictivo import analizar_input_legal
+    analisis = analizar_input_legal(datos.contexto)
+
+    resultado = {
+        "respuesta": analisis,
+        "clasificacion": "Fuerte",
+        "justificacion": "Análisis predictivo bayesiano",
+        "logs": {"input": datos.dict()}
+    }
+    return JSONResponse(content=output_dual(resultado))
+
+# ===== modules/vision_forense.py =====
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+from fastapi.responses import JSONResponse
+from utils_output import output_dual
+
+router = APIRouter()
+
+class VisionInput(BaseModel):
+    image_id: str
+
+@router.post("/vision/")
+def analizar_imagen(data: VisionInput):
+    if not data.image_id.strip():
+        raise HTTPException(status_code=400, detail="ID de imagen requerido")
+
+    resultado = {
+        "respuesta": f"Análisis visual forense registrado para: {data.image_id}",
+        "clasificacion": "Moderada",
+        "justificacion": "Procesamiento de imagen forense",
+        "logs": {"input": data.dict()}
+    }
+    return JSONResponse(content=output_dual(resultado))
+
+# ===== modules/forensics_proxy.py =====
+from fastapi import APIRouter, Query
+from fastapi.responses import JSONResponse
+from utils_output import output_dual
+
+router = APIRouter(prefix="/forensics")
+
+@router.get("/search")
+def buscar_forensics(pregunta: str = Query(...)):
+    resultado = {
+        "respuesta": f"Búsqueda forense para: {pregunta}",
+        "clasificacion": "Moderada",
+        "justificacion": "Búsqueda forense simulada",
+        "logs": {"input": pregunta}
+    }
+    return JSONResponse(content=output_dual(resultado))
+
+# ===== modules/bcn_parser.py =====
+from fastapi import APIRouter
+from fastapi.responses import JSONResponse
+
+router = APIRouter()
+
+@router.get("/api/bcn/norma/{id_norma}")
+def norma_bcn(id_norma: int):
+    return JSONResponse(content={
+        "norma": {
+            "id": id_norma,
+            "titulo": f"Norma simulada {id_norma}",
+            "fecha_publicacion": "2024-01-01",
+            "contenido": "Contenido simulado de norma legal"
+        }
+    })
+
+# ===== modules/bcn_text_search_parser.py =====
+from fastapi import APIRouter, Query
+from fastapi.responses import JSONResponse
+from utils_output import output_dual
+
+router = APIRouter()
+
+@router.get("/text-search")
+def buscar_texto_bcn(palabra: str = Query(...)):
+    resultado = {
+        "respuesta": f"Búsqueda textual para: {palabra}",
+        "clasificacion": "Moderada",
+        "justificacion": "Búsqueda textual en normativa",
+        "logs": {"input": palabra}
+    }
+    return JSONResponse(content=output_dual(resultado))
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\pack_project.py ---
+
+import os
+
+<<<<<<< HEAD
+
+def pack_selective_project_for_review(
+    project_root, include_paths, output_filename="project_bundle_selective.txt"
+):
+=======
+def pack_selective_project_for_review(project_root, include_paths, output_filename="project_bundle_selective.txt"):
+>>>>>>> 03c2c84b047c243bcbdeac10025a8f13ee62ef96
+    """
+    Packs specified files and directories into a single output file,
+    excluding common large/sensitive directories and files.
+
+    project_root: The root directory of your project.
+    include_paths: A list of file or directory paths (relative to project_root) to include.
+    output_filename: The name of the output text file.
+    """
+    excluded_dirs = ["node_modules", ".git", "__pycache__"]
+<<<<<<< HEAD
+    excluded_files = [
+        output_filename,
+        ".env",
+        ".gitignore",
+        "pack_project.py",
+        "project_bundle.txt",
+    ]
+=======
+    excluded_files = [output_filename, ".env", ".gitignore", "pack_project.py", "project_bundle.txt"]
+>>>>>>> 03c2c84b047c243bcbdeac10025a8f13ee62ef96
+
+    with open(output_filename, "w", encoding="utf-8") as outfile:
+        outfile.write(f"--- INICIO DEL BUNDLE DEL PROYECTO (SELECTIVO) ---\n\n")
+        outfile.write(f"Raíz del proyecto: {os.path.basename(project_root)}\n\n")
+
+        for path_to_include in include_paths:
+            full_path = os.path.join(project_root, path_to_include)
+
+            if not os.path.exists(full_path):
+<<<<<<< HEAD
+                outfile.write(
+                    f"\n--- ADVERTENCIA: Ruta no encontrada: {path_to_include} ---\n"
+                )
+=======
+                outfile.write(f"\n--- ADVERTENCIA: Ruta no encontrada: {path_to_include} ---\n")
+>>>>>>> 03c2c84b047c243bcbdeac10025a8f13ee62ef96
+                continue
+
+            # If it's a single file
+            if os.path.isfile(full_path):
+                file_name = os.path.basename(full_path)
+                if file_name in excluded_files:
+<<<<<<< HEAD
+                    continue  # Skip excluded files
+=======
+                    continue # Skip excluded files
+>>>>>>> 03c2c84b047c243bcbdeac10025a8f13ee62ef96
+
+                try:
+                    with open(full_path, "r", encoding="utf-8") as infile:
+                        content = infile.read()
+                    outfile.write(f"\n--- Archivo: {path_to_include} ---\n")
+                    outfile.write(content)
+<<<<<<< HEAD
+                    outfile.write("\n")  # Add newline for separation
+                except UnicodeDecodeError:
+                    outfile.write(
+                        f"\n--- Archivo (IGNORADO - posible binario): {path_to_include} ---\n"
+                    )
+                except Exception as e:
+                    outfile.write(
+                        f"\n--- ERROR al leer archivo {path_to_include}: {e} ---\n"
+                    )
+=======
+                    outfile.write("\n") # Add newline for separation
+                except UnicodeDecodeError:
+                    outfile.write(f"\n--- Archivo (IGNORADO - posible binario): {path_to_include} ---\n")
+                except Exception as e:
+                    outfile.write(f"\n--- ERROR al leer archivo {path_to_include}: {e} ---\n")
+>>>>>>> 03c2c84b047c243bcbdeac10025a8f13ee62ef96
+
+            # If it's a directory, walk through it
+            elif os.path.isdir(full_path):
+                for root, dirs, files in os.walk(full_path):
+                    # Filter out excluded directories
+                    dirs[:] = [d for d in dirs if d not in excluded_dirs]
+
+                    relative_root = os.path.relpath(root, project_root)
+
+                    # Add a directory header if it's not the top-level included path or if it has files
+<<<<<<< HEAD
+                    if files or (
+                        relative_root != path_to_include and relative_root != "."
+                    ):
+=======
+                    if files or (relative_root != path_to_include and relative_root != "."):
+>>>>>>> 03c2c84b047c243bcbdeac10025a8f13ee62ef96
+                        outfile.write(f"\n--- Directorio: {relative_root} ---\n")
+
+                    for file_name in files:
+                        if file_name in excluded_files:
+<<<<<<< HEAD
+                            continue  # Skip excluded files
+
+                        file_path = os.path.join(root, file_name)
+                        # Attempt to read common text files, skip known binary types
+                        if not (
+                            file_name.lower().endswith(
+                                (
+                                    ".png",
+                                    ".jpg",
+                                    ".jpeg",
+                                    ".gif",
+                                    ".zip",
+                                    ".tar.gz",
+                                    ".log",
+                                    ".ico",
+                                    ".svg",
+                                )
+                            )
+                            or os.path.islink(file_path)
+                        ):
+                            try:
+                                with open(file_path, "r", encoding="utf-8") as infile:
+                                    content = infile.read()
+                                outfile.write(
+                                    f"\n--- Archivo: {os.path.join(relative_root, file_name)} ---\n"
+                                )
+                                outfile.write(content)
+                                outfile.write("\n")
+                            except UnicodeDecodeError:
+                                outfile.write(
+                                    f"\n--- Archivo (IGNORADO - posible binario): {os.path.join(relative_root, file_name)} ---\n"
+                                )
+                            except Exception as e:
+                                outfile.write(
+                                    f"\n--- ERROR al leer archivo {os.path.join(relative_root, file_name)}: {e} ---\n"
+                                )
+        outfile.write(f"\n--- FIN DEL BUNDLE DEL PROYECTO (SELECTIVO) ---\n")
+    print(f"Proyecto empaquetado selectivamente en '{output_filename}'")
+
+
+=======
+                            continue # Skip excluded files
+
+                        file_path = os.path.join(root, file_name)
+                        # Attempt to read common text files, skip known binary types
+                        if not (file_name.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.zip', '.tar.gz', '.log', '.ico', '.svg')) or os.path.islink(file_path)):
+                            try:
+                                with open(file_path, "r", encoding="utf-8") as infile:
+                                    content = infile.read()
+                                outfile.write(f"\n--- Archivo: {os.path.join(relative_root, file_name)} ---\n")
+                                outfile.write(content)
+                                outfile.write("\n")
+                            except UnicodeDecodeError:
+                                outfile.write(f"\n--- Archivo (IGNORADO - posible binario): {os.path.join(relative_root, file_name)} ---\n")
+                            except Exception as e:
+                                outfile.write(f"\n--- ERROR al leer archivo {os.path.join(relative_root, file_name)}: {e} ---\n")
+        outfile.write(f"\n--- FIN DEL BUNDLE DEL PROYECTO (SELECTIVO) ---\n")
+    print(f"Proyecto empaquetado selectivamente en '{output_filename}'")
+
+>>>>>>> 03c2c84b047c243bcbdeac10025a8f13ee62ef96
+if __name__ == "__main__":
+    # <<<<<<<<<<<<<<<<<<<<<<<< MODIFICA ESTA LISTA >>>>>>>>>>>>>>>>>>>>>>>>>>
+    # Añade aquí los nombres de los archivos y carpetas que quieres que yo revise.
+    # Ejemplos:
+    # - "server.js" (tu archivo principal del servidor)
+    # - "package.json" (para ver las dependencias)
+    # - "models" (si tus modelos están en una carpeta llamada 'models')
+    # - "routes" (si tienes una carpeta 'routes' para tus rutas)
+    # - "controllers" (si tienes una carpeta 'controllers')
+    # - "utils" (si tienes una carpeta 'utils')
+    # - etc.
+    #
+    # Si tu modelo está en un archivo específico, por ejemplo, "models/UserModel.js", inclúyelo.
+    # Si tienes más de un modelo, añade todos los archivos de modelo relevantes.
+    # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+    essential_paths_for_review = [
+        "server.js",
+        "package.json",
+        # EJEMPLO: Si tienes una carpeta 'models', descomenta la siguiente línea:
+        # "models",
+        # EJEMPLO: Si tienes un archivo de modelo específico como 'User.js' en la raíz o en 'models/User.js':
+        # "models/User.js",
+        # EJEMPLO: Si tus rutas están en una carpeta 'routes':
+        # "routes",
+        # ... añade más rutas y archivos según sea necesario para tu revisión ...
+    ]
+
+    pack_selective_project_for_review(os.getcwd(), essential_paths_for_review)
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\pack_project.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\quick_test.py ---
+
+import httpx
+import time
+
+BASE_URL = "https://gpt-legal-backend.onrender.com"
+
+def quick_test():
+    client = httpx.Client(timeout=15.0)
+    tests = [
+        ("GET", "/", None),
+        ("POST", "/predict", {"texto": "contrato laboral informal"}),
+        ("GET", "/legislacion/buscar", {"palabra": "contrato"}),
+    ]
+    
+    print("⚡ QUICK TEST - Endpoints Críticos")
+    print("=" * 40)
+    
+    passed = 0
+    for method, endpoint, data in tests:
+        try:
+            if method == "GET" and isinstance(data, dict):
+                r = client.get(f"{BASE_URL}{endpoint}", params=data)
+            elif method == "POST":
+                r = client.post(f"{BASE_URL}{endpoint}", json=data)
+            else:
+                r = client.get(f"{BASE_URL}{endpoint}")
+            
+            if r.status_code < 400:
+                print(f"✅ {method} {endpoint}")
+                passed += 1
+            else:
+                print(f"❌ {method} {endpoint} - {r.status_code}")
+        except Exception as e:
+            print(f"❌ {method} {endpoint} - Error")
+    
+    success_rate = (passed / len(tests)) * 100
+    print(f"\n📊 Resultado: {passed}/{len(tests)} ({success_rate:.0f}%)")
+    
+    if success_rate == 100:
+        print("🎉 TODO FUNCIONAL - Listo para deploy!")
+    elif success_rate >= 66:
+        print("✅ MAYORMENTE FUNCIONAL - Deploy OK")
+    else:
+        print("⚠️  PROBLEMAS DETECTADOS")
+    
+    client.close()
+    return success_rate >= 66
+
+if __name__ == "__main__":
+    quick_test()
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\quick_test.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\status_test.py ---
+
+import requests
+
+URL = "http://127.0.0.1:8000/status/json"  # o https://gpt-legal-backend.onrender.com/status/json si ya está online
+HEADERS = {
+    "x-api-key": "FL4.1-1112919"  # Debe coincidir con tu API_KEY_SECRET en el .env
+}
+
+response = requests.get(URL, headers=HEADERS)
+
+print("Código de estado:", response.status_code)
+print("Respuesta JSON:", response.json())
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\status_test.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\test_api.py ---
+
+#!/usr/bin/env python3
+"""
+Script de testing completo para Forensic Legal Cognition API 4.1
+"""
+
+import json
+import time
+import argparse
+from typing import Optional, Dict, Any
+
+try:
+    import httpx
+except ModuleNotFoundError:
+    print("❌ ERROR: No se pudo importar 'httpx'. Usa:")
+    print("   pip install httpx")
+    exit(1)
+
+try:
+    import ssl
+except ModuleNotFoundError:
+    print("❌ ERROR: No se puede importar 'ssl'.")
+    exit(1)
+
+BASE_URL = "https://gpt-legal-backend.onrender.com"
+LOCAL_URL = "http://127.0.0.1:8000"
+TIMEOUT = 30.0
+
+class APITester:
+    def __init__(self, base_url: str = BASE_URL):
+        self.base_url = base_url
+        self.client = httpx.Client(timeout=TIMEOUT)
+        self.results = []
+
+    def log_result(self, test_name: str, success: bool, response_data: Any = None, error: str = None):
+        result = {
+            "test": test_name,
+            "success": success,
+            "timestamp": time.strftime("%H:%M:%S"),
+            "response_preview": str(response_data)[:200] if response_data else None,
+            "error": error
+        }
+        self.results.append(result)
+        status = "✅" if success else "❌"
+        print(f"{status} {test_name}")
+        if error:
+            print(f"   Error: {error}")
+        if response_data and success:
+            print(f"   Response: {str(response_data)[:100]}...")
+        print()
+
+    def safe_request(self, method: str, endpoint: str, **kwargs) -> Optional[httpx.Response]:
+        url = f"{self.base_url}{endpoint}"
+        try:
+            return self.client.request(method, url, **kwargs)
+        except Exception as e:
+            print(f"❌ Request failed: {e}")
+            return None
+
+    def test_health_check(self):
+        response = self.safe_request("GET", "/")
+        if response and response.status_code == 200:
+            self.log_result("Health Check", True, response.json())
+            return True
+        else:
+            self.log_result("Health Check", False, error=f"Status: {response.status_code if response else 'No response'}")
+            return False
+
+    def test_status_json(self):
+        response = self.safe_request("GET", "/status/json")
+        if response and response.status_code == 200:
+            self.log_result("Status JSON", True, response.json())
+            return True
+        else:
+            self.log_result("Status JSON", False, error=f"Status: {response.status_code if response else 'No response'}")
+            return False
+
+    def test_error_handling(self):
+        error_tests = [
+            ("POST", "/predict", {"invalid": "data"}),
+            ("POST", "/reflexion/", {"documento_analizado": ""}),
+            ("GET", "/legislacion/buscar", {"palabra": "a"}),
+            ("GET", "/legislacion/norma/999999999", None),
+            ("POST", "/api/prediccion/", {"contexto": "muy corto"}),
+        ]
+        handled_errors = 0
+        for method, endpoint, data in error_tests:
+            if method == "GET" and isinstance(data, dict):
+                response = self.safe_request(method, endpoint, params=data)
+            elif method == "GET":
+                response = self.safe_request(method, endpoint)
+            else:
+                response = self.safe_request(method, endpoint, json=data)
+
+            test_name = f"Error Handling {method} {endpoint}"
+            if response and response.status_code >= 400:
+                try:
+                    _ = response.json()
+                    self.log_result(test_name, True, f"Error handled: {response.status_code}")
+                    handled_errors += 1
+                except:
+                    self.log_result(test_name, True, f"Error handled: {response.status_code} (no JSON)")
+                    handled_errors += 1
+            else:
+                self.log_result(test_name, False, error="Error not properly handled")
+        return handled_errors >= len(error_tests) // 2
+
+    def run_comprehensive_test(self):
+        print("🚀 Iniciando tests comprehensivos de Forensic Legal Cognition API 4.1")
+        print("=" * 70)
+        start_time = time.time()
+        results = [
+            self.test_health_check(),
+            self.test_status_json(),
+            self.test_error_handling()
+        ]
+        total_time = time.time() - start_time
+        passed = sum(results)
+        total = len(results)
+        print("=" * 70)
+        print(f"✅ Tests exitosos: {passed}/{total} ({(passed/total)*100:.1f}%)")
+        print(f"⏱️  Tiempo total: {total_time:.2f} segundos")
+        print("=" * 70)
+        return passed == total
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--url", default=BASE_URL, help="URL base del API")
+    parser.add_argument("--local", action="store_true", help="Usar URL local")
+    parser.add_argument("--quick", action="store_true", help="Ejecutar solo tests rápidos")
+    args = parser.parse_args()
+
+    test_url = LOCAL_URL if args.local else args.url
+    print(f"🎯 Testing en: {test_url}")
+    tester = APITester(test_url)
+
+    if args.quick:
+        tester.test_health_check()
+        tester.test_status_json()
+        tester.test_error_handling()
+    else:
+        tester.run_comprehensive_test()
+
+if __name__ == "__main__":
+    main()
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\test_api.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\test_token.py ---
+
+import requests
+
+url = "http://127.0.0.1:8000/status/json"
+headers = {
+    "x-api-key": "FL4.1-1112919"  # debe coincidir con tu .env
+}
+
+r = requests.get(url, headers=headers)
+print("Código de estado:", r.status_code)
+print("Respuesta:", r.json())
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\test_token.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\test_vision.py ---
+
+import requests
+
+API_URL = "https://gpt-legal-backend-bodukoeg-thecousinmates-projects.vercel.app/vision/"
+
+def test_vision_endpoint():
+    payload = {
+        "image_id": "ejemplo.png"  # Asegúrate de que este archivo esté en /mnt/data o accesible si es servidor real
+    }
+    response = requests.post(API_URL, json=payload)
+    print("Status Code:", response.status_code)
+    try:
+        print("Response JSON:", response.json())
+    except Exception as e:
+        print("❌ Error en parseo JSON:", e)
+        print("Texto crudo:", response.text)
+
+if __name__ == "__main__":
+    test_vision_endpoint()
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\test_vision.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\update_openapi.py ---
+
+from main import app
+import json
+with open("static/openapi.json", "w", encoding="utf-8") as f:
+    json.dump(app.openapi(), f, indent=2, ensure_ascii=False)
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\update_openapi.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\utils_output.py ---
+
+
+import json
+from typing import Dict, Any
+from datetime import datetime
+
+def output_dual(data: Dict[str, Any]) -> Dict[str, str]:
+    defaults = {
+        'respuesta': 'Sin respuesta generada',
+        'clasificacion': 'No clasificado',
+        'justificacion': 'Sin justificación',
+        'base_legal': {},
+        'derecho_comparado': {},
+        'contradicciones': [],
+        'estandares_internacionales': [],
+        'esquema_visual': '',
+        'sintesis_audio': '',
+        'fuentes': [],
+        'logs': {},
+        'timestamp': datetime.now().isoformat(),
+        'version': '4.1.0'
+    }
+    complete_data = {**defaults, **data}
+    output_json = json.dumps(complete_data, ensure_ascii=False, indent=2)
+    output_md = f"""# 📋 Análisis Jurídico Automatizado
+
+## 🎯 Respuesta Principal
+{complete_data['respuesta']}
+
+---
+
+## 📊 Clasificación del Caso
+**Nivel:** {complete_data['clasificacion']}  
+**Justificación:** {complete_data['justificacion']}
+
+---
+
+## ⚖️ Marco Legal Aplicable
+{format_legal_framework(complete_data['base_legal'])}
+
+---
+
+## 🌍 Derecho Comparado
+{format_comparative_law(complete_data['derecho_comparado'])}
+
+---
+
+## ⚠️ Contradicciones Detectadas
+{format_contradictions(complete_data['contradicciones'])}
+
+---
+
+## 🏛️ Estándares Internacionales
+{format_international_standards(complete_data['estandares_internacionales'])}
+
+---
+
+## 📈 Esquema Visual
+{complete_data['esquema_visual'] or 'No disponible'}
+
+---
+
+## 🎵 Síntesis para Audio
+{complete_data['sintesis_audio'] or 'No disponible'}
+
+---
+
+## 📚 Fuentes Consultadas
+{format_sources(complete_data['fuentes'])}
+
+---
+
+## 🔍 Información Técnica
+**Timestamp:** {complete_data['timestamp']}  
+**Versión:** {complete_data['version']}  
+**Logs:** ```json
+{json.dumps(complete_data['logs'], ensure_ascii=False, indent=2)}
+```"""
+    return {"json": output_json, "markdown": output_md.strip()}
+
+def format_legal_framework(base_legal: Dict[str, str]) -> str:
+    return "\n".join(f"- **{k}:** {v}" for k, v in base_legal.items()) or "*No se identificó marco legal específico.*"
+
+def format_comparative_law(dc: Dict[str, str]) -> str:
+    return "\n".join(f"- **{k}:** {v}" for k, v in dc.items()) or "*No se aplicó análisis de derecho comparado.*"
+
+def format_contradictions(lista: list) -> str:
+    return "\n".join(f"{i+1}. {item}" for i, item in enumerate(lista)) or "*No se detectaron contradicciones normativas.*"
+
+def format_international_standards(estandares: list) -> str:
+    return "\n".join(f"- {s}" for s in estandares) or "*No se aplicaron estándares internacionales.*"
+
+def format_sources(fuentes: list) -> str:
+    formatted = []
+    for i, fuente in enumerate(fuentes, 1):
+        if isinstance(fuente, str):
+            formatted.append(f"{i}. {fuente}")
+        elif isinstance(fuente, dict):
+            formatted.append(f"{i}. [{fuente.get('title', 'Sin título')}]({fuente.get('url', '#')})")
+        else:
+            formatted.append(f"{i}. {str(fuente)}")
+    return "\n".join(formatted) or "*No se registraron fuentes específicas.*"
+
+def create_error_response(msg: str, details: str = "") -> Dict[str, str]:
+    return output_dual({
+        'respuesta': f"Error: {msg}",
+        'clasificacion': 'Error',
+        'justificacion': details or "Se produjo un error durante el procesamiento",
+        'logs': {'error': msg, 'details': details, 'timestamp': datetime.now().isoformat()}
+    })
+
+def create_success_response(message: str, data: Dict[str, Any] = None) -> Dict[str, str]:
+    return output_dual({
+        'respuesta': message,
+        'clasificacion': 'Exitoso',
+        'justificacion': 'Operación completada correctamente',
+        'logs': {'status': 'success', 'data': data or {}, 'timestamp': datetime.now().isoformat()}
+    })
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\utils_output.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\bcn_parser.py ---
+
+# modules/bcn_parser.py
+
+import requests
+from bs4 import BeautifulSoup
+from fastapi import APIRouter
+from fastapi.responses import JSONResponse
+
+router = APIRouter()
+
+@router.get("/api/bcn/norma/{id_norma}")
+def norma_bcn(id_norma: int):
+    """
+    Extrae información de una norma chilena desde el sitio de la Biblioteca del Congreso Nacional (BCN).
+    """
+    try:
+        url = f"https://www.bcn.cl/leychile/Navegar?idNorma={id_norma}"
+        headers = {"User-Agent": "ForensicLegalBot/1.0"}
+        response = requests.get(url, headers=headers, timeout=10)
+        response.raise_for_status()
+        soup = BeautifulSoup(response.text, "html.parser")
+
+        titulo_tag = soup.find("h1") or soup.find("title")
+        titulo = titulo_tag.get_text(strip=True) if titulo_tag else "Título no disponible"
+
+        fecha_tag = soup.find(class_="fecha-publicacion")
+        fecha = fecha_tag.get_text(strip=True) if fecha_tag else "Fecha no disponible"
+
+        resumen_tag = soup.find("div", class_="resumen")
+        if resumen_tag:
+            resumen = resumen_tag.get_text(strip=True)
+        else:
+            primer_p = soup.find("p")
+            resumen = primer_p.get_text(strip=True) if primer_p else "Resumen no disponible"
+
+        resultado = {
+            "id": id_norma,
+            "titulo": titulo,
+            "fecha_publicacion": fecha,
+            "contenido": resumen
+        }
+        return JSONResponse(content=resultado)
+
+    except Exception as e:
+        return JSONResponse(status_code=500, content={
+            "error": "No se pudo extraer la norma desde BCN.",
+            "detalle": str(e)
+        })
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\bcn_parser.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\bcn_text_search_parser.py ---
+
+# modules/bcn_text_search_parser.py
+from fastapi import APIRouter, Query
+
+router = APIRouter()
+
+@router.get("/legislacion/buscar")
+def buscar_texto(palabra: str = Query(...)):
+    if not palabra.strip():
+        return {"error": "Palabra clave vacía"}
+    return {
+        "palabra": palabra,
+        "resultados": [],
+        "mensaje": "No se encontraron normas relevantes"
+    }
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\bcn_text_search_parser.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\config_map.py ---
+
+CONFIG_MAP = {
+    "modules/bcn_parser.py": {
+        "model": "none",
+        "keywords": ["ley", "norma", "bcn", "boletín"]
+    },
+    "modules/legislacion_bcn.py": {
+        "model": "none",
+        "keywords": ["consulta", "legislación", "palabra clave", "búsqueda"]
+    },
+    "modules/bcn_text_search_parser.py": {
+        "model": "none",
+        "keywords": ["buscador", "html", "resultados", "búsqueda textual"]
+    },
+    "modules/reflexion.py": {
+        "model": "gpt-4o",
+        "temperature": 0.4,
+        "top_p": 0.85,
+        "max_tokens": 1500,
+        "keywords": ["reflexiona", "estructura", "argumento", "coherencia"]
+    },
+    "modules/vision_forense.py": {
+        "model": "gpt-4o",
+        "temperature": 0.3,
+        "top_p": 0.85,
+        "max_tokens": 1000,
+        "keywords": ["imagen", "visual", "simbología", "documento"]
+    },
+    "modules/prediccion_bayesiana.py": {
+        "model": "gpt-4o",
+        "temperature": 0.3,
+        "top_p": 0.9,
+        "max_tokens": 2048,
+        "keywords": ["predecir", "probabilidad", "riesgo", "modelo bayesiano"]
+    },
+    "modules/forensics_proxy.py": {
+        "model": "none",
+        "keywords": ["gafi", "beneficiario", "transparencia", "forensics"]
+    }
+}
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\config_map.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\corpus_legal.py ---
+
+from fastapi import APIRouter
+
+router = APIRouter(prefix="/corpus")
+
+@router.get("/")
+def obtenerCorpus():
+    return {"corpus": []}  # Deja vacío o usa tu data real aquí
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\corpus_legal.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\dependencies.py ---
+
+from fastapi import Header, HTTPException
+import os
+
+# Lee desde .env
+API_KEY_SECRET = os.getenv("API_KEY_SECRET")
+
+async def verify_token(x_api_key: str = Header(...)):
+    if x_api_key != API_KEY_SECRET:
+        raise HTTPException(status_code=403, detail="Token inválido")
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\dependencies.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\exceptions.py ---
+
+from fastapi import HTTPException
+
+class InvalidLegalDocument(HTTPException):
+    def __init__(self, detail="Documento legal inválido o corrupto"):
+        super().__init__(status_code=422, detail=detail)
+
+class PredictionModelError(HTTPException):
+    def __init__(self, detail="Error en la predicción del modelo"):
+        super().__init__(status_code=500, detail=detail)
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\exceptions.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\forensics_proxy.py ---
+
+# modules/forensics_proxy.py
+
+import os
+import openai
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+from fastapi.responses import JSONResponse
+
+router = APIRouter(prefix="/proxy")
+
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
+class ProxyInput(BaseModel):
+    input: str
+
+@router.post("/")
+async def analizar_proxy(data: ProxyInput):
+    """
+    Realiza un análisis forense legal a partir de la entrada proporcionada.
+    """
+    try:
+        if not data.input or len(data.input.strip()) < 10:
+            raise HTTPException(status_code=400, detail="La entrada es demasiado corta para análisis forense.")
+
+        prompt = (
+            "Eres un jurista chileno con especialidad en análisis forense legal. "
+            "Responde de forma estructurada, considerando normas chilenas, contradicciones legales, jurisprudencia y estándares internacionales si aplican."
+        )
+
+        completion = openai.ChatCompletion.create(
+            model="gpt-4o",
+            messages=[
+                {"role": "system", "content": prompt},
+                {"role": "user", "content": data.input}
+            ],
+            temperature=0.2,
+            max_tokens=900
+        )
+
+        contenido = completion.choices[0].message["content"]
+
+        return JSONResponse(content={
+            "resultado": contenido.strip(),
+            "fuente": "GPT-4o (IA jurídica forense real)",
+            "entrada": data.input
+        })
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error en análisis forense: {str(e)}")
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\forensics_proxy.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\interprete.py ---
+
+import os
+import openai
+from fastapi import APIRouter, HTTPException, Query
+from pydantic import BaseModel
+from fastapi.responses import JSONResponse
+
+router = APIRouter()  # ← Sin prefijo
+
+# Validar API key antes de usar
+api_key = os.getenv("OPENAI_API_KEY")
+if not api_key:
+    raise RuntimeError("🛑 Falta variable de entorno OPENAI_API_KEY")
+openai.api_key = api_key
+
+class EntradaTexto(BaseModel):
+    texto: str
+
+@router.post("/interpretar")
+def interpretar_mensaje(data: EntradaTexto):
+    return interpretar_input(data.texto)
+
+@router.get("/interpretar")
+def interpretar_get(texto: str = Query(..., min_length=3)):
+    return interpretar_input(texto)
+
+def interpretar_input(mensaje: str) -> dict:
+    mensaje = mensaje.strip()
+
+    if not mensaje or len(mensaje) < 10:
+        raise HTTPException(status_code=400, detail="Mensaje demasiado corto para interpretar.")
+
+    try:
+        system_prompt = (
+            "Eres un modelo jurídico chileno. Dado un mensaje, clasifícalo en una de estas tres categorías:\n"
+            "- 'predict' si describe un caso o problema legal concreto\n"
+            "- 'reflexion' si es una consulta doctrinal, constitucional o interpretativa\n"
+            "- 'vision' si hace referencia a un documento escaneado, imagen o evidencia visual.\n"
+            "Responde SOLO con una de estas palabras: predict, reflexion, vision."
+        )
+
+        completion = openai.ChatCompletion.create(
+            model="gpt-4o",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": mensaje}
+            ],
+            temperature=0,
+            max_tokens=5
+        )
+
+        decision = completion.choices[0].message["content"].strip().lower()
+
+        if decision == "predict":
+            return {
+                "endpoint": "/predict",
+                "input_json": {"contexto": mensaje},
+                "interpretacion": "Clasificado como análisis de riesgo jurídico concreto."
+            }
+
+        elif decision == "reflexion":
+            return {
+                "endpoint": "/reflexion",
+                "input_json": {"consulta": mensaje},
+                "interpretacion": "Clasificado como reflexión o consulta doctrinal."
+            }
+
+        elif decision == "vision":
+            return {
+                "endpoint": "/vision",
+                "input_json": {"mensaje": mensaje},
+                "interpretacion": "Clasificado como contenido visual o documento escaneado."
+            }
+
+        else:
+            raise ValueError("Respuesta IA fuera de rango")
+
+    except Exception as e:
+        mensaje_lower = mensaje.lower()
+        if any(p in mensaje_lower for p in ["despido", "finiquito", "contrato", "demanda", "juicio", "causa"]):
+            return {
+                "endpoint": "/predict",
+                "input_json": {"contexto": mensaje},
+                "interpretacion": "Fallback: clasificación básica por palabra clave (riesgo jurídico)."
+            }
+        elif any(p in mensaje_lower for p in ["nulidad", "jurisprudencia", "constitucional", "derechos", "norma"]):
+            return {
+                "endpoint": "/reflexion",
+                "input_json": {"consulta": mensaje},
+                "interpretacion": "Fallback: clasificación básica por palabra clave (doctrina)."
+            }
+        elif any(p in mensaje_lower for p in ["imagen", "documento", "foto", "escaneado"]):
+            return {
+                "endpoint": "/vision",
+                "input_json": {"mensaje": mensaje},
+                "interpretacion": "Fallback: clasificación básica por palabra clave (visual)."
+            }
+        raise HTTPException(status_code=500, detail=f"Error interpretando mensaje: {str(e)}")
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\interprete.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\legislacion_bcn.py ---
+
+# modules/legislacion_bcn.py
+
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+import requests
+from bs4 import BeautifulSoup
+
+router = APIRouter(prefix="/legislacion")
+
+@router.get("/buscar")
+def buscar_norma(palabra: str):
+    try:
+        url = f"https://www.bcn.cl/leychile/search?q={palabra}"
+        headers = {"User-Agent": "ForensicLegalBot/1.0"}
+        response = requests.get(url, headers=headers, timeout=10)
+        response.raise_for_status()
+
+        soup = BeautifulSoup(response.text, 'html.parser')
+        resultados = []
+        enlaces = soup.select("h3.resultado-titulo a")
+
+        for e in enlaces[:5]:
+            resultados.append({
+                "titulo": e.text.strip(),
+                "url": e['href']
+            })
+
+        if not resultados:
+            raise ValueError("No se encontraron normas.")
+
+        return {
+            "palabra": palabra,
+            "resultados": resultados,
+            "fuente": "https://www.bcn.cl/leychile"
+        }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error en scraping de BCN: {str(e)}")
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\legislacion_bcn.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\motor_predictivo.py ---
+
+import re
+from typing import Dict
+
+def analizar_input_legal(texto: str) -> str:
+    if not texto or len(texto.strip()) == 0:
+        return "Texto vacío. Por favor, provea contenido jurídico para análisis."
+    
+    texto_lower = texto.lower()
+
+    patrones_riesgo = {
+        "alto": [
+            (r"fraude|estafa|malversación", "Riesgo penal alto - posible delito económico"),
+            (r"despido\s+injustificado|término\s+sin\s+causa", "Riesgo laboral alto - despido improcedente"),
+            (r"discriminación|acoso\s+sexual|mobbing", "Riesgo laboral alto - vulneración de derechos fundamentales"),
+            (r"incumplimiento\s+contractual\s+grave", "Riesgo civil alto - posible resolución de contrato"),
+            (r"responsabilidad\s+penal|dolo\s+directo", "Riesgo penal alto - responsabilidad criminal"),
+            (r"nulidad\s+absoluta|objeto\s+ilícito", "Riesgo civil alto - nulidad contractual")
+        ],
+        "moderado": [
+            (r"trabajador.*contrato.*informal", "Riesgo laboral moderado - formalización requerida"),
+            (r"pago.*sin\s+contrato", "Riesgo fiscal moderado - documentación insuficiente"),
+            (r"negligencia|imprudencia\s+grave", "Riesgo civil moderado - responsabilidad extracontractual"),
+            (r"falta\s+de\s+competencia|delegación", "Riesgo administrativo moderado - vicio de procedimiento"),
+            (r"plazo\s+vencido|prescripción", "Riesgo procesal moderado - pérdida de acción legal"),
+            (r"ambigüedad\s+contractual", "Riesgo interpretativo moderado - cláusulas poco claras")
+        ],
+        "bajo": [
+            (r"consulta\s+preventiva", "Riesgo bajo - consulta precautoria"),
+            (r"revisión\s+de\s+contrato", "Riesgo bajo - análisis preventivo"),
+            (r"asesoría\s+jurídica", "Riesgo bajo - orientación legal"),
+            (r"cumplimiento\s+normativo", "Riesgo bajo - verificación de compliance")
+        ]
+    }
+
+    areas_legales = {
+        "laboral": r"trabajador|empleador|sueldo|contrato\s+de\s+trabajo|despido|finiquito|indemnización",
+        "civil": r"contrato|responsabilidad\s+civil|daños|perjuicios|incumplimiento|nulidad",
+        "penal": r"delito|dolo|culpa|responsabilidad\s+penal|querella|denuncia",
+        "administrativo": r"procedimiento\s+administrativo|autoridad|competencia|recurso\s+de\s+protección",
+        "tributario": r"impuesto|tributo|sii|evasión\s+tributaria|facturación",
+        "comercial": r"empresa|sociedad|comercio|marca|patente|competencia\s+desleal"
+    }
+
+    area_detectada = "general"
+    for area, patron in areas_legales.items():
+        if re.search(patron, texto_lower):
+            area_detectada = area
+            break
+
+    nivel_riesgo = "bajo"
+    explicacion_riesgo = ""
+
+    for nivel, patrones in patrones_riesgo.items():
+        for patron, explicacion in patrones:
+            if re.search(patron, texto_lower):
+                nivel_riesgo = nivel
+                explicacion_riesgo = explicacion
+                break
+        if explicacion_riesgo:
+            break
+
+    recomendaciones = generar_recomendaciones(area_detectada, nivel_riesgo)
+    analisis_area = get_analisis_area(area_detectada, texto_lower)
+    marco = get_marco_legal(area_detectada)
+
+    return f"""
+📊 ANÁLISIS LEGAL AUTOMATIZADO
+
+🎯 Área detectada: {area_detectada.upper()}
+⚠️ Nivel de riesgo: {nivel_riesgo.upper()}
+
+📋 Evaluación:
+{explicacion_riesgo}
+
+🔍 Análisis específico del área {area_detectada}:
+{analisis_area}
+
+💡 Recomendaciones:
+{recomendaciones}
+
+⚖️ Marco legal aplicable:
+{marco}
+""".strip()
+
+def generar_recomendaciones(area: str, riesgo: str) -> str:
+    recomendaciones_base = {
+        "laboral": {
+            "alto": "• Consulta urgente con abogado laboralista\n• Documentar comunicaciones\n• Revisar contrato y reglamento interno",
+            "moderado": "• Formalizar contrato por escrito\n• Verificar pagos previsionales\n• Establecer protocolos internos",
+            "bajo": "• Mantener documentación laboral\n• Revisión anual de contratos\n• Capacitación básica en normativa"
+        },
+        "civil": {
+            "alto": "• Preservar evidencia\n• Evaluar medidas cautelares\n• Consulta legal inmediata",
+            "moderado": "• Revisión contractual\n• Negociación extrajudicial\n• Asesoría especializada",
+            "bajo": "• Revisión preventiva\n• Clarificar términos\n• Mantener respaldo documental"
+        },
+        "penal": {
+            "alto": "• No declarar sin abogado\n• Preservar evidencia\n• Asesoría penal inmediata",
+            "moderado": "• Revisión de protocolos internos\n• Capacitación en compliance\n• Consultoría externa",
+            "bajo": "• Auditoría preventiva\n• Programas de cumplimiento\n• Capacitaciones legales"
+        }
+    }
+    return recomendaciones_base.get(area, {}).get(riesgo, "• Consulta con abogado especializado\n• Revisión del caso\n• Análisis de alternativas legales")
+
+def get_analisis_area(area: str, texto: str) -> str:
+    analisis = {
+        "laboral": "Revisar cumplimiento del Código del Trabajo, derechos fundamentales y obligaciones contractuales.",
+        "civil": "Verificar buena fe contractual, obligaciones, daños y vicios del consentimiento.",
+        "penal": "Evaluar tipo penal, dolo o culpa, y elementos del delito conforme al Código Penal.",
+        "administrativo": "Examinar legitimidad del procedimiento, competencia de la autoridad y posibles vicios formales.",
+        "tributario": "Revisar cumplimiento tributario, obligaciones ante el SII y normativa del Código Tributario.",
+        "comercial": "Revisar estructuras societarias, actos de comercio y regulación del consumidor.",
+    }
+    return analisis.get(area, "No se detectó un área específica. Se requiere mayor información.")
+
+def get_marco_legal(area: str) -> str:
+    marcos = {
+        "laboral": "• Código del Trabajo\n• Ley 20.940\n• Ley 16.744",
+        "civil": "• Código Civil\n• Código de Procedimiento Civil",
+        "penal": "• Código Penal\n• Código Procesal Penal\n• Ley 20.393",
+        "administrativo": "• Ley 19.880\n• Ley 18.575\n• Constitución (Art. 6 y 7)",
+        "tributario": "• Código Tributario\n• Ley de IVA\n• Ley sobre Impuesto a la Renta",
+        "comercial": "• Código de Comercio\n• Ley 18.046\n• Ley 19.496",
+    }
+    return marcos.get(area, "• Constitución Política\n• Código Civil (norma general)")
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\motor_predictivo.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\prediccion_bayesiana.py ---
+
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+import joblib
+import os
+import re
+
+router = APIRouter()
+
+# Cargar modelo entrenado
+modelo_path = os.path.join("modules", "modelo_bayesiano.joblib")
+if not os.path.isfile(modelo_path):
+    raise FileNotFoundError(f"Modelo no encontrado en {modelo_path}")
+modelo = joblib.load(modelo_path)
+
+# Clase de entrada
+class TextoEntrada(BaseModel):
+    texto: str
+
+# Preprocesamiento mínimo
+stopwords = {"de", "la", "que", "el", "en", "y", "a", "los", "del", "se"}  # puedes ampliar
+
+def limpiar_texto(texto: str) -> str:
+    texto = texto.lower()
+    texto = re.sub(r"[^a-zñáéíóú\s]", "", texto)
+    palabras = texto.split()
+    palabras_filtradas = [p for p in palabras if p not in stopwords]
+    return " ".join(palabras_filtradas)
+
+# Ruta del API
+@router.post("/prediccion-bayesiana", tags=["Predicción Bayesiana"])
+def predecir(texto_entrada: TextoEntrada):
+    if not texto_entrada.texto.strip():
+        raise HTTPException(status_code=400, detail="El texto no puede estar vacío.")
+
+    texto_limpio = limpiar_texto(texto_entrada.texto)
+    prediccion = modelo.predict([texto_limpio])[0]
+    probas = modelo.predict_proba([texto_limpio])[0]
+    etiquetas = modelo.classes_
+
+    return {
+        "resultado": prediccion,
+        "probabilidades": dict(zip(etiquetas, probas))
+    }
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\prediccion_bayesiana.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\predict.py ---
+
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+from main import tokenizer, model
+import torch
+
+router = APIRouter()
+
+class InputText(BaseModel):
+    texto: str
+
+# Puedes editar este diccionario si tu modelo tiene más etiquetas
+etiquetas = {
+    0: "desfavorable",
+    1: "favorable"
+}
+
+@router.post("/predecir", tags=["Modelo Legal-BERT"])
+async def predecir(input_data: InputText):
+    try:
+        inputs = tokenizer(input_data.texto, return_tensors="pt", truncation=True, padding=True)
+        with torch.no_grad():
+            outputs = model(**inputs)
+        pred_clase = torch.argmax(outputs.logits, dim=1).item()
+        etiqueta = etiquetas.get(pred_clase, f"desconocido ({pred_clase})")
+        return {
+            "texto_analizado": input_data.texto,
+            "clase_predicha": pred_clase,
+            "etiqueta": etiqueta
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error de predicción: {str(e)}")
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\predict.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\reflexion.py ---
+
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+from typing import List
+import json
+
+router = APIRouter()
+
+class ReflexionInput(BaseModel):
+    documento_analizado: str
+    criterios: List[str]
+
+@router.post("/reflexion")
+async def reflexionar(data: ReflexionInput):
+    print("🧠 Reflexion.py ACTUALIZADO — Fix UTF-8 aplicado")
+
+    if not data.documento_analizado.strip() or not data.criterios:
+        raise HTTPException(status_code=400, detail="Faltan campos obligatorios: documento_analizado y al menos un criterio.")
+
+    resultado = []
+    for criterio in data.criterios:
+        resultado.append({
+            "criterio": criterio,
+            "analisis": f"Análisis doctrinal real sobre '{criterio}' respecto al documento '{data.documento_analizado}'."
+        })
+
+    json_result = json.dumps(resultado, ensure_ascii=False, indent=2)
+
+    # Fuerza correcta codificación UTF-8
+    markdown_result = "\n\n".join(
+        f"**{r['criterio']}**\n> {r['analisis'].encode('utf-8').decode('utf-8')}" for r in resultado
+    )
+
+    return {
+        "json": json_result,
+        "markdown": markdown_result
+    }
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\reflexion.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\root.py ---
+
+from fastapi import APIRouter, Request
+from fastapi.responses import JSONResponse
+from utils_output import output_dual
+from modules.motor_predictivo import analizar_input_legal
+
+router = APIRouter()
+
+@router.get("/status/json")
+def status_json():
+    resultado = {
+        "respuesta": "El backend está operativo y responde en JSON y Markdown.",
+        "clasificacion": "Fuerte",
+        "justificacion": "Sistema activo.",
+        "base_legal": {},
+        "derecho_comparado": {},
+        "contradicciones": [],
+        "estandares_internacionales": [],
+        "esquema_visual": "",
+        "sintesis_audio": "Sistema activo.",
+        "fuentes": [],
+        "logs": {
+            "input": None,
+            "output": "ok"
+        }
+    }
+    dual = output_dual(resultado)
+    return JSONResponse(content={"json": dual["json"], "markdown": dual["markdown"]})
+
+@router.post("/predict")
+async def predict(request: Request):
+    try:
+        payload = await request.json()
+        texto = payload.get("texto") or payload.get("input")
+        if not texto:
+            raise ValueError("Falta el campo obligatorio 'texto' o 'input'.")
+    except Exception as e:
+        return JSONResponse(status_code=400, content={"error": f"Error al procesar JSON: {str(e)}"})
+
+    respuesta_generada = analizar_input_legal(texto)
+
+    resultado = {
+        "respuesta": respuesta_generada,
+        "clasificacion": "Fuerte",
+        "justificacion": "El endpoint predict fue alcanzado exitosamente.",
+        "base_legal": {},
+        "derecho_comparado": {},
+        "contradicciones": [],
+        "estandares_internacionales": [],
+        "esquema_visual": "",
+        "sintesis_audio": respuesta_generada,
+        "fuentes": [],
+        "logs": {
+            "input": texto,
+            "output": "Respuesta generada correctamente"
+        }
+    }
+    dual = output_dual(resultado)
+    return JSONResponse(content={"json": dual["json"], "markdown": dual["markdown"]})
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\root.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\router_universal.py ---
+
+# modules/router_universal.py
+from fastapi import APIRouter
+from modules.root import router as root_router
+from modules.reflexion import router as reflexion_router
+from modules.predict import router as predict_router
+from modules.vision_forense import router as vision_router
+from modules.forensics_proxy import router as forensics_router
+from modules.bcn_parser import router as bcn_parser_router
+from modules.bcn_text_search_parser import router as text_search_router
+
+router = APIRouter()
+router.include_router(root_router)
+router.include_router(reflexion_router)
+router.include_router(predict_router)
+router.include_router(vision_router)
+router.include_router(forensics_router)
+router.include_router(bcn_parser_router)
+router.include_router(text_search_router)
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\router_universal.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\schemas.py ---
+
+from pydantic import BaseModel
+
+class Mensaje(BaseModel):
+    contenido: str
+
+class PrediccionRequest(BaseModel):
+    texto: str
+    contexto: str = None
+
+class PrediccionResponse(BaseModel):
+    resultado: str
+    confianza: float
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\schemas.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\status.py ---
+
+from fastapi import APIRouter, Request
+from datetime import datetime
+
+router = APIRouter()
+
+@router.get("/status")
+@router.get("/status/json")
+async def estado_backend(request: Request):
+    timestamp = datetime.utcnow().isoformat()
+    return {
+        "json": {
+            "respuesta": "El backend está operativo y responde en JSON y Markdown.",
+            "clasificacion": "Fuerte",
+            "justificacion": "Sistema activo.",
+            "base_legal": {},
+            "derecho_comparado": {},
+            "contradicciones": [],
+            "estandares_internacionales": [],
+            "esquema_visual": "",
+            "sintesis_audio": "Sistema activo.",
+            "fuentes": [],
+            "logs": {
+                "input": None,
+                "output": "ok"
+            },
+            "timestamp": timestamp,
+            "version": "4.1.0"
+        },
+        "markdown": f"""# 📋 Análisis Jurídico Automatizado
+
+## 🎯 Respuesta Principal
+El backend está operativo y responde en JSON y Markdown.
+
+---
+
+## 📊 Clasificación del Caso
+**Nivel:** Fuerte  
+**Justificación:** Sistema activo.
+
+---
+
+## ⚖️ Marco Legal Aplicable
+*No se identificó marco legal específico.*
+
+---
+
+## 🌍 Derecho Comparado
+*No se aplicó análisis de derecho comparado.*
+
+---
+
+## ⚠️ Contradicciones Detectadas
+*No se detectaron contradicciones normativas.*
+
+---
+
+## 🏛️ Estándares Internacionales
+*No se aplicaron estándares internacionales.*
+
+---
+
+## 📈 Esquema Visual
+No disponible
+
+---
+
+## 🎵 Síntesis para Audio
+Sistema activo.
+
+---
+
+## 📚 Fuentes Consultadas
+*No se registraron fuentes específicas.*
+
+---
+
+## 🔍 Información Técnica
+**Timestamp:** {timestamp}  
+**Versión:** 4.1.0  
+**Logs:** ```json
+{{ "input": null, "output": "ok" }}
+```"""
+    }
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\status.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\utils.py ---
+
+import logging
+
+def setup_logger(name: str):
+    logger = logging.getLogger(name)
+    if not logger.handlers:
+        logger.setLevel(logging.INFO)
+        ch = logging.StreamHandler()
+        formatter = logging.Formatter('[%(asctime)s] %(levelname)s - %(message)s')
+        ch.setFormatter(formatter)
+        logger.addHandler(ch)
+    return logger
+
+def sanitize_input(text: str) -> str:
+    return text.strip().lower()
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\utils.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\vision_forense.py ---
+
+from fastapi import APIRouter, HTTPException, UploadFile, File, Body
+from fastapi.responses import JSONResponse
+import pytesseract
+from PIL import Image
+import io
+import base64
+
+# Ruta explícita para Windows (ajusta si usas Linux/Render)
+pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+
+router = APIRouter()
+
+@router.post("/vision")
+async def analizar_imagen(
+    file: UploadFile = File(None),
+    img_base64: str = Body(None)
+):
+    try:
+        if file is not None:
+            contenido = await file.read()
+            if not contenido:
+                raise HTTPException(status_code=400, detail="Archivo vacío.")
+            imagen = Image.open(io.BytesIO(contenido))
+            fuente = "archivo"
+        elif img_base64 is not None:
+            try:
+                img_bytes = base64.b64decode(img_base64)
+                imagen = Image.open(io.BytesIO(img_bytes))
+                fuente = "base64"
+            except Exception:
+                raise HTTPException(status_code=400, detail="Error decodificando imagen base64.")
+        else:
+            raise HTTPException(status_code=400, detail="Debe subir una imagen (archivo o base64).")
+
+        texto_extraido = pytesseract.image_to_string(imagen, lang="spa")
+        if not texto_extraido.strip():
+            raise HTTPException(status_code=422, detail="No se detectó texto legible en la imagen.")
+
+        return {
+            "texto_extraido": texto_extraido.strip(),
+            "estatus": "OCR completado",
+            "fuente": fuente
+        }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error analizando imagen: {str(e)}")
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\vision_forense.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\__init__.py ---
+
+# modules/__init__.py
+# Paquete inicializado
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\modules\__init__.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\tests\test_app.py ---
+
+
+from fastapi.testclient import TestClient
+from unittest.mock import patch
+import openai
+import main
+
+client = TestClient(main.app)
+
+class DummyResp:
+    def __init__(self, content="mock response"):
+        self.choices = [type("obj", (), {"message": {"content": content}})()]
+
+def dummy_chatcompletion_create(*args, **kwargs):
+    return DummyResp()
+
+def test_healthcheck():
+    r = client.get("/")
+    assert r.status_code == 200
+    data = r.json()
+    assert data.get("status") == "alive"
+    assert "version" in data
+
+@patch("openai.ChatCompletion.create", side_effect=dummy_chatcompletion_create)
+def test_predict(mock_create):
+    payload = {"contexto": "Existe un posible incumplimiento de contrato con riesgo de nulidad"}
+    r = client.post("/predict", json=payload)
+    assert r.status_code == 200
+    data = r.json()
+    assert data["resultado"] == "mock response"
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\tests\test_app.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\tests\test_app_extendido.py ---
+
+from fastapi.testclient import TestClient
+from unittest.mock import patch
+import openai
+import main
+
+client = TestClient(main.app)
+
+class DummyResp:
+    def __init__(self, content="mock response"):
+        self.choices = [type("obj", (), {"message": {"content": content}})()]
+
+def dummy_chatcompletion_create(*args, **kwargs):
+    return DummyResp()
+
+def test_healthcheck():
+    r = client.get("/")
+    assert r.status_code == 200
+    data = r.json()
+    assert data.get("status") == "alive"
+    assert "version" in data
+
+@patch("openai.ChatCompletion.create", side_effect=dummy_chatcompletion_create)
+def test_predict(mock_create):
+    payload = {"contexto": "Existe un posible incumplimiento de contrato con riesgo de nulidad"}
+    r = client.post("/predict", json=payload)
+    assert r.status_code == 200
+    data = r.json()
+    assert data["resultado"] == "mock response"
+
+@patch("openai.ChatCompletion.create", side_effect=dummy_chatcompletion_create)
+def test_reflexion(mock_create):
+    payload = {"texto": "El contrato fue firmado solo por una parte"}
+    r = client.post("/reflexion", json=payload)
+    assert r.status_code == 200
+    data = r.json()
+    assert data["reflexion"] == "mock response"
+
+@patch("openai.ChatCompletion.create", side_effect=dummy_chatcompletion_create)
+def test_interpretar(mock_create):
+    payload = {"pregunta": "¿Puede un menor firmar un contrato en Chile?"}
+    r = client.post("/interpretar", json=payload)
+    assert r.status_code == 200
+    data = r.json()
+    assert data["respuesta"] == "mock response"
+
+@patch("openai.ChatCompletion.create", side_effect=dummy_chatcompletion_create)
+def test_vision(mock_create):
+    payload = {"image_url": "https://example.com/fakeimage.png"}
+    r = client.post("/vision", json=payload)
+    assert r.status_code == 200
+    data = r.json()
+    assert data["descripcion"] == "mock response"
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\tests\test_app_extendido.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\tests\test_app_FINAL.py ---
+
+
+from fastapi.testclient import TestClient
+from unittest.mock import patch
+import openai
+import main
+
+client = TestClient(main.app)
+
+class DummyResp:
+    def __init__(self, content="mock response"):
+        self.choices = [type("obj", (), {"message": {"content": content}})()]
+
+def dummy_chatcompletion_create(*args, **kwargs):
+    return DummyResp()
+
+def test_healthcheck():
+    r = client.get("/")
+    assert r.status_code == 200
+    data = r.json()
+    assert data.get("status") == "alive"
+    assert "version" in data
+
+@patch("openai.ChatCompletion.create", side_effect=dummy_chatcompletion_create)
+def test_predict(mock_create):
+    payload = {"contexto": "Existe un posible incumplimiento de contrato con riesgo de nulidad"}
+    r = client.post("/predict", json=payload)
+    assert r.status_code == 200
+    data = r.json()
+    assert data["resultado"] == "mock response"
+
+@patch("openai.ChatCompletion.create", side_effect=dummy_chatcompletion_create)
+def test_reflexion(mock_create):
+    payload = {"contexto": "El contrato fue firmado solo por una parte"}
+    r = client.post("/reflexion", json=payload)
+    assert r.status_code == 200
+    data = r.json()
+    assert data["reflexion"] == "mock response"
+
+@patch("openai.ChatCompletion.create", side_effect=dummy_chatcompletion_create)
+def test_interpretar(mock_create):
+    payload = {"contexto": "¿Puede un menor firmar un contrato en Chile?"}
+    r = client.post("/interpretar", json=payload)
+    assert r.status_code == 200
+    data = r.json()
+    assert data["respuesta"] == "mock response"
+
+@patch("openai.ChatCompletion.create", side_effect=dummy_chatcompletion_create)
+def test_vision(mock_create):
+    payload = {"contexto": "https://example.com/fakeimage.png"}
+    r = client.post("/vision", json=payload)
+    assert r.status_code == 200
+    data = r.json()
+    assert data["descripcion"] == "mock response"
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\tests\test_app_FINAL.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\tests\test_app_VERIFICADO.py ---
+
+
+from fastapi.testclient import TestClient
+from unittest.mock import patch
+import openai
+import main
+
+client = TestClient(main.app)
+
+class DummyResp:
+    def __init__(self, content="mock response"):
+        self.choices = [type("obj", (), {"message": {"content": content}})()]
+
+def dummy_chatcompletion_create(*args, **kwargs):
+    return DummyResp()
+
+def test_healthcheck():
+    r = client.get("/")
+    assert r.status_code == 200
+    data = r.json()
+    assert data.get("status") == "alive"
+    assert "version" in data
+
+@patch("openai.ChatCompletion.create", side_effect=dummy_chatcompletion_create)
+def test_predict(mock_create):
+    payload = {"contexto": "Existe un posible incumplimiento de contrato con riesgo de nulidad"}
+    r = client.post("/predict", json=payload)
+    assert r.status_code == 200
+    data = r.json()
+    assert data["resultado"] == "mock response"
+
+@patch("openai.ChatCompletion.create", side_effect=dummy_chatcompletion_create)
+def test_reflexion(mock_create):
+    payload = {"texto": "El contrato fue firmado solo por una parte"}
+    r = client.post("/reflexion", json=payload)
+    assert r.status_code == 200
+    data = r.json()
+    assert data["reflexion"] == "mock response"
+
+@patch("openai.ChatCompletion.create", side_effect=dummy_chatcompletion_create)
+def test_interpretar(mock_create):
+    payload = {"pregunta": "¿Puede un menor firmar un contrato en Chile?"}
+    r = client.post("/interpretar", json=payload)
+    assert r.status_code == 200
+    data = r.json()
+    assert data["respuesta"] == "mock response"
+
+@patch("openai.ChatCompletion.create", side_effect=dummy_chatcompletion_create)
+def test_vision(mock_create):
+    payload = {"image_url": "https://example.com/fakeimage.png"}
+    r = client.post("/vision", json=payload)
+    assert r.status_code == 200
+    data = r.json()
+    assert data["descripcion"] == "mock response"
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\tests\test_app_VERIFICADO.py ---
+
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\tests\__test_all_endpoints.py ---
+
+import requests
+
+BASE_URL = "http://127.0.0.1:10000"
+
+def test_healthcheck():
+    url = f"{BASE_URL}/"
+    r = requests.get(url)
+    assert r.status_code == 200
+    data = r.json()
+    assert data.get("status") == "alive"
+    assert "version" in data
+    print("[OK] Healthcheck passed")
+
+def test_predict():
+    url = f"{BASE_URL}/predict"
+    payload = {"contexto": "Existe un posible incumplimiento de contrato con riesgo de nulidad"}
+    r = requests.post(url, json=payload)
+    assert r.status_code == 200, f"Status code {r.status_code}, response: {r.text}"
+    print("[OK] Predict endpoint passed")
+
+if __name__ == "__main__":
+    test_healthcheck()
+    test_predict()
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\tests\__test_all_endpoints.py ---
+

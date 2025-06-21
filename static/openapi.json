@@ -1,0 +1,433 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Forensic Legal Cognition 4.1",
+    "version": "4.1.0",
+    "description": "API jurídica avanzada para análisis forense, predictivo y legislativo en Chile."
+  },
+  "servers": [
+    {
+      "url": "https://forensic-legal-railway.up.railway.app"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "Estado general del backend",
+        "operationId": "getRootStatus",
+        "responses": {
+          "200": {
+            "description": "Estado general",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "nombre": {
+                      "type": "string"
+                    },
+                    "version": {
+                      "type": "string"
+                    },
+                    "estado": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/predict": {
+      "post": {
+        "summary": "Predicción legal general",
+        "operationId": "predictLegalOutcome",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PredictionInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Resultado de la predicción",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PredictionResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/predecir": {
+      "post": {
+        "summary": "Predicción legal con modelo LegalBERT",
+        "operationId": "predictWithLegalBert",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PredictionInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Resultado LegalBERT",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PredictionResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reflexion": {
+      "post": {
+        "summary": "Generación de reflexión jurídica",
+        "operationId": "generateReflexion",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReflexionInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Reflexión generada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReflexionResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/vision/analizar": {
+      "post": {
+        "summary": "OCR y visión forense sobre imágenes",
+        "operationId": "analyzeForensicImage",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Resultado OCR y visión",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "texto_detectado": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/interpretar": {
+      "post": {
+        "summary": "Interpretación doctrinal automatizada",
+        "operationId": "interpretDoctrine",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "texto": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Resultado interpretado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "interpretacion": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/proxy/pdf_ocr": {
+      "post": {
+        "summary": "OCR completo de documento PDF",
+        "operationId": "performPdfOcr",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Resultado del OCR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "contenido_extraido": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/legislacion/buscar": {
+      "get": {
+        "summary": "Buscar norma legal en BCN",
+        "operationId": "searchLegislationBCN",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resultado búsqueda BCN",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "resultado": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/corpus/": {
+      "get": {
+        "summary": "Listado de corpus legal disponibles",
+        "operationId": "getCorpusList",
+        "responses": {
+          "200": {
+            "description": "Corpus disponible",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "documentos": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/prediccion/": {
+      "post": {
+        "summary": "Predicción estadística bayesiana",
+        "operationId": "predictBayes",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "texto": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Resultado de predicción",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "resultado": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/status": {
+      "get": {
+        "summary": "Estado resumido del backend",
+        "operationId": "getStatus",
+        "responses": {
+          "200": {
+            "description": "Estado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "nombre": {
+                      "type": "string"
+                    },
+                    "version": {
+                      "type": "string"
+                    },
+                    "estado": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/status/json": {
+      "get": {
+        "summary": "Estado extendido con formato JSON y Markdown",
+        "operationId": "getStatusExtended",
+        "responses": {
+          "200": {
+            "description": "Estado extendido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "json": {
+                      "type": "object"
+                    },
+                    "markdown": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "PredictionInput": {
+        "type": "object",
+        "properties": {
+          "texto": {
+            "type": "string"
+          }
+        }
+      },
+      "PredictionResult": {
+        "type": "object",
+        "properties": {
+          "resultado": {
+            "type": "string"
+          }
+        }
+      },
+      "ReflexionInput": {
+        "type": "object",
+        "properties": {
+          "texto": {
+            "type": "string"
+          }
+        }
+      },
+      "ReflexionResult": {
+        "type": "object",
+        "properties": {
+          "reflexion": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
+ 

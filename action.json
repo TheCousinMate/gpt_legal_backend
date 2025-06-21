@@ -1,0 +1,18 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "Legal Forensic Cognition",
+  "name_for_model": "legal_forensic_plugin",
+  "description_for_human": "Análisis jurídico, predicciones legales, reflexiones de texto y consultas legislativas de Chile.",
+  "description_for_model": "Utiliza esta API para realizar análisis forense legal, predicción de resultados jurídicos, comprensión de textos y consultas legislativas dentro del contexto legal chileno.",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "https://forensic-legal-railway.up.railway.app/static/openapi.yaml",
+    "has_user_authentication": false
+  },
+  "logo_url": "https://forensic-legal-railway.up.railway.app/static/logo.png",
+  "contact_email": "khazbun@gmail.com",
+  "legal_info_url": "https://gptkabir.cl/terminos"
+}

@@ -1,0 +1,21 @@
+# Establece el manejo de fin de línea para todos los archivos de texto
+* text=auto
+
+# Forzar LF para scripts de Unix y Python
+*.sh text eol=lf
+*.py text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+
+# Archivos binarios
+*.joblib binary
+*.pt binary
+*.h5 binary
+*.bin binary
+*.msgpack binary
+
+# Codificación para internacionalización
+*.md text working-tree-encoding=UTF-8
+*.txt text working-tree-encoding=UTF-8

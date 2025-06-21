@@ -1,0 +1,20 @@
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\.dockerignore ---
+
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+.env
+*.env
+.vscode/
+*.sqlite3
+*.log
+.DS_Store
+.venv/
+*.zip
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\.dockerignore ---
+

@@ -1,0 +1,8 @@
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\.gitattributes ---
+
+*.bin filter=lfs diff=lfs merge=lfs -text
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\.gitattributes ---
+

@@ -1,0 +1,18 @@
+{
+  "schema_version": "v1",
+  "name_for_model": "forensic_legal_cognition_4_1",
+  "name_for_human": "Forensic Legal Cognition 4.1",
+  "description_for_model": "Herramienta jurídica chilena para análisis predictivo, forense y doctrinal automatizado. Permite interpretar casos legales, realizar OCR de documentos, buscar legislación en BCN y clasificar automáticamente entradas.",
+  "description_for_human": "API chilena de análisis jurídico automatizado, visión forense, predicción bayesiana y búsqueda legal.",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "https://forensic-legal-railway.up.railway.app/openapi.json",
+    "is_user_authenticated": false
+  },
+  "logo_url": "https://forensic-legal-railway.up.railway.app/static/logo.png",
+  "contact_email": "contacto@tuempresa.cl",
+  "legal_info_url": "https://tuempresa.cl/terminos-y-condiciones"
+}

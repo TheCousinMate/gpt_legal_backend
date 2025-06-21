@@ -1,0 +1,42 @@
+# 🐳 IGNORAR ARCHIVOS Y CARPETAS QUE NO SE DEBEN INCLUIR EN LA IMAGEN DOCKER
+
+__pycache__/
+*.py[cod]
+*.so
+*.log
+*.sqlite3
+*.env
+.env.*
+*.bak
+*.swp
+*.swo
+*.db
+*.pid
+Thumbs.db
+.DS_Store
+
+# Excluir carpetas de desarrollo y pruebas
+/tests/
+output/
+coverage/
+instance/
+resultados_api/
+
+# Excluir archivos grandes o sensibles
+*.joblib
+*.h5
+*.pt
+*.bin
+*.msgpack
+
+# Evitar subir archivos temporales
+*.tmp
+*.cache
+*.old
+
+# Incluir explícitamente lo necesario
+!static/openapi.yaml
+!static/.well-known/ai-plugin.json
+!band/
+!band/matrix.jit
+!render.yaml

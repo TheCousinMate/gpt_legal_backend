@@ -1,0 +1,93 @@
+
+--- INICIO: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\.gitignore ---
+
+# ================================
+# ⚙️ ENTORNOS VIRTUALES Y SISTEMA
+# ================================
+.venv/
+env/
+venv/
+__pycache__/
+*.py[cod]
+*.DS_Store
+*.swp
+*.swo
+Thumbs.db
+
+# ================================
+# 🔐 ARCHIVOS SENSIBLES Y CONFIG
+# ================================
+.env
+.env.*
+
+# ================================
+# 📊 ARCHIVOS DE LOGS Y EJECUCIÓN
+# ================================
+*.log
+*.pid
+*.sqlite3
+*.db
+*.bak
+instance/
+
+# ================================
+# 🧪 TESTS Y ARCHIVOS TEMPORALES
+# ================================
+/tests/
+__snapshots__/
+*.test.js
+*.test.json
+*.test.txt
+coverage/
+output/
+resultados_api/
+
+# ================================
+# 🧱 STATIC & BUILD
+# ================================
+static/*.cache
+static/*.tmp
+static/*.json
+static/*.old
+
+# ================================
+# 🚀 DEPLOYMENT
+# ================================
+Dockerfile
+*.ps1
+
+# ⬇️ Habilitar explícitamente render.yaml
+!render.yaml
+
+# ================================
+# 📦 ARCHIVOS GRANDES / MODELOS
+# ================================
+backend_codigo.txt
+backend_snapshot.txt
+*.joblib
+legal-bert-base-uncased/*.bin
+legal-bert-base-uncased/*.h5
+legal-bert-base-uncased/*.msgpack
+legal-bert-base-uncased/*.pt
+legal-bert-base-uncased/__pycache__/
+
+# ================================
+# ✅ INCLUSIONES EXPLÍCITAS
+# ================================
+!modules/modelo_bayesiano.joblib
+!static/openapi.yaml
+!static/.well-known/ai-plugin.json
+!band/
+!band/matrix.jit
+
+# ================================
+# ❌ EXCLUSIONES ESPECÍFICAS MANUALES
+# ================================
+INACIA IA MODEL.txt
+bfg-1.14.0.jar
+gpt_legal_backend.git/
+requirements.zip
+
+
+--- FIN: C:\Users\khazb\OneDrive\Escritorio\Documentos\gpt_legal_backend\.gitignore ---
+
