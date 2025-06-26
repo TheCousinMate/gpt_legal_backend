@@ -92,3 +92,8 @@ def interpretar_input(mensaje: str) -> dict:
                 "interpretacion": "Fallback por palabra clave: documento visual."
             }
         raise HTTPException(status_code=500, detail=f"Error interpretando mensaje: {str(e)}")
+
+# 🔧 Función requerida por router_universal → reflexion.py
+def generar_reflexion_juridica(texto: str) -> str:
+    resultado = interpretar_input(texto)
+    return resultado.get("interpretacion", "Sin interpretación")
