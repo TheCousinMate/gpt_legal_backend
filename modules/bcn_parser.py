@@ -2,46 +2,31 @@
 
 import requests
 from bs4 import BeautifulSoup
-from fastapi import APIRouter
-from fastapi.responses import JSONResponse
 
-router = APIRouter()
-
-@router.get("/api/bcn/norma/{id_norma}")
-def norma_bcn(id_norma: int):
+def obtener_leyes_chilenas(busqueda: str) -> list:
     """
-    Extrae información de una norma chilena desde el sitio de la Biblioteca del Congreso Nacional (BCN).
+    Realiza scraping simple en la BCN para buscar leyes relacionadas a un término.
     """
-    try:
-        url = f"https://www.bcn.cl/leychile/Navegar?idNorma={id_norma}"
-        headers = {"User-Agent": "ForensicLegalBot/1.0"}
-        response = requests.get(url, headers=headers, timeout=10)
-        response.raise_for_status()
-        soup = BeautifulSoup(response.text, "html.parser")
+    url = f"https://www.bcn.cl/leychile/busqueda?query={busqueda}"
+    response = requests.get(url)
+    
+    if response.status_code != 200:
+        raise ValueError("No se pudo acceder a la BCN.")
 
-        titulo_tag = soup.find("h1") or soup.find("title")
-        titulo = titulo_tag.get_text(strip=True) if titulo_tag else "Título no disponible"
+    soup = BeautifulSoup(response.text, "html.parser")
+    resultados = []
 
-        fecha_tag = soup.find(class_="fecha-publicacion")
-        fecha = fecha_tag.get_text(strip=True) if fecha_tag else "Fecha no disponible"
+    for item in soup.select("div.resultado"):
+        titulo = item.select_one("h3")
+        link = item.select_one("a[href]")
 
-        resumen_tag = soup.find("div", class_="resumen")
-        if resumen_tag:
-            resumen = resumen_tag.get_text(strip=True)
-        else:
-            primer_p = soup.find("p")
-            resumen = primer_p.get_text(strip=True) if primer_p else "Resumen no disponible"
+        if titulo and link:
+            resultados.append({
+                "titulo": titulo.text.strip(),
+                "url": link["href"]
+            })
 
-        resultado = {
-            "id": id_norma,
-            "titulo": titulo,
-            "fecha_publicacion": fecha,
-            "contenido": resumen
-        }
-        return JSONResponse(content=resultado)
-
-    except Exception as e:
-        return JSONResponse(status_code=500, content={
-            "error": "No se pudo extraer la norma desde BCN.",
-            "detalle": str(e)
-        })
+    if not resultados:
+        return [{"mensaje": "No se encontraron leyes asociadas a esta búsqueda."}]
+    
+    return resultados

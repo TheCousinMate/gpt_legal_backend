@@ -1,117 +1,167 @@
-
+"""
+Utilidades para formateo de salida dual (JSON y Markdown)
+"""
 import json
+import logging
 from typing import Dict, Any
-from datetime import datetime
 
-def output_dual(data: Dict[str, Any]) -> Dict[str, str]:
-    defaults = {
-        'respuesta': 'Sin respuesta generada',
-        'clasificacion': 'No clasificado',
-        'justificacion': 'Sin justificación',
-        'base_legal': {},
-        'derecho_comparado': {},
-        'contradicciones': [],
-        'estandares_internacionales': [],
-        'esquema_visual': '',
-        'sintesis_audio': '',
-        'fuentes': [],
-        'logs': {},
-        'timestamp': datetime.now().isoformat(),
-        'version': '4.1.0'
-    }
-    complete_data = {**defaults, **data}
-    output_json = json.dumps(complete_data, ensure_ascii=False, indent=2)
-    output_md = f"""# 📋 Análisis Jurídico Automatizado
+logger = logging.getLogger(__name__)
+
+def output_dual(resultado: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Convierte un resultado en formato dual: JSON y Markdown
+    
+    Args:
+        resultado: Diccionario con los datos del resultado
+        
+    Returns:
+        Dict con claves 'json' y 'markdown'
+    """
+    try:
+        # Formatear como JSON limpio
+        json_output = {
+            "respuesta": resultado.get("respuesta", ""),
+            "clasificacion": resultado.get("clasificacion", ""),
+            "justificacion": resultado.get("justificacion", ""),
+            "base_legal": resultado.get("base_legal", {}),
+            "derecho_comparado": resultado.get("derecho_comparado", {}),
+            "contradicciones": resultado.get("contradicciones", []),
+            "estandares_internacionales": resultado.get("estandares_internacionales", []),
+            "esquema_visual": resultado.get("esquema_visual", ""),
+            "sintesis_audio": resultado.get("sintesis_audio", ""),
+            "fuentes": resultado.get("fuentes", []),
+            "logs": resultado.get("logs", {})
+        }
+        
+        # Formatear como Markdown estructurado
+        markdown_output = generar_markdown(resultado)
+        
+        return {
+            "json": json_output,
+            "markdown": markdown_output
+        }
+        
+    except Exception as e:
+        logger.error(f"Error en output_dual: {e}")
+        return {
+            "json": {"error": f"Error en formateo: {str(e)}"},
+            "markdown": f"# Error\n\nError en formateo: {str(e)}"
+        }
+
+def generar_markdown(resultado: Dict[str, Any]) -> str:
+    """
+    Genera formato Markdown estructurado a partir del resultado
+    """
+    try:
+        respuesta = resultado.get("respuesta", "")
+        clasificacion = resultado.get("clasificacion", "")
+        justificacion = resultado.get("justificacion", "")
+        base_legal = resultado.get("base_legal", {})
+        derecho_comparado = resultado.get("derecho_comparado", {})
+        contradicciones = resultado.get("contradicciones", [])
+        estandares = resultado.get("estandares_internacionales", [])
+        fuentes = resultado.get("fuentes", [])
+        logs = resultado.get("logs", {})
+        
+        markdown = f"""# 📋 Análisis Legal Automatizado
 
 ## 🎯 Respuesta Principal
-{complete_data['respuesta']}
+{respuesta}
 
----
+## 🏷️ Clasificación
+**Nivel:** {clasificacion}
 
-## 📊 Clasificación del Caso
-**Nivel:** {complete_data['clasificacion']}  
-**Justificación:** {complete_data['justificacion']}
+## 💭 Justificación
+{justificacion}
 
----
+"""
+        
+        # Agregar base legal si existe
+        if base_legal:
+            markdown += "## ⚖️ Base Legal\n"
+            for key, value in base_legal.items():
+                markdown += f"- **{key}:** {value}\n"
+            markdown += "\n"
+        
+        # Agregar derecho comparado si existe
+        if derecho_comparado:
+            markdown += "## 🌐 Derecho Comparado\n"
+            for key, value in derecho_comparado.items():
+                markdown += f"- **{key}:** {value}\n"
+            markdown += "\n"
+        
+        # Agregar contradicciones si existen
+        if contradicciones:
+            markdown += "## ⚠️ Contradicciones Detectadas\n"
+            for i, contradiccion in enumerate(contradicciones, 1):
+                markdown += f"{i}. {contradiccion}\n"
+            markdown += "\n"
+        
+        # Agregar estándares internacionales si existen
+        if estandares:
+            markdown += "## 🌍 Estándares Internacionales\n"
+            for i, estandar in enumerate(estandares, 1):
+                markdown += f"{i}. {estandar}\n"
+            markdown += "\n"
+        
+        # Agregar fuentes si existen
+        if fuentes:
+            markdown += "## 📚 Fuentes Consultadas\n"
+            for i, fuente in enumerate(fuentes, 1):
+                markdown += f"{i}. {fuente}\n"
+            markdown += "\n"
+        
+        # Agregar logs si existen
+        if logs:
+            markdown += "## 📝 Información de Procesamiento\n"
+            if logs.get("input"):
+                markdown += f"- **Input procesado:** {len(str(logs['input']))} caracteres\n"
+            if logs.get("output"):
+                markdown += f"- **Status:** {logs['output']}\n"
+            markdown += "\n"
+        
+        markdown += "---\n*Generado por Forensic Legal Cognition 4.1*"
+        
+        return markdown
+        
+    except Exception as e:
+        logger.error(f"Error generando markdown: {e}")
+        return f"# Error\n\nError generando formato markdown: {str(e)}"
 
-## ⚖️ Marco Legal Aplicable
-{format_legal_framework(complete_data['base_legal'])}
+def formatear_respuesta_simple(texto: str, clasificacion: str = "Análisis") -> Dict[str, Any]:
+    """
+    Formatea una respuesta simple en el formato estándar
+    """
+    resultado = {
+        "respuesta": texto,
+        "clasificacion": clasificacion,
+        "justificacion": "Análisis completado exitosamente.",
+        "base_legal": {},
+        "derecho_comparado": {},
+        "contradicciones": [],
+        "estandares_internacionales": [],
+        "esquema_visual": "",
+        "sintesis_audio": texto,
+        "fuentes": [],
+        "logs": {
+            "input": "Texto procesado",
+            "output": "Respuesta generada correctamente"
+        }
+    }
+    
+    return output_dual(resultado)
 
----
-
-## 🌍 Derecho Comparado
-{format_comparative_law(complete_data['derecho_comparado'])}
-
----
-
-## ⚠️ Contradicciones Detectadas
-{format_contradictions(complete_data['contradicciones'])}
-
----
-
-## 🏛️ Estándares Internacionales
-{format_international_standards(complete_data['estandares_internacionales'])}
-
----
-
-## 📈 Esquema Visual
-{complete_data['esquema_visual'] or 'No disponible'}
-
----
-
-## 🎵 Síntesis para Audio
-{complete_data['sintesis_audio'] or 'No disponible'}
-
----
-
-## 📚 Fuentes Consultadas
-{format_sources(complete_data['fuentes'])}
-
----
-
-## 🔍 Información Técnica
-**Timestamp:** {complete_data['timestamp']}  
-**Versión:** {complete_data['version']}  
-**Logs:** ```json
-{json.dumps(complete_data['logs'], ensure_ascii=False, indent=2)}
-```"""
-    return {"json": output_json, "markdown": output_md.strip()}
-
-def format_legal_framework(base_legal: Dict[str, str]) -> str:
-    return "\n".join(f"- **{k}:** {v}" for k, v in base_legal.items()) or "*No se identificó marco legal específico.*"
-
-def format_comparative_law(dc: Dict[str, str]) -> str:
-    return "\n".join(f"- **{k}:** {v}" for k, v in dc.items()) or "*No se aplicó análisis de derecho comparado.*"
-
-def format_contradictions(lista: list) -> str:
-    return "\n".join(f"{i+1}. {item}" for i, item in enumerate(lista)) or "*No se detectaron contradicciones normativas.*"
-
-def format_international_standards(estandares: list) -> str:
-    return "\n".join(f"- {s}" for s in estandares) or "*No se aplicaron estándares internacionales.*"
-
-def format_sources(fuentes: list) -> str:
-    formatted = []
-    for i, fuente in enumerate(fuentes, 1):
-        if isinstance(fuente, str):
-            formatted.append(f"{i}. {fuente}")
-        elif isinstance(fuente, dict):
-            formatted.append(f"{i}. [{fuente.get('title', 'Sin título')}]({fuente.get('url', '#')})")
-        else:
-            formatted.append(f"{i}. {str(fuente)}")
-    return "\n".join(formatted) or "*No se registraron fuentes específicas.*"
-
-def create_error_response(msg: str, details: str = "") -> Dict[str, str]:
-    return output_dual({
-        'respuesta': f"Error: {msg}",
-        'clasificacion': 'Error',
-        'justificacion': details or "Se produjo un error durante el procesamiento",
-        'logs': {'error': msg, 'details': details, 'timestamp': datetime.now().isoformat()}
-    })
-
-def create_success_response(message: str, data: Dict[str, Any] = None) -> Dict[str, str]:
-    return output_dual({
-        'respuesta': message,
-        'clasificacion': 'Exitoso',
-        'justificacion': 'Operación completada correctamente',
-        'logs': {'status': 'success', 'data': data or {}, 'timestamp': datetime.now().isoformat()}
-    })
+def limpiar_texto_respuesta(texto: str) -> str:
+    """
+    Limpia y normaliza texto de respuesta
+    """
+    if not texto:
+        return ""
+    
+    # Eliminar espacios excesivos
+    texto = " ".join(texto.split())
+    
+    # Limpiar saltos de línea excesivos
+    texto = texto.replace("\n\n\n", "\n\n")
+    
+    return texto.strip()

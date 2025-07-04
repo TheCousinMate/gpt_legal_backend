@@ -1,0 +1,98 @@
+@echo off
+echo Organizando proyecto Forensic Legal Cognition 4.1...
+echo ========================================================
+
+REM Crear directorios necesarios
+echo Creando directorios...
+mkdir band 2>nul
+mkdir static 2>nul
+mkdir static\.well-known 2>nul
+mkdir modules 2>nul
+mkdir logs 2>nul
+mkdir models 2>nul
+
+REM Renombrar y mover archivos
+echo Organizando archivos...
+
+REM Archivos principales
+if exist "predict_corregido.py" (
+    move "predict_corregido.py" "modules\predict.py"
+    echo ✅ predict_corregido.py -> modules\predict.py
+)
+
+if exist "router_universal_corregido.py" (
+    move "router_universal_corregido.py" "router_universal.py"
+    echo ✅ router_universal_corregido.py -> router_universal.py
+)
+
+if exist "startup_script.py" (
+    move "startup_script.py" "start.py"
+    echo ✅ startup_script.py -> start.py
+)
+
+if exist "requirements_txt.txt" (
+    move "requirements_txt.txt" "requirements.txt"
+    echo ✅ requirements_txt.txt -> requirements.txt
+)
+
+if exist "env_config (1).sh" (
+    move "env_config (1).sh" ".env"
+    echo ✅ env_config (1).sh -> .env
+)
+
+REM Módulos
+if exist "root_module.py" (
+    move "root_module.py" "modules\root.py"
+    echo ✅ root_module.py -> modules\root.py
+)
+
+if exist "status_module.py" (
+    move "status_module.py" "modules\status.py"
+    echo ✅ status_module.py -> modules\status.py
+)
+
+if exist "modules_init.py" (
+    move "modules_init.py" "modules\__init__.py"
+    echo ✅ modules_init.py -> modules\__init__.py
+)
+
+if exist "matrix_jit.json" (
+    move "matrix_jit.json" "band\matrix.jit"
+    echo ✅ matrix_jit.json -> band\matrix.jit
+)
+
+REM Crear archivo de respaldo si existe duplicado
+if exist "utils_output (1).py" (
+    move "utils_output (1).py" "utils_output_backup.py"
+    echo ✅ utils_output (1).py -> utils_output_backup.py
+)
+
+echo.
+echo ========================================================
+echo Verificando estructura del proyecto...
+
+REM Verificar archivos principales
+if exist "main.py" (echo ✅ main.py) else (echo ❌ main.py FALTANTE)
+if exist "router_universal.py" (echo ✅ router_universal.py) else (echo ❌ router_universal.py FALTANTE)
+if exist "utils_output.py" (echo ✅ utils_output.py) else (echo ❌ utils_output.py FALTANTE)
+if exist "requirements.txt" (echo ✅ requirements.txt) else (echo ❌ requirements.txt FALTANTE)
+if exist ".env" (echo ✅ .env) else (echo ❌ .env FALTANTE)
+if exist "start.py" (echo ✅ start.py) else (echo ❌ start.py FALTANTE)
+
+REM Verificar configuración
+if exist "band\matrix.jit" (echo ✅ band\matrix.jit) else (echo ❌ band\matrix.jit FALTANTE)
+
+REM Verificar módulos
+if exist "modules\__init__.py" (echo ✅ modules\__init__.py) else (echo ❌ modules\__init__.py FALTANTE)
+if exist "modules\predict.py" (echo ✅ modules\predict.py) else (echo ❌ modules\predict.py FALTANTE)
+if exist "modules\root.py" (echo ✅ modules\root.py) else (echo ❌ modules\root.py FALTANTE)
+if exist "modules\status.py" (echo ✅ modules\status.py) else (echo ❌ modules\status.py FALTANTE)
+
+echo.
+echo ========================================================
+echo Proyecto organizado. Pasos siguientes:
+echo 1. Ejecutar: pip install -r requirements.txt
+echo 2. Ejecutar: python start.py
+echo 3. Abrir: http://localhost:8000
+echo ========================================================
+pause

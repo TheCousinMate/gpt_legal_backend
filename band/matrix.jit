@@ -1,7 +1,86 @@
 {
-  "endpoint_trace_active": true,
-  "auth_signature": "KABIR•GPT•2025•VERIFICADO",
-  "token": "gpt_legal_backend_onrender.com|AUTHORIZED|KHZB-CORE",
-  "audit_id": "REPAIR-SEQ-0145-GPTCUSTODIO",
-  "status": "active"
+    "system_info": {
+        "name": "Forensic Legal Cognition",
+        "version": "4.1.0",
+        "build": "2024.01.01",
+        "environment": "production"
+    },
+    "endpoint_trace_active": true,
+    "status": "active",
+    "timestamp": "2024-01-01T00:00:00Z",
+    "configuration": {
+        "trace_level": "full",
+        "audit_enabled": true,
+        "debug_mode": false,
+        "performance_monitoring": true,
+        "security_checks": true
+    },
+    "modules": {
+        "predict": {
+            "enabled": true,
+            "version": "1.0.0",
+            "endpoint": "/predict",
+            "methods": ["POST", "GET"]
+        },
+        "root": {
+            "enabled": true,
+            "version": "1.0.0",
+            "endpoint": "/",
+            "methods": ["GET"]
+        },
+        "reflexion": {
+            "enabled": true,
+            "version": "1.0.0",
+            "endpoint": "/reflexion",
+            "methods": ["POST"]
+        },
+        "vision_forense": {
+            "enabled": true,
+            "version": "1.0.0",
+            "endpoint": "/vision",
+            "methods": ["POST"]
+        },
+        "legislacion_bcn": {
+            "enabled": true,
+            "version": "1.0.0",
+            "endpoint": "/legislacion",
+            "methods": ["GET", "POST"]
+        },
+        "corpus_legal": {
+            "enabled": true,
+            "version": "1.0.0",
+            "endpoint": "/corpus",
+            "methods": ["GET", "POST"]
+        },
+        "prediccion_bayesiana": {
+            "enabled": true,
+            "version": "1.0.0",
+            "endpoint": "/bayesian",
+            "methods": ["POST"]
+        },
+        "status": {
+            "enabled": true,
+            "version": "1.0.0",
+            "endpoint": "/status",
+            "methods": ["GET"]
+        },
+        "interprete": {
+            "enabled": true,
+            "version": "1.0.0",
+            "endpoint": "/interprete",
+            "methods": ["POST"]
+        }
+    },
+    "security": {
+        "cors_enabled": true,
+        "rate_limiting": true,
+        "authentication": false,
+        "encryption": true
+    },
+    "performance": {
+        "cache_enabled": true,
+        "compression": true,
+        "async_processing": true,
+        "batch_processing": true
+    }
 }

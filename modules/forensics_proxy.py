@@ -1,49 +1,20 @@
 # modules/forensics_proxy.py
 
-import os
-import openai
-from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
-from fastapi.responses import JSONResponse
-
-router = APIRouter(prefix="/proxy")
-
-openai.api_key = os.getenv("OPENAI_API_KEY")
-
-class ProxyInput(BaseModel):
-    input: str
-
-@router.post("/")
-async def analizar_proxy(data: ProxyInput):
+def procesar_imagen_forense(imagen_base64: str) -> dict:
     """
-    Realiza un análisis forense legal a partir de la entrada proporcionada.
+    Procesa una imagen codificada en base64 y retorna inferencias simuladas.
+    En el futuro puede conectarse a OCR u otros modelos visuales reales.
     """
-    try:
-        if not data.input or len(data.input.strip()) < 10:
-            raise HTTPException(status_code=400, detail="La entrada es demasiado corta para análisis forense.")
+    if not imagen_base64 or not isinstance(imagen_base64, str):
+        raise ValueError("Se requiere una cadena base64 válida.")
 
-        prompt = (
-            "Eres un jurista chileno con especialidad en análisis forense legal. "
-            "Responde de forma estructurada, considerando normas chilenas, contradicciones legales, jurisprudencia y estándares internacionales si aplican."
-        )
-
-        completion = openai.ChatCompletion.create(
-            model="gpt-4o",
-            messages=[
-                {"role": "system", "content": prompt},
-                {"role": "user", "content": data.input}
-            ],
-            temperature=0.2,
-            max_tokens=900
-        )
-
-        contenido = completion.choices[0].message["content"]
-
-        return JSONResponse(content={
-            "resultado": contenido.strip(),
-            "fuente": "GPT-4o (IA jurídica forense real)",
-            "entrada": data.input
-        })
-
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error en análisis forense: {str(e)}")
+    return {
+        "mensaje": "Imagen forense procesada correctamente.",
+        "hash": hash(imagen_base64),
+        "modelo_visual": "OCR-SIMULADO",
+        "metadata": {
+            "tipo": "documento escaneado",
+            "formato": "base64",
+            "inferencia": "texto legal probablemente visible"
+        }
+    }
